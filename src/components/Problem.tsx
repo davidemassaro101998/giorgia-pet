@@ -1,4 +1,7 @@
 import { Reveal } from "./Reveal";
+import { SectionTitle } from "./SectionTitle";
+import { RevealImageMask } from "./RevealImageMask";
+import heroDog from "../assets/photos/hero-dog.jpg";
 
 const signals = [
   {
@@ -23,24 +26,34 @@ export function Problem() {
   return (
     <section className="border-b border-[var(--color-border)] bg-[var(--color-bone)] py-20 md:py-28">
       <div className="mx-auto max-w-[1200px] px-6">
-        <Reveal>
-          <h2 className="max-w-[26ch] text-3xl leading-tight tracking-tight text-[var(--color-ink)] md:text-4xl">
-            Riconosci uno di questi segnali nel tuo cane o gatto?
-          </h2>
-        </Reveal>
-        <div className="mt-12 grid grid-cols-1 gap-6 sm:grid-cols-2">
-          {signals.map((s, i) => (
-            <Reveal
-              key={s.title}
-              index={i}
-              className="rounded-2xl border border-[var(--color-border)] bg-[var(--color-paper)] p-8"
-            >
-              <h3 className="text-lg text-[var(--color-ink)]">{s.title}</h3>
-              <p className="mt-2 text-[15px] leading-relaxed text-[var(--color-graphite)]">
-                {s.body}
-              </p>
-            </Reveal>
-          ))}
+        <SectionTitle
+          firstHalf="Riconosci uno di questi segnali "
+          secondHalf="nel tuo cane o gatto?"
+          className="max-w-[30ch] text-3xl leading-tight tracking-tight text-[var(--color-ink)] md:text-4xl"
+        />
+
+        <div className="mt-12 grid grid-cols-1 gap-10 md:grid-cols-[minmax(0,1fr)_minmax(0,1.1fr)] md:items-center">
+          <RevealImageMask
+            src={heroDog}
+            alt="Cane attento e presente, momento di connessione con il proprietario"
+            shape="rounded"
+            className="h-[320px] md:h-[440px]"
+          />
+
+          <div className="grid grid-cols-1 gap-5 sm:grid-cols-2">
+            {signals.map((s, i) => (
+              <Reveal
+                key={s.title}
+                index={i}
+                className="rounded-2xl border border-[var(--color-border)] bg-[var(--color-paper)] p-7"
+              >
+                <h3 className="text-lg text-[var(--color-ink)]">{s.title}</h3>
+                <p className="mt-2 text-[15px] leading-relaxed text-[var(--color-graphite)]">
+                  {s.body}
+                </p>
+              </Reveal>
+            ))}
+          </div>
         </div>
       </div>
     </section>

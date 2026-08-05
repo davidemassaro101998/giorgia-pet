@@ -1,5 +1,6 @@
 import { site } from "../siteConfig";
 import { Reveal } from "./Reveal";
+import { SectionTitle } from "./SectionTitle";
 
 export function About() {
   return (
@@ -17,9 +18,11 @@ export function About() {
           <p className="font-mono text-[13px] uppercase tracking-[0.18em] text-[var(--color-amber)]">
             Chi ti segue
           </p>
-          <h2 className="mt-3 text-3xl leading-tight tracking-tight text-[var(--color-ink)] md:text-4xl">
-            {site.practitioner.name}
-          </h2>
+          <SectionTitle
+            firstHalf={site.practitioner.name.split(" ")[0] + " "}
+            secondHalf={site.practitioner.name.split(" ").slice(1).join(" ")}
+            className="mt-3 text-3xl leading-tight tracking-tight text-[var(--color-ink)] md:text-4xl"
+          />
           <p className="mt-2 text-base text-[var(--color-graphite)]">
             {site.practitioner.role}
           </p>

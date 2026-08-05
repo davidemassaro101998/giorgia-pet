@@ -2,6 +2,7 @@ import { ctaLabel } from "../siteConfig";
 import { Reveal } from "./Reveal";
 import { MotionButton } from "./MotionButton";
 import { ScrollParallaxBg } from "./ScrollParallaxBg";
+import { SectionTitle } from "./SectionTitle";
 
 const steps = [
   {
@@ -43,15 +44,19 @@ export function HowItWorks() {
         />
       </ScrollParallaxBg>
       <div className="relative mx-auto max-w-[1200px] px-6">
-        <Reveal>
-          <h2 className="max-w-[22ch] text-3xl leading-tight tracking-tight text-[var(--color-bone)] md:text-4xl">
-            Come funziona una sessione
-          </h2>
-        </Reveal>
+        <SectionTitle
+          firstHalf="Come funziona "
+          secondHalf="una sessione"
+          className="max-w-[22ch] text-3xl leading-tight tracking-tight text-[var(--color-bone)] md:text-4xl"
+        />
 
-        <div className="mt-14 grid grid-cols-1 gap-x-10 gap-y-12 md:grid-cols-4">
+        <div className="mt-14 grid grid-cols-1 gap-x-6 gap-y-6 md:grid-cols-4">
           {steps.map((s, i) => (
-            <Reveal key={s.n} index={i}>
+            <Reveal
+              key={s.n}
+              index={i}
+              className="rounded-2xl border border-[color-mix(in_srgb,var(--color-bone)_10%,transparent)] bg-[color-mix(in_srgb,var(--color-bone)_5%,transparent)] p-6 backdrop-blur-sm"
+            >
               <span className="inline-flex items-center rounded-full border border-[color-mix(in_srgb,var(--color-bone)_25%,transparent)] px-3 py-1 font-mono text-[13px] text-[var(--color-amber)]">
                 {s.n}
               </span>

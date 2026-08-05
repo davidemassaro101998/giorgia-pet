@@ -4,6 +4,19 @@ Regole standing per questo progetto. Vedi anche
 `~/claude-library-for-site` (repo separato) per la libreria di riferimento
 completa — style-reference, motion patterns, GOTCHAS, componenti pronti.
 
+## REGOLA OBBLIGATORIA — 21st.dev, codice reale, non "ispirato"
+Non scrivere componenti/animazioni/effetti da zero e presentarli come
+"combinati con 21st.dev" o "ispirati a X" quando in realtà è codice scritto
+da zero. Cercare su 21st.dev (`mcp__21st__search`, `get_inspiration`),
+recuperare il codice reale con `get_component`, e integrarlo con modifiche
+minime necessarie (ricolorare sui token del brand, sistemare import per il
+pacchetto installato in questo progetto, fixare bug con label italiane
+lunghe). Se dopo una ricerca vera non c'è nulla di adatto, dirlo
+esplicitamente prima di scrivere custom — non scrivere custom di default e
+giustificarlo dopo. Violato due volte in questo progetto (cerchi CSS
+spacciati per "shader", gradiente CSS spacciato per "combinazione con
+cursor-spotlight") — da qui non si ripete.
+
 ## Il brand
 - **Nome**: Armonya — "Biorisonanza per cani e gatti"
 - **Tagline**: "Riequilibrio a distanza — per il tuo animale, per te, per l'ambiente."
@@ -40,16 +53,48 @@ icone non permesse come lucide con Phosphor, aggiustare per label italiane
 più lunghe) invece di scrivere da zero. Solo se la ricerca non produce nulla
 di adatto si scrive un componente custom.
 
-Componenti attuali di questo progetto adattati da 21st.dev:
-- `ShaderOrb.tsx` — sfondo WebGL "orb" (federicotoscano611/orb-shader,
-  id 23443), ricolorato su ambra/corallo, usato in Hero/WhatIsBioresonance/
-  FinalCta per un linguaggio visivo coerente su tutte le sezioni scure
-- `MotionButton.tsx` — CTA con freccia animata (Shatlyk1011/motion-button,
-  id 10384), riscritto da larghezza fissa ad auto-width (l'originale si
-  rompe con label italiane lunghe tipo "Prenota la chiamata gratuita")
+Componenti attuali di questo progetto adattati da 21st.dev (codice reale
+via `get_component`, non "ispirato"):
+- `QuantumNebula.tsx` — 50.000 particelle Three.js con curl noise + Unreal
+  Bloom (dhileepkumargm/quantum-nebula, id 9112), ricolorato ciano→ambra.
+  È la firma visiva del sito: usata identica in Hero, WhatIsBioresonance
+  (full-bleed, senza card) e FinalCta per legare le sezioni scure invece di
+  tre tecniche diverse. Codice lasciato fedele all'originale (Three.js
+  puro, non R3F) — solo hue, boxSize/bloom e pausa IntersectionObserver
+  aggiunti (3 istanze sulla stessa pagina, serve per non sprecare CPU
+  fuori viewport). Caricato via `import()` dinamico dentro `useEffect`,
+  non nell'import statico — three.js+postprocessing pesano ~185KB gzip,
+  tenerli fuori dal bundle iniziale accorcia il critical path.
+- `RevealImageMask.tsx` — foto di cane/gatto mascherate da una forma che
+  si apre a piena inquadratura scrollando (daiwiikharihar/reveal-image-
+  mask, id 10905) — niente più card con bordo intorno alle foto animali,
+  richiesta esplicita dopo la prima versione ("togli gli animali dai
+  contenitori").
+- `MotionButton.tsx` — CTA con pull magnetico GSAP (pattern
+  snippets/r3f-cinematic/MagneticButton.tsx della libreria) + freccia
+  animata (concetto Shatlyk1011/motion-button, id 10384, riscritto da
+  larghezza fissa ad auto-width perché l'originale si rompe con label
+  italiane lunghe tipo "Prenota la chiamata gratuita").
 - `Faq.tsx` — accordion numerato con spring animation (jatin-yadav05/
   interactive-accordion, id 9602), import spostato da `framer-motion` a
-  `motion/react` (pacchetto già installato in questo progetto)
+  `motion/react` (pacchetto già installato in questo progetto).
+- `SectionTitle.tsx` — titoli di sezione che si "aprono" (scala + tracking)
+  mentre attraversano il centro del viewport in scroll — adattato da
+  `snippets/motion-patterns/ScrollPortalTitle.tsx` della libreria (offset
+  ritarato per un titolo normale invece che un hero pinned a schermo
+  intero). **Bug trovato**: split di stringa in due `<span>` inline-block
+  perde lo spazio finale del primo blocco (CSS collassa whitespace a fine
+  riga) — serve `whiteSpace: "pre"` sul primo span o si legge
+  "pensatoArmonya" invece di "pensato Armonya".
+
+**Build separata per l'anteprima artifact**: `QuantumNebula` usa
+`import()` dinamico → Vite crea chunk separati che un HTML a file singolo
+non può servire (richiederebbero richieste HTTP a URL che non esistono
+nel file inlineato). `vite.artifact.config.ts` forza
+`rollupOptions.output.inlineDynamicImports: true` in una build a parte
+(`dist-artifact/`, ignorata da git) usata solo da `inline-artifact.mjs` —
+la build reale per il deploy (`npm run build` → `dist/`) mantiene il
+code-splitting.
 
 **Attenzione ai componenti a larghezza fissa**: molti componenti 21st.dev
 sono dimostrati con label inglesi corte ("Get Started"). Il copy italiano

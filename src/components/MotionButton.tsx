@@ -1,10 +1,12 @@
-// Adattato da 21st.dev — @Shatlyk1011/motion-button (id 10384): pulsante
-// CTA con micro-interazione sulla freccia. Adattato da larghezza fissa a
-// auto-width (l'originale rompe con label lunghe come le nostre in
-// italiano), ricolorato sui token Armonya, icona Phosphor al posto di
-// Lucide (convenzione della libreria).
+// CTA con pull magnetico (GSAP quickTo — pattern MagneticButton della
+// libreria, snippets/r3f-cinematic/MagneticButton.tsx) + freccia animata
+// (concetto adattato da 21st.dev @Shatlyk1011/motion-button, id 10384,
+// riscritto ad auto-width perché l'originale a larghezza fissa si rompe
+// con label italiane lunghe).
 
+import { useRef } from "react";
 import { ArrowRight } from "@phosphor-icons/react";
+import gsap from "gsap";
 import { cn } from "../lib/utils";
 
 const variants = {
@@ -26,11 +28,37 @@ export function MotionButton({
   variant?: keyof typeof variants;
   className?: string;
 }) {
+  const ref = useRef<HTMLAnchorElement>(null);
+  const quick = useRef<{ x: gsap.QuickToFunc; y: gsap.QuickToFunc } | null>(null);
+
+  const ensureQuick = () => {
+    if (!quick.current && ref.current) {
+      quick.current = {
+        x: gsap.quickTo(ref.current, "x", { duration: 0.5, ease: "elastic.out(1,0.4)" }),
+        y: gsap.quickTo(ref.current, "y", { duration: 0.5, ease: "elastic.out(1,0.4)" }),
+      };
+    }
+    return quick.current;
+  };
+
   return (
     <a
+      ref={ref}
       href={href}
+      onMouseMove={(e) => {
+        if (!ref.current) return;
+        const r = ref.current.getBoundingClientRect();
+        const q = ensureQuick();
+        q?.x((e.clientX - r.left - r.width / 2) * 0.28);
+        q?.y((e.clientY - r.top - r.height / 2) * 0.28);
+      }}
+      onMouseLeave={() => {
+        const q = ensureQuick();
+        q?.x(0);
+        q?.y(0);
+      }}
       className={cn(
-        "group inline-flex w-fit items-center gap-3 whitespace-nowrap rounded-full px-6 py-3 font-mono text-[13px] font-medium uppercase tracking-wide transition-transform active:scale-[0.98]",
+        "group inline-flex w-fit items-center gap-3 whitespace-nowrap rounded-full px-6 py-3 font-mono text-[13px] font-medium uppercase tracking-wide",
         variants[variant],
         className,
       )}
