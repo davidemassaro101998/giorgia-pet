@@ -23,7 +23,12 @@ import { ctaLabel, site } from "../siteConfig";
 import { MotionButton } from "./MotionButton";
 import { VerticalCutReveal, type VerticalCutRevealRef } from "./VerticalCutReveal";
 import heroDog from "../assets/hero-dog.jpg";
-import heroCat from "../assets/hero-cat.jpg";
+
+// Filtro sempre applicato al cane di sfondo — desaturato e scurito per
+// farlo leggere come atmosfera dentro il canvas nero invece che come una
+// foto "incollata sopra": il primo tentativo era un ritaglio quadrato a
+// piena luminosità con un vignette stretto, leggeva come sticker.
+const DOG_FILTER = "grayscale(0.3) brightness(0.5) contrast(1.05)";
 
 if (typeof window !== "undefined") {
   gsap.registerPlugin(ScrollTrigger);
@@ -57,8 +62,8 @@ export function CinematicIntro() {
       );
       gsap.fromTo(
         heroImgRef.current,
-        { opacity: 0, scale: 1.06 },
-        { opacity: 1, scale: 1, duration: 2, ease: "expo.out", delay: 0.15 },
+        { opacity: 0, scale: 1.08, filter: `blur(18px) ${DOG_FILTER}` },
+        { opacity: 1, scale: 1, filter: `blur(0px) ${DOG_FILTER}`, duration: 2.2, ease: "expo.out", delay: 0.15 },
       );
       heroTitleRef.current?.startAnimation();
 
@@ -69,7 +74,18 @@ export function CinematicIntro() {
         lastSlide.current = index;
         const showHero = index === 0;
 
-        gsap.to(heroLayerRef.current, { opacity: showHero ? 1 : 0, duration: 0.9, ease: "power3.out" });
+        // Il testo della hero e lo sfondo del cane si dissolvono con
+        // ritmi diversi — il cane si allontana/sfoca come se affondasse
+        // nel nero, il testo si limita a un fade più secco: fa sentire il
+        // cane come parte dell'ambiente, non un livello incollato sopra.
+        gsap.to(heroRevealRef.current, { opacity: showHero ? 1 : 0, duration: 0.8, ease: "power3.out" });
+        gsap.to(heroImgRef.current, {
+          opacity: showHero ? 1 : 0,
+          scale: showHero ? 1 : 1.15,
+          filter: showHero ? `blur(0px) ${DOG_FILTER}` : `blur(20px) ${DOG_FILTER}`,
+          duration: 1.2,
+          ease: "power2.inOut",
+        });
         gsap.to(whatIsLayerRef.current, { opacity: showHero ? 0 : 1, duration: 0.9, ease: "power3.out" });
         gsap.set(heroLayerRef.current, { pointerEvents: showHero ? "auto" : "none" });
         gsap.set(whatIsLayerRef.current, { pointerEvents: showHero ? "none" : "auto" });
@@ -98,32 +114,24 @@ export function CinematicIntro() {
       <div ref={stageRef} className="relative h-screen w-full overflow-hidden bg-[var(--color-off-black)]">
         {/* Slide 1 — Hero */}
         <div ref={heroLayerRef} className="absolute inset-0 pt-16">
+          {/* Cane come atmosfera di sfondo, non un ritaglio incollato
+              sopra: copre buona parte del lato destro, sfumato ampiamente
+              su tutti i bordi (non solo un vignette stretto) e scurito/
+              desaturato perché si fonda nel canvas nero invece di
+              staccarsi come uno sticker. */}
           <div
             ref={heroImgRef}
             aria-hidden
-            className="pointer-events-none absolute inset-y-0 right-0 hidden w-[42%] flex-col justify-center gap-6 md:flex"
-          >
-            <div
-              className="aspect-square w-full"
-              style={{
-                backgroundImage: `url(${heroDog})`,
-                backgroundSize: "cover",
-                backgroundPosition: "center 28%",
-                maskImage: "radial-gradient(closest-side, black 55%, transparent 92%)",
-                WebkitMaskImage: "radial-gradient(closest-side, black 55%, transparent 92%)",
-              }}
-            />
-            <div
-              className="aspect-square w-full"
-              style={{
-                backgroundImage: `url(${heroCat})`,
-                backgroundSize: "cover",
-                backgroundPosition: "center 22%",
-                maskImage: "radial-gradient(closest-side, black 55%, transparent 92%)",
-                WebkitMaskImage: "radial-gradient(closest-side, black 55%, transparent 92%)",
-              }}
-            />
-          </div>
+            className="pointer-events-none absolute inset-y-0 right-0 hidden w-[62%] md:block"
+            style={{
+              backgroundImage: `url(${heroDog})`,
+              backgroundSize: "cover",
+              backgroundPosition: "center 30%",
+              filter: DOG_FILTER,
+              maskImage: "radial-gradient(85% 75% at 80% 45%, black 25%, transparent 78%)",
+              WebkitMaskImage: "radial-gradient(85% 75% at 80% 45%, black 25%, transparent 78%)",
+            }}
+          />
 
           <div
             ref={heroRevealRef}

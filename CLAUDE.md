@@ -134,17 +134,31 @@ principio esplicito): `TiltCard.tsx` (tilt 3D + spotlight-gradient),
 `GlassCard.tsx` (backdrop-blur), `GlowingEffect.tsx` (bordo conic-gradient
 animato). File cancellati, non lasciati come infrastruttura morta.
 
-**Step 2 — Immagini (fatto)**: foto vere di un cane e un gatto (Unsplash,
-licenza libera, scaricate e self-hostate in `src/assets/hero-dog.jpg`,
-`hero-cat.jpg` — **placeholder di stile**, da sostituire con foto reali
-prima del lancio, vedi TODO) al posto del render 3D umano del riferimento
-— stesso trattamento visivo: `mask-image: radial-gradient(...)` per farle
-dissolvere nel nero ai bordi invece di un taglio netto. **Bug corretto**:
-la prima composizione le sovrapponeva (`translate` + `scale` per
-impilarle una sopra l'altra) — illeggibile, segnalato direttamente
-dall'utente ("leva l'immagine del cane e gatto che sono una sopra
-l'altra"). Ora sono impilate verticalmente con un `gap-6` reale, ognuna
-con la propria maschera indipendente.
+**Step 2 — Immagini (fatto, iterato 3 volte)**: foto vera di un cane
+(Unsplash, licenza libera, self-hostata in `src/assets/hero-dog.jpg` —
+**placeholder di stile**, da sostituire con una foto reale prima del
+lancio, vedi TODO) al posto del render 3D umano del riferimento.
+- Giro 1: cane + gatto sovrapposti (`translate`+`scale` per impilarli) —
+  illeggibile, segnalato dall'utente ("leva l'immagine del cane e gatto
+  che sono una sopra l'altra").
+- Giro 2: sistemata la sovrapposizione (impilati verticalmente con
+  `gap-6`), ma restavano due ritagli quadrati a piena luminosità con un
+  vignette stretto — leggevano come sticker incollati sopra lo sfondo,
+  non come parte di esso (feedback dell'utente: "il cane deve essere
+  parte dello sfondo non deve essere incollato sopra").
+- Giro 3 (attuale): **solo il cane** in hero (il gatto resta disponibile
+  in `src/assets/hero-cat.jpg` per un uso futuro, non referenziato ora).
+  Copre una fascia larga sul lato destro (non più un quadrato), con
+  `filter: grayscale(0.3) brightness(0.5) contrast(1.05)` per scurirlo e
+  desaturarlo — si fonde nel canvas nero invece di risaltare come una
+  foto a piena luminosità — e una `radial-gradient` di maschera molto più
+  ampia e spostata verso il bordo (`85% 75% at 80% 45%`) invece del
+  vignette stretto centrato, per una dissolvenza larga sui bordi invece
+  di un taglio a disco. Ha una sua animazione dedicata nel crossfade
+  hero→"cos'è" (vedi Step 3): si allontana/sfoca (`scale` + `blur`) invece
+  di limitarsi a un fade con il resto del layer, per sembrare l'ambiente
+  che affonda nel buio, non un livello che sparisce. Simmetrico: ricompare
+  con la stessa animazione se si torna in su. Vedi `CinematicIntro.tsx`.
 
 **Step 3 — Transizione cinematografica hero → "cos'è la biorisonanza"
 (fatto)**: unica eccezione esplicitamente richiesta alla disciplina
