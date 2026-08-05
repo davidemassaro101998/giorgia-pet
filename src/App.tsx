@@ -1,8 +1,7 @@
 import { Nav } from "./components/Nav";
-import { Hero } from "./components/Hero";
+import { CinematicIntro } from "./components/CinematicIntro";
 import { Problem } from "./components/Problem";
 import { HowItWorks } from "./components/HowItWorks";
-import { WhatIsBioresonance } from "./components/WhatIsBioresonance";
 import { About } from "./components/About";
 import { WhoItsFor } from "./components/WhoItsFor";
 import { SocialProof } from "./components/SocialProof";
@@ -16,10 +15,9 @@ function App() {
     <>
       <Nav />
       <main>
-        <Hero />
+        <CinematicIntro />
         <Problem />
         <HowItWorks />
-        <WhatIsBioresonance />
         <About />
         <WhoItsFor />
         <SocialProof />

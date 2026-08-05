@@ -134,18 +134,40 @@ principio esplicito): `TiltCard.tsx` (tilt 3D + spotlight-gradient),
 `GlassCard.tsx` (backdrop-blur), `GlowingEffect.tsx` (bordo conic-gradient
 animato). File cancellati, non lasciati come infrastruttura morta.
 
-**Step 2 — Immagini (fatto in questo stesso giro)**: hero con foto vere di
-un cane e un gatto (Unsplash, licenza libera, scaricate e self-hostate in
-`src/assets/`) al posto del render 3D umano del riferimento — stesso
-trattamento visivo: `mask-image: radial-gradient(...)` per farle dissolvere
-nel nero ai bordi invece di un taglio netto, posizionate a destra con il
-testo a sinistra (era centrato, ora asimmetrico come il riferimento).
+**Step 2 — Immagini (fatto)**: foto vere di un cane e un gatto (Unsplash,
+licenza libera, scaricate e self-hostate in `src/assets/hero-dog.jpg`,
+`hero-cat.jpg` — **placeholder di stile**, da sostituire con foto reali
+prima del lancio, vedi TODO) al posto del render 3D umano del riferimento
+— stesso trattamento visivo: `mask-image: radial-gradient(...)` per farle
+dissolvere nel nero ai bordi invece di un taglio netto. **Bug corretto**:
+la prima composizione le sovrapponeva (`translate` + `scale` per
+impilarle una sopra l'altra) — illeggibile, segnalato direttamente
+dall'utente ("leva l'immagine del cane e gatto che sono una sopra
+l'altra"). Ora sono impilate verticalmente con un `gap-6` reale, ognuna
+con la propria maschera indipendente.
 
-**Step 3 — Animazioni / Step 4 — Transizioni**: il riferimento stesso è
-minimale su questo fronte (fade-up all'ingresso, hover state, niente di
-più) — la disciplina "presente ma non urlato" vale anche qui. Non
-reintrodurre dissolvenze a particelle o wipe complessi senza che l'utente
-li richieda esplicitamente all'interno di questo nuovo linguaggio visivo.
+**Step 3 — Transizione cinematografica hero → "cos'è la biorisonanza"
+(fatto)**: unica eccezione esplicitamente richiesta alla disciplina
+"sobria" del riferimento — l'utente ha chiesto animazioni "spettacolari"
+tra le sezioni, prese da 21st.dev, non basiche. Vedi `CinematicIntro.tsx`:
+fonde Hero e la vecchia `WhatIsBioresonance.tsx` (eliminata, il contenuto
+è confluito qui) in un binario di scroll pinnato lungo `200vh` (GSAP
+`ScrollTrigger`, tecnica presa da lovesickfromthe6ix/full-screen-scroll-fx
+id 5794, semplificata da N slide con liste laterali+audio a 2 sole slide
+testuali) — a metà corsa la hero dissolve nella sezione successiva invece
+di scorrere via, con i titoli che si rivelano via `VerticalCutReveal`
+(cnippet.dev id 18595, wipe verticale a clip-path, adattato in
+`VerticalCutReveal.tsx`). **Resta l'unico punto "spettacolare" del sito**
+— il resto (card, FAQ, prezzi) resta sui semplici fade-up di `Reveal.tsx`,
+deliberatamente, per non tornare a un linguaggio incoerente col
+riferimento. **Ordine di sezione cambiato**: "cos'è la biorisonanza" era
+dopo `HowItWorks`, ora è la seconda slide della cinematic intro (subito
+dopo l'hook della hero, prima di "riconosci i segnali") — narrativamente
+più corretto.
+
+**Step 4 — Altre transizioni**: non toccate, restano i `Reveal` fade-up
+standard. Non reintrodurre altri momenti "spettacolari" senza richiesta
+esplicita — uno solo per scelta, non un'abitudine.
 
 ## Componenti: 21st.dev prima, custom solo se non c'è nulla di adatto
 Regola cambiata a metà progetto — la prima versione aveva troppi componenti
