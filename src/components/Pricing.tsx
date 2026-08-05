@@ -1,6 +1,8 @@
 import { ctaLabel } from "../siteConfig";
 import { Reveal } from "./Reveal";
 import { MotionButton } from "./MotionButton";
+import { TiltCard } from "./TiltCard";
+import { GlowingEffect } from "./GlowingEffect";
 
 const tiers = [
   {
@@ -34,25 +36,26 @@ export function Pricing() {
         </Reveal>
         <div className="mt-12 grid grid-cols-1 gap-6 md:grid-cols-3">
           {tiers.map((t, i) => (
-            <Reveal
-              key={t.name}
-              index={i}
-              className={`flex flex-col rounded-2xl border p-8 ${
-                t.cta
-                  ? "border-[color-mix(in_srgb,var(--color-amber)_45%,transparent)] bg-[var(--color-paper)] ring-1 ring-[color-mix(in_srgb,var(--color-amber)_20%,transparent)]"
-                  : "border-[var(--color-border)] bg-[var(--color-paper)]"
-              }`}
-            >
-              <h3 className="text-lg text-[var(--color-ink)]">{t.name}</h3>
-              <p className="mt-3 font-display text-3xl tracking-tight text-[var(--color-ink)]">
-                {t.price}
-              </p>
-              <p className="mt-3 flex-1 text-[14px] leading-relaxed text-[var(--color-graphite)]">
-                {t.detail}
-              </p>
-              {t.cta && (
-                <MotionButton href="#prenota" label={ctaLabel} className="mt-6 self-start" />
-              )}
+            <Reveal key={t.name} index={i}>
+              <TiltCard
+                className={`flex flex-col rounded-2xl border p-8 ${
+                  t.cta
+                    ? "border-[color-mix(in_srgb,var(--color-amber)_45%,transparent)] bg-[var(--color-paper)] ring-1 ring-[color-mix(in_srgb,var(--color-amber)_20%,transparent)]"
+                    : "border-[var(--color-border)] bg-[var(--color-paper)]"
+                }`}
+              >
+                {t.cta && <GlowingEffect />}
+                <h3 className="text-lg text-[var(--color-ink)]">{t.name}</h3>
+                <p className="mt-3 font-display text-3xl tracking-tight text-[var(--color-ink)]">
+                  {t.price}
+                </p>
+                <p className="mt-3 flex-1 text-[14px] leading-relaxed text-[var(--color-graphite)]">
+                  {t.detail}
+                </p>
+                {t.cta && (
+                  <MotionButton href="#prenota" label={ctaLabel} className="mt-6 self-start" />
+                )}
+              </TiltCard>
             </Reveal>
           ))}
         </div>

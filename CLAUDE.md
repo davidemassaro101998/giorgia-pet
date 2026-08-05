@@ -50,6 +50,17 @@ il tell più riconoscibile dell'AI per brief premium-consumer — scoperto
 rileggendo `design-taste-frontend/SKILL.md` dopo il feedback "sembra
 già visto ovunque". Vedi `src/index.css`.
 
+**Step 1.5 — Profondità bottoni/contenitori (fatto)**: dopo il feedback
+"analizza bottoni e contenitori, controlla su 21st.dev quale ci sta meglio
+per un effetto di profondità" si sono sostituite le card piatte
+(solo bordo) e i bottoni flat con versioni reali 21st.dev a profondità
+tattile, applicate in modo coerente su tutte le 9 schermate — vedi
+`TiltCard.tsx`, `GlassCard.tsx`, `GlowingEffect.tsx`, `MotionButton.tsx`
+in "Componenti" sotto per i dettagli. `Reshaped Card` (id 17531) è stato
+scartato: non è un componente standalone ma un re-export che richiede
+l'intero package `reshaped` + il suo theme provider, in conflitto con i
+token Tailwind del progetto — sostituito con `Tilt Card` (id 12246).
+
 **Step 2 — Immagini**: da fare. Per lo step 1 le foto di cane/gatto e il
 campo di particelle sono stati **rimossi del tutto** (non solo ritoccati)
 per isolare la valutazione dei colori da altre variabili — vanno
@@ -91,7 +102,24 @@ via `get_component`, non "ispirato"):
   snippets/r3f-cinematic/MagneticButton.tsx della libreria) + freccia
   animata (concetto Shatlyk1011/motion-button, id 10384, riscritto da
   larghezza fissa ad auto-width perché l'originale si rompe con label
-  italiane lunghe tipo "Prenota la chiamata gratuita").
+  italiane lunghe tipo "Prenota la chiamata gratuita") + profondità reale
+  al press (@ddoemonn/press-depth, id 23547 — slab colorato sotto la
+  faccia del bottone che si "preme" col click, `group-active:translate-y`,
+  invece di un piatto cambio colore all'hover).
+- `TiltCard.tsx` — tilt 3D in prospettiva + spotlight che segue il cursore
+  (@tom_ui/tilt-card, id 12246), codice fedele all'originale, `tiltLimit`
+  ridotto da 15-20 (demo) a 6 per restare sobrio. Usato per le card nelle
+  sezioni chiare: segnali (`Problem.tsx`), percorsi (`Pricing.tsx`),
+  monogramma "chi ti segue" (`About.tsx`).
+- `GlassCard.tsx` — superficie vetro smerigliato con backdrop-blur
+  (molecule-lab-rushil/glass-card, id 5588), semplificata al solo
+  contenitore base (sotto-componenti header/footer non servono qui).
+  Usato per le 4 card step-by-step in `HowItWorks.tsx` (sezione scura).
+- `GlowingEffect.tsx` — bordo che si illumina seguendo il cursore
+  (@manuarora700/glowing-effect, Aceternity, id 1567, "come su Cursor"),
+  gradiente conico arcobaleno originale ricolorato in un'unica tinta oro
+  per coerenza con la regola "un solo accento" della palette. Usato solo
+  sulla card in evidenza in `Pricing.tsx` ("Chiamata conoscitiva").
 - `Faq.tsx` — accordion numerato con spring animation (jatin-yadav05/
   interactive-accordion, id 9602), import spostato da `framer-motion` a
   `motion/react` (pacchetto già installato in questo progetto).

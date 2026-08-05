@@ -1,5 +1,6 @@
 import { Reveal } from "./Reveal";
 import { SectionTitle } from "./SectionTitle";
+import { TiltCard } from "./TiltCard";
 
 const signals = [
   {
@@ -32,15 +33,13 @@ export function Problem() {
 
         <div className="mt-12 grid grid-cols-1 gap-5 sm:grid-cols-2 md:grid-cols-4">
           {signals.map((s, i) => (
-            <Reveal
-              key={s.title}
-              index={i}
-              className="rounded-2xl border border-[var(--color-border)] bg-[var(--color-paper)] p-7"
-            >
-              <h3 className="text-lg text-[var(--color-ink)]">{s.title}</h3>
-              <p className="mt-2 text-[15px] leading-relaxed text-[var(--color-graphite)]">
-                {s.body}
-              </p>
+            <Reveal key={s.title} index={i}>
+              <TiltCard className="rounded-2xl border border-[var(--color-border)] bg-[var(--color-paper)] p-7">
+                <h3 className="text-lg text-[var(--color-ink)]">{s.title}</h3>
+                <p className="mt-2 text-[15px] leading-relaxed text-[var(--color-graphite)]">
+                  {s.body}
+                </p>
+              </TiltCard>
             </Reveal>
           ))}
         </div>

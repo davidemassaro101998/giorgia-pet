@@ -3,6 +3,7 @@ import { Reveal } from "./Reveal";
 import { MotionButton } from "./MotionButton";
 import { ScrollParallaxBg } from "./ScrollParallaxBg";
 import { SectionTitle } from "./SectionTitle";
+import { GlassCard } from "./GlassCard";
 
 const steps = [
   {
@@ -39,7 +40,7 @@ export function HowItWorks() {
           className="absolute -left-24 top-1/2 h-[420px] w-[420px] -translate-y-1/2 rounded-full opacity-[0.14] blur-[110px]"
           style={{
             background:
-              "radial-gradient(circle, var(--color-amber) 0%, var(--color-coral) 60%, transparent 78%)",
+              "radial-gradient(circle, var(--color-amber) 0%, transparent 75%)",
           }}
         />
       </ScrollParallaxBg>
@@ -52,20 +53,18 @@ export function HowItWorks() {
 
         <div className="mt-14 grid grid-cols-1 gap-x-6 gap-y-6 md:grid-cols-4">
           {steps.map((s, i) => (
-            <Reveal
-              key={s.n}
-              index={i}
-              className="rounded-2xl border border-[color-mix(in_srgb,var(--color-bone)_10%,transparent)] bg-[color-mix(in_srgb,var(--color-bone)_5%,transparent)] p-6 backdrop-blur-sm"
-            >
-              <span className="inline-flex items-center rounded-full border border-[color-mix(in_srgb,var(--color-bone)_25%,transparent)] px-3 py-1 font-mono text-[13px] text-[var(--color-amber)]">
-                {s.n}
-              </span>
-              <h3 className="mt-4 text-lg text-[var(--color-bone)]">
-                {s.title}
-              </h3>
-              <p className="mt-2 text-[15px] leading-relaxed text-[color-mix(in_srgb,var(--color-bone)_65%,transparent)]">
-                {s.body}
-              </p>
+            <Reveal key={s.n} index={i}>
+              <GlassCard className="p-6">
+                <span className="inline-flex items-center rounded-full border border-[color-mix(in_srgb,var(--color-bone)_25%,transparent)] px-3 py-1 font-mono text-[13px] text-[var(--color-amber)]">
+                  {s.n}
+                </span>
+                <h3 className="mt-4 text-lg text-[var(--color-bone)]">
+                  {s.title}
+                </h3>
+                <p className="mt-2 text-[15px] leading-relaxed text-[color-mix(in_srgb,var(--color-bone)_65%,transparent)]">
+                  {s.body}
+                </p>
+              </GlassCard>
             </Reveal>
           ))}
         </div>

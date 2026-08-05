@@ -61,10 +61,7 @@ export function Faq() {
                     <div className="relative flex h-9 w-9 shrink-0 items-center justify-center">
                       <motion.div
                         className="absolute inset-0 rounded-full"
-                        style={{
-                          background:
-                            "linear-gradient(135deg, var(--color-amber), var(--color-coral))",
-                        }}
+                        style={{ background: "var(--color-amber)" }}
                         initial={false}
                         animate={{
                           scale: isActive ? 1 : isHovered ? 0.85 : 0,

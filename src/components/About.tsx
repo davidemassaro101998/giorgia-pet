@@ -1,6 +1,7 @@
 import { site } from "../siteConfig";
 import { Reveal } from "./Reveal";
 import { SectionTitle } from "./SectionTitle";
+import { TiltCard } from "./TiltCard";
 
 export function About() {
   return (
@@ -10,9 +11,12 @@ export function About() {
           {/* Monogramma: nessuna foto reale della praticante disponibile
               ancora — un ritratto stock al suo posto sarebbe fuorviante.
               Sostituire con una foto vera appena disponibile. */}
-          <div className="flex h-[220px] w-[220px] items-center justify-center rounded-full border border-[var(--color-border)] bg-[var(--color-card-alt)] font-display text-5xl text-[var(--color-ink)]">
+          <TiltCard
+            tiltLimit={8}
+            className="mx-auto flex h-[220px] w-[220px] items-center justify-center rounded-full border border-[var(--color-border)] bg-[var(--color-card-alt)] font-display text-5xl text-[var(--color-ink)]"
+          >
             GB
-          </div>
+          </TiltCard>
         </Reveal>
         <Reveal index={1}>
           <p className="font-mono text-[13px] uppercase tracking-[0.18em] text-[var(--color-amber)]">
