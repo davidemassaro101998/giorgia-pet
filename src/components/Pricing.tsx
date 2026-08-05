@@ -53,7 +53,7 @@ export function Pricing() {
                   {t.detail}
                 </p>
                 {t.cta && (
-                  <MotionButton href="#prenota" label={ctaLabel} className="mt-6 self-start" />
+                  <MotionButton href="#prenota" label={ctaLabel} fullWidth className="mt-6" />
                 )}
               </TiltCard>
             </Reveal>

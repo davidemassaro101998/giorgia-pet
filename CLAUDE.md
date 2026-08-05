@@ -135,10 +135,28 @@ via `get_component`, non "ispirato"):
 **Attenzione ai componenti a larghezza fissa**: molti componenti 21st.dev
 sono dimostrati con label inglesi corte ("Get Started"). Il copy italiano
 è quasi sempre più lungo — verificare SEMPRE che bottoni/badge non vadano
-a capo (`whitespace-nowrap` + `w-fit`, mai `w-full` fisso su un bottone con
-testo) prima di considerare l'integrazione finita. Bug reale trovato in
-questo progetto: `MotionButton` in una card di pricing stretta andava a
-capo su due righe finché non si è aggiunto `whitespace-nowrap`.
+tagliati o si rompano nei contenitori più stretti prima di considerare
+l'integrazione finita.
+
+**Bug reale trovato e risolto**: `MotionButton` con `whitespace-nowrap` +
+`rounded-full` in una card di pricing stretta produceva testo più largo
+della card, tagliato a filo dall'`overflow-hidden` di `TiltCard` (bordo
+destro netto, non arrotondato — sintomo riconoscibile). Fix: rimosso
+`whitespace-nowrap` (il testo ora può andare a capo su due righe),
+`rounded-full` sostituito con `rounded-xl` (un pillola a due righe legge
+male, un rettangolo arrotondato no), aggiunta una prop `fullWidth` che fa
+riempire al bottone la larghezza del contenitore invece di restare a
+larghezza-contenuto (`w-fit`) — usata in `Pricing.tsx` sulla card CTA.
+
+**Tipografia bottoni cambiata dopo feedback ("non sembrano di
+un'azienda pet da milioni di dollari")**: la faccia del bottone era
+`font-mono uppercase tracking-wide` — una scelta stilistica mia, non
+sourced da 21st.dev, aggiunta sopra il pattern magnetic-pull/press-depth
+che invece è reale. Il mono-maiuscolo legge "tool per sviluppatori", non
+brand di benessere animale premium. Cambiato a `font-body` (Inter Tight,
+lo stesso font del body text) in sentence case, peso medium, senza
+tracking artificiale — coerente con il resto del copy del sito invece di
+sembrare un'etichetta di debug.
 
 **Immagini in artifact/preview self-contained**: se il progetto viene
 pubblicato come artifact HTML a file singolo (per anteprima rapida), Vite

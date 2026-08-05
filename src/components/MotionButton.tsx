@@ -27,15 +27,22 @@ const slabVariants = {
   "outline-light": "bg-[var(--color-border)]",
 };
 
+// full: usato in contenitori stretti (card di pricing) dove il CTA deve
+// riempire la larghezza della card invece di restare a larghezza contenuto —
+// evita che label italiane lunghe ("Prenota la chiamata gratuita") vengano
+// tagliate dall'overflow-hidden della card.
+
 export function MotionButton({
   href,
   label,
   variant = "primary",
+  fullWidth = false,
   className,
 }: {
   href: string;
   label: string;
   variant?: keyof typeof faceVariants;
+  fullWidth?: boolean;
   className?: string;
 }) {
   const ref = useRef<HTMLAnchorElement>(null);
@@ -68,28 +75,33 @@ export function MotionButton({
         q?.y(0);
       }}
       style={{ paddingBottom: DEPTH }}
-      className={cn("group relative inline-flex w-fit select-none rounded-full", className)}
+      className={cn(
+        "group relative inline-flex select-none rounded-xl",
+        fullWidth ? "w-full" : "w-fit",
+        className,
+      )}
     >
       {/* Slab: la base "solida" su cui la faccia del bottone poggia — visibile
           come bordo inferiore colorato finché non premuto. */}
       <span
         aria-hidden
         style={{ top: DEPTH }}
-        className={cn("absolute inset-x-0 bottom-0 rounded-full", slabVariants[variant])}
+        className={cn("absolute inset-x-0 bottom-0 rounded-xl", slabVariants[variant])}
       />
       <span
         className={cn(
-          "relative inline-flex items-center gap-3 whitespace-nowrap rounded-full px-6 py-3 font-mono text-[13px] font-medium uppercase tracking-wide",
+          "relative flex items-center justify-center gap-3 rounded-xl px-7 py-3.5 text-center font-body text-[15px] font-medium",
           "transition-transform duration-150 ease-out group-active:translate-y-[3px]",
+          fullWidth ? "w-full" : "w-fit",
           faceVariants[variant],
         )}
       >
         <span
           aria-hidden
-          className="pointer-events-none absolute inset-0 rounded-full shadow-[inset_0_1.5px_0_rgba(255,255,255,0.35),inset_0_-1px_0_rgba(0,0,0,0.08)]"
+          className="pointer-events-none absolute inset-0 rounded-xl shadow-[inset_0_1.5px_0_rgba(255,255,255,0.35),inset_0_-1px_0_rgba(0,0,0,0.08)]"
         />
         <span>{label}</span>
-        <span className="relative flex h-4 w-4 items-center justify-center overflow-hidden">
+        <span className="relative flex h-4 w-4 shrink-0 items-center justify-center overflow-hidden">
           <ArrowRight
             weight="bold"
             className="absolute size-4 transition-transform duration-300 ease-out group-hover:translate-x-5"
