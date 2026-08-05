@@ -1,5 +1,6 @@
 import { ctaLabel } from "../siteConfig";
 import { Reveal } from "./Reveal";
+import { MotionButton } from "./MotionButton";
 
 const steps = [
   {
@@ -54,12 +55,7 @@ export function HowItWorks() {
         </div>
 
         <Reveal index={4} className="mt-14">
-          <a
-            href="#prenota"
-            className="inline-block rounded-lg bg-[var(--color-amber)] px-6 py-3 font-mono text-[13px] uppercase tracking-wide text-[var(--color-ink)] transition-transform active:scale-[0.98]"
-          >
-            {ctaLabel}
-          </a>
+          <MotionButton href="#prenota" label={ctaLabel} />
         </Reveal>
       </div>
     </section>

@@ -22,11 +22,49 @@ completa — style-reference, motion patterns, GOTCHAS, componenti pronti.
 ## Direzione visiva
 Adattamento caldo di `style-references/integrated-biosciences.md` (nella
 libreria): stessa disciplina flat/no-shadow/single-accent, palette scaldata
-da verde-laboratorio ad ambra (`--color-amber: #ee9c4e`). Vedi `src/index.css`
-per i token completi. Immagini scientifiche → sostituite con visual
-illustrato (`ResonanceRings` in `WhatIsBioresonance.tsx`) per la parte
-concettuale, foto reali di animali (self-hosted in `src/assets/photos/`,
-licenza Unsplash, verificate visivamente prima dell'uso) per la parte calda.
+da verde-laboratorio ad ambra/corallo (`--color-amber`, `--color-coral` in
+`src/index.css`). Font: Bricolage Grotesque (display) + Inter Tight (body) —
+non Inter Tight ovunque, letto come troppo neutro/anonimo nella prima
+versione. Foto reali di animali self-hosted in `src/assets/photos/`
+(licenza Unsplash, verificate visivamente prima dell'uso, MAI hotlink diretto
+— vedi nota sotto).
+
+## Componenti: 21st.dev prima, custom solo se non c'è nulla di adatto
+Regola cambiata a metà progetto — la prima versione aveva troppi componenti
+fatti a mano (cerchi CSS per il visual di risonanza, bottoni custom, FAQ con
+`<details>`) e il risultato leggeva "cheap". Da qui in avanti, e per ogni
+progetto futuro: **cercare prima su 21st.dev** (`mcp__21st__search`,
+`get_inspiration`) bottoni, animazioni, transizioni, contenitori, pattern di
+testo — poi adattare (ricolorare sui token del brand, sostituire librerie
+icone non permesse come lucide con Phosphor, aggiustare per label italiane
+più lunghe) invece di scrivere da zero. Solo se la ricerca non produce nulla
+di adatto si scrive un componente custom.
+
+Componenti attuali di questo progetto adattati da 21st.dev:
+- `ShaderOrb.tsx` — sfondo WebGL "orb" (federicotoscano611/orb-shader,
+  id 23443), ricolorato su ambra/corallo, usato in Hero/WhatIsBioresonance/
+  FinalCta per un linguaggio visivo coerente su tutte le sezioni scure
+- `MotionButton.tsx` — CTA con freccia animata (Shatlyk1011/motion-button,
+  id 10384), riscritto da larghezza fissa ad auto-width (l'originale si
+  rompe con label italiane lunghe tipo "Prenota la chiamata gratuita")
+- `Faq.tsx` — accordion numerato con spring animation (jatin-yadav05/
+  interactive-accordion, id 9602), import spostato da `framer-motion` a
+  `motion/react` (pacchetto già installato in questo progetto)
+
+**Attenzione ai componenti a larghezza fissa**: molti componenti 21st.dev
+sono dimostrati con label inglesi corte ("Get Started"). Il copy italiano
+è quasi sempre più lungo — verificare SEMPRE che bottoni/badge non vadano
+a capo (`whitespace-nowrap` + `w-fit`, mai `w-full` fisso su un bottone con
+testo) prima di considerare l'integrazione finita. Bug reale trovato in
+questo progetto: `MotionButton` in una card di pricing stretta andava a
+capo su due righe finché non si è aggiunto `whitespace-nowrap`.
+
+**Immagini in artifact/preview self-contained**: se il progetto viene
+pubblicato come artifact HTML a file singolo (per anteprima rapida), Vite
+importa le immagini come stringa `/assets/nome-hash.jpg` dentro il bundle
+JS, non solo nel CSS — un inliner che processa solo il CSS lascia le
+immagini rotte nel file singolo. Vedi `inline-artifact.mjs`: deve riscrivere
+sia `url()` nel CSS sia i riferimenti stringa nel JS.
 
 ## TODO prima del lancio pubblico (vedi `src/siteConfig.ts`)
 - [ ] Contatti reali: WhatsApp, email, telefono (attualmente placeholder)

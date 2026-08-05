@@ -1,23 +1,27 @@
 @import "tailwindcss";
+@import "@fontsource-variable/bricolage-grotesque";
 @import "@fontsource-variable/inter-tight";
 @import "@fontsource/jetbrains-mono/400.css";
 @import "@fontsource/jetbrains-mono/500.css";
 
 @theme {
   /* Armonya — adattamento caldo dello style-reference integrated-biosciences:
-     stessa disciplina flat/no-shadow/single-accent, palette scaldata da
-     verde-laboratorio a bagliore ambra per un brand pet-wellness. */
-  --color-ink: #1f1a17;        /* canvas scuro, quasi-nero caldo */
-  --color-void: #120e0c;       /* footer, nero pieno riservato */
-  --color-bone: #faf6f1;       /* canvas chiaro, bianco caldo */
-  --color-paper: #fffcf8;      /* superficie card su sezioni chiare */
-  --color-card-alt: #f1e7db;   /* superficie card alternativa, più calda */
-  --color-graphite: #8a7c70;   /* testo secondario, muted */
-  --color-border: #e6d9cb;     /* hairline, divisori */
-  --color-amber: #ee9c4e;      /* accento unico: bagliore risonanza */
-  --color-amber-soft: #ffd9ab; /* alone/glow, mai su superfici grandi */
+     stessa disciplina flat/no-shadow, palette scaldata da verde-laboratorio
+     a un duo ambra/corallo con profondità reale (gradienti, non tinte piatte). */
+  --color-ink: #201a16;         /* canvas scuro, quasi-nero caldo */
+  --color-ink-deep: #140f0c;    /* variante più profonda, per gradienti hero */
+  --color-void: #0d0a08;        /* footer, nero pieno riservato */
+  --color-bone: #faf6f1;        /* canvas chiaro, bianco caldo */
+  --color-paper: #fffcf8;       /* superficie card su sezioni chiare */
+  --color-card-alt: #f1e6d8;    /* superficie card alternativa, più calda */
+  --color-graphite: #8a7c70;    /* testo secondario, muted */
+  --color-border: #e6d9cb;      /* hairline, divisori */
+  --color-amber: #f0a25a;       /* accento primario: bagliore risonanza */
+  --color-coral: #ef7d5c;       /* accento secondario, solo in gradiente con amber */
+  --color-amber-soft: #ffd9ab;  /* alone/glow, mai su superfici grandi */
 
-  --font-display: "Inter Tight Variable", ui-sans-serif, system-ui, sans-serif;
+  --font-display: "Bricolage Grotesque Variable", ui-sans-serif, system-ui, sans-serif;
+  --font-body: "Inter Tight Variable", ui-sans-serif, system-ui, sans-serif;
   --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, monospace;
 }
 
@@ -33,13 +37,23 @@
     margin: 0;
     background-color: var(--color-bone);
     color: var(--color-ink);
-    font-family: var(--font-display);
+    font-family: var(--font-body);
     -webkit-font-smoothing: antialiased;
+  }
+  h1, h2, h3 {
+    font-family: var(--font-display);
+    font-weight: 560;
   }
 }
 
 @layer utilities {
   .glow-text {
     text-shadow: 0 0 40px color-mix(in srgb, var(--color-amber) 35%, transparent);
+  }
+  .text-gradient {
+    background: linear-gradient(100deg, var(--color-amber), var(--color-coral));
+    background-clip: text;
+    -webkit-background-clip: text;
+    color: transparent;
   }
 }

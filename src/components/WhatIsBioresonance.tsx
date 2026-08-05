@@ -1,4 +1,5 @@
 import { Reveal } from "./Reveal";
+import { ShaderOrb } from "./ShaderOrb";
 
 export function WhatIsBioresonance() {
   return (
@@ -24,44 +25,13 @@ export function WhatIsBioresonance() {
           </div>
         </Reveal>
 
-        <Reveal index={1} className="relative flex h-[320px] items-center justify-center md:h-[400px]">
-          <ResonanceRings />
+        <Reveal
+          index={1}
+          className="relative h-[380px] overflow-hidden rounded-3xl ring-1 ring-[color-mix(in_srgb,var(--color-amber)_15%,transparent)] md:h-[460px]"
+        >
+          <ShaderOrb className="h-full w-full" />
         </Reveal>
       </div>
     </section>
-  );
-}
-
-function ResonanceRings() {
-  const rings = [1, 2, 3, 4];
-  return (
-    <div className="relative flex h-full w-full items-center justify-center overflow-hidden rounded-2xl bg-[var(--color-ink)]">
-      {rings.map((r) => (
-        <span
-          key={r}
-          aria-hidden
-          className="absolute rounded-full border motion-safe:animate-[resonance-pulse_3.2s_ease-out_infinite]"
-          style={{
-            width: `${r * 70}px`,
-            height: `${r * 70}px`,
-            borderColor: "var(--color-amber)",
-            opacity: 0.55 - r * 0.1,
-            animationDelay: `${r * 0.5}s`,
-          }}
-        />
-      ))}
-      <span
-        aria-hidden
-        className="relative h-4 w-4 rounded-full"
-        style={{ background: "var(--color-amber)" }}
-      />
-      <style>{`
-        @keyframes resonance-pulse {
-          0% { transform: scale(0.85); opacity: 0.6; }
-          70% { opacity: 0.15; }
-          100% { transform: scale(1.15); opacity: 0; }
-        }
-      `}</style>
-    </div>
   );
 }

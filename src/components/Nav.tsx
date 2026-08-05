@@ -1,4 +1,5 @@
 import { ctaLabel, site } from "../siteConfig";
+import { MotionButton } from "./MotionButton";
 
 export function Nav() {
   return (
@@ -7,12 +8,11 @@ export function Nav() {
         <a href="#top" className="font-display text-lg tracking-tight text-[var(--color-ink)]">
           {site.brand}
         </a>
-        <a
+        <MotionButton
           href="#prenota"
-          className="rounded-lg bg-[var(--color-ink)] px-4 py-2 font-mono text-[13px] uppercase tracking-wide text-[var(--color-bone)] transition-transform active:scale-[0.98]"
-        >
-          {ctaLabel}
-        </a>
+          label={ctaLabel}
+          className="whitespace-nowrap px-3 py-2 text-[11px] sm:px-4 sm:text-[13px]"
+        />
       </div>
     </header>
   );

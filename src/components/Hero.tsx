@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
 import { ctaLabel, site } from "../siteConfig";
 import heroDog from "../assets/photos/hero-dog.jpg";
+import { ShaderOrb } from "./ShaderOrb";
+import { MotionButton } from "./MotionButton";
 
 export function Hero() {
   // Above-the-fold: reveal via requestAnimationFrame al mount, mai via
@@ -15,15 +17,12 @@ export function Hero() {
   return (
     <section
       id="top"
-      className="relative overflow-hidden bg-[var(--color-ink)] pt-16"
+      className="relative overflow-hidden bg-[var(--color-ink-deep)] pt-16"
     >
-      {/* Bagliore ambra unico — l'unico punto in cui l'accento riempie una
-          superficie ampia, sfumato, mai come tinta piatta. */}
-      <div
-        aria-hidden
-        className="pointer-events-none absolute -top-40 right-[-10%] h-[520px] w-[520px] rounded-full opacity-40 blur-[120px]"
-        style={{ background: "var(--color-amber)" }}
-      />
+      <div className="pointer-events-none absolute inset-0">
+        <ShaderOrb className="h-full w-full opacity-80" />
+        <div className="absolute inset-0 bg-gradient-to-r from-[var(--color-ink-deep)] via-[color-mix(in_srgb,var(--color-ink-deep)_55%,transparent)] to-transparent" />
+      </div>
 
       <div className="relative mx-auto grid max-w-[1200px] grid-cols-1 items-center gap-12 px-6 pt-16 pb-20 md:grid-cols-2 md:pt-24 md:pb-28">
         <div
@@ -36,26 +35,18 @@ export function Hero() {
           <p className="mb-5 font-mono text-[13px] uppercase tracking-[0.18em] text-[var(--color-amber)]">
             {site.positioning}
           </p>
-          <h1 className="max-w-[14ch] text-4xl leading-[1.05] tracking-tight text-[var(--color-bone)] md:text-6xl">
-            {site.tagline}
+          <h1 className="max-w-[15ch] text-4xl leading-[1.05] tracking-tight text-[var(--color-bone)] md:text-6xl">
+            Riequilibrio a distanza — per il tuo{" "}
+            <span className="text-gradient">animale</span>, per te, per
+            l'ambiente.
           </h1>
-          <p className="mt-6 max-w-[42ch] text-base leading-relaxed text-[color-mix(in_srgb,var(--color-bone)_70%,transparent)] md:text-lg">
+          <p className="mt-6 max-w-[42ch] text-base leading-relaxed text-[color-mix(in_srgb,var(--color-bone)_72%,transparent)] md:text-lg">
             Una videochiamata con Giorgia Bisognin, per riportare in equilibrio
             il tuo cane o gatto — a distanza, senza stress da spostamento.
           </p>
           <div className="mt-9 flex flex-wrap items-center gap-4">
-            <a
-              href="#prenota"
-              className="rounded-lg bg-[var(--color-amber)] px-6 py-3 font-mono text-[13px] uppercase tracking-wide text-[var(--color-ink)] transition-transform active:scale-[0.98]"
-            >
-              {ctaLabel}
-            </a>
-            <a
-              href="#come-funziona"
-              className="rounded-lg border border-[color-mix(in_srgb,var(--color-bone)_25%,transparent)] px-6 py-3 font-mono text-[13px] uppercase tracking-wide text-[var(--color-bone)]"
-            >
-              Come funziona
-            </a>
+            <MotionButton href="#prenota" label={ctaLabel} />
+            <MotionButton href="#come-funziona" label="Come funziona" variant="outline-dark" />
           </div>
           <p className="mt-6 max-w-[40ch] font-mono text-[12px] leading-relaxed text-[color-mix(in_srgb,var(--color-bone)_45%,transparent)]">
             Il veterinario resta sempre il riferimento sanitario del tuo
@@ -64,7 +55,7 @@ export function Hero() {
         </div>
 
         <div
-          className="relative h-[320px] overflow-hidden rounded-2xl md:h-[440px] transition-all duration-700 delay-150 ease-out motion-reduce:transition-none"
+          className="relative h-[320px] overflow-hidden rounded-2xl ring-1 ring-[color-mix(in_srgb,var(--color-amber)_18%,transparent)] md:h-[440px] transition-all duration-700 delay-150 ease-out motion-reduce:transition-none"
           style={{
             opacity: shown ? 1 : 0,
             transform: shown ? "scale(1)" : "scale(0.97)",
@@ -77,6 +68,7 @@ export function Hero() {
             width={1200}
             height={1400}
           />
+          <div className="absolute inset-0 bg-gradient-to-t from-[var(--color-ink-deep)]/30 via-transparent to-transparent" />
         </div>
       </div>
     </section>
