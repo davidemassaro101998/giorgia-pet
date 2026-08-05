@@ -32,15 +32,42 @@ cursor-spotlight") — da qui non si ripete.
 - Nessun numero/percentuale finto (niente "98% di proprietari soddisfatti"
   inventato)
 
-## Direzione visiva
-Adattamento caldo di `style-references/integrated-biosciences.md` (nella
-libreria): stessa disciplina flat/no-shadow/single-accent, palette scaldata
-da verde-laboratorio ad ambra/corallo (`--color-amber`, `--color-coral` in
-`src/index.css`). Font: Bricolage Grotesque (display) + Inter Tight (body) —
-non Inter Tight ovunque, letto come troppo neutro/anonimo nella prima
-versione. Foto reali di animali self-hosted in `src/assets/photos/`
-(licenza Unsplash, verificate visivamente prima dell'uso, MAI hotlink diretto
-— vedi nota sotto).
+## Direzione visiva — STEP-BY-STEP REBUILD IN CORSO
+Dopo due round di feedback negativo (particelle "vetro sporco", foto del
+cane inserita male, palette sbagliata) si è deciso di ripartire a step
+espliciti invece di iterare su tutto insieme: colori → immagini →
+animazioni → transizioni, un pezzo alla volta, con preview e conferma ad
+ogni step prima di procedere al successivo. **Non saltare step né
+reintrodurre pezzi di step successivi in anticipo** (es. non rimettere
+foto/particelle mentre si lavora sui colori).
+
+**Step 1 — Colori (fatto)**: palette "Forest" — verde profondo
+(`--color-ink: #16211c`) + bone neutro + **un solo accento oro**
+(`--color-amber: #d4a24e`, niente più coppia ambra/corallo). La palette
+precedente (crema `#faf6f1` + ambra/corallo + quasi-nero caldo) era
+**esattamente** la combinazione bannata dalle nostre skill di taste come
+il tell più riconoscibile dell'AI per brief premium-consumer — scoperto
+rileggendo `design-taste-frontend/SKILL.md` dopo il feedback "sembra
+già visto ovunque". Vedi `src/index.css`.
+
+**Step 2 — Immagini**: da fare. Per lo step 1 le foto di cane/gatto e il
+campo di particelle sono stati **rimossi del tutto** (non solo ritoccati)
+per isolare la valutazione dei colori da altre variabili — vanno
+riprogettati da zero nello step immagini, non semplicemente reintrodotti
+come prima.
+
+**Step 3 — Animazioni**: da fare.
+
+**Step 4 — Transizioni tra sezioni**: da fare. Direzione già discussa e
+approvata concettualmente (vedi commit precedenti) ma non ancora
+implementata: 2 famiglie soltanto per coerenza — dissolvenza a particelle
+sui 3 snodi narrativi principali, wipe editoriale sul titolo per i 6
+passaggi minori. **Va rivista alla luce della nuova palette** (le
+particelle vecchie erano legate all'ambra/corallo bocciato).
+
+Font: Bricolage Grotesque (display) + Inter Tight (body) — non Inter
+Tight ovunque, letto come troppo neutro/anonimo nella prima versione.
+Questa parte resta valida, non toccata dal reset.
 
 ## Componenti: 21st.dev prima, custom solo se non c'è nulla di adatto
 Regola cambiata a metà progetto — la prima versione aveva troppi componenti
@@ -55,21 +82,11 @@ di adatto si scrive un componente custom.
 
 Componenti attuali di questo progetto adattati da 21st.dev (codice reale
 via `get_component`, non "ispirato"):
-- `QuantumNebula.tsx` — 50.000 particelle Three.js con curl noise + Unreal
-  Bloom (dhileepkumargm/quantum-nebula, id 9112), ricolorato ciano→ambra.
-  È la firma visiva del sito: usata identica in Hero, WhatIsBioresonance
-  (full-bleed, senza card) e FinalCta per legare le sezioni scure invece di
-  tre tecniche diverse. Codice lasciato fedele all'originale (Three.js
-  puro, non R3F) — solo hue, boxSize/bloom e pausa IntersectionObserver
-  aggiunti (3 istanze sulla stessa pagina, serve per non sprecare CPU
-  fuori viewport). Caricato via `import()` dinamico dentro `useEffect`,
-  non nell'import statico — three.js+postprocessing pesano ~185KB gzip,
-  tenerli fuori dal bundle iniziale accorcia il critical path.
-- `RevealImageMask.tsx` — foto di cane/gatto mascherate da una forma che
-  si apre a piena inquadratura scrollando (daiwiikharihar/reveal-image-
-  mask, id 10905) — niente più card con bordo intorno alle foto animali,
-  richiesta esplicita dopo la prima versione ("togli gli animali dai
-  contenitori").
+- `RevealImageMask.tsx` — foto mascherate da una forma che si apre a piena
+  inquadratura scrollando (daiwiikharihar/reveal-image-mask, id 10905).
+  **Non referenziato da nessun componente al momento** (foto rimosse nello
+  step colori) — resta come infrastruttura pronta per lo step immagini,
+  non è codice morto da cancellare.
 - `MotionButton.tsx` — CTA con pull magnetico GSAP (pattern
   snippets/r3f-cinematic/MagneticButton.tsx della libreria) + freccia
   animata (concetto Shatlyk1011/motion-button, id 10384, riscritto da
@@ -86,15 +103,6 @@ via `get_component`, non "ispirato"):
   perde lo spazio finale del primo blocco (CSS collassa whitespace a fine
   riga) — serve `whiteSpace: "pre"` sul primo span o si legge
   "pensatoArmonya" invece di "pensato Armonya".
-
-**Build separata per l'anteprima artifact**: `QuantumNebula` usa
-`import()` dinamico → Vite crea chunk separati che un HTML a file singolo
-non può servire (richiederebbero richieste HTTP a URL che non esistono
-nel file inlineato). `vite.artifact.config.ts` forza
-`rollupOptions.output.inlineDynamicImports: true` in una build a parte
-(`dist-artifact/`, ignorata da git) usata solo da `inline-artifact.mjs` —
-la build reale per il deploy (`npm run build` → `dist/`) mantiene il
-code-splitting.
 
 **Attenzione ai componenti a larghezza fissa**: molti componenti 21st.dev
 sono dimostrati con label inglesi corte ("Get Started"). Il copy italiano

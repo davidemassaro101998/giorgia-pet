@@ -1,14 +1,9 @@
 import { SectionTitle } from "./SectionTitle";
-import { QuantumNebula } from "./QuantumNebula";
 
 export function WhatIsBioresonance() {
   return (
-    <section className="relative min-h-[85vh] w-full overflow-hidden border-b border-[var(--color-border)] bg-[var(--color-ink-deep)]">
-      <QuantumNebula className="pointer-events-none absolute inset-0 opacity-90" />
-      <div className="pointer-events-none absolute inset-0 bg-[var(--color-ink-deep)]/40" />
-      <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-[var(--color-ink-deep)]/70 via-[var(--color-ink-deep)]/25 to-[var(--color-ink-deep)]/80" />
-
-      <div className="relative z-10 mx-auto flex min-h-[85vh] max-w-[900px] flex-col items-center justify-center px-6 py-24 text-center">
+    <section className="relative w-full overflow-hidden border-b border-[var(--color-border)] bg-[var(--color-ink-deep)]">
+      <div className="relative z-10 mx-auto flex max-w-[900px] flex-col items-center px-6 py-24 text-center">
         <SectionTitle
           firstHalf="Cos'è "
           secondHalf="la biorisonanza"

@@ -1,10 +1,7 @@
 import { readFileSync, writeFileSync, readdirSync } from "fs";
 import { join, extname } from "path";
 
-// Legge dalla build separata a bundle unico (vite.artifact.config.ts) —
-// la build normale (dist/, usata da Vercel) mantiene il code-splitting
-// dinamico di three.js, che un file HTML singolo non può servire.
-const dist = "dist-artifact";
+const dist = "dist";
 const assetsDir = join(dist, "assets");
 const files = readdirSync(assetsDir);
 const cssFile = files.find((f) => f.endsWith(".css"));

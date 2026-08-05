@@ -1,6 +1,5 @@
 import { ctaLabel, site } from "../siteConfig";
 import { Reveal } from "./Reveal";
-import { QuantumNebula } from "./QuantumNebula";
 import { MotionButton } from "./MotionButton";
 
 export function FinalCta() {
@@ -9,8 +8,6 @@ export function FinalCta() {
       id="prenota"
       className="relative overflow-hidden border-b border-[var(--color-border)] bg-[var(--color-ink-deep)] py-28"
     >
-      <QuantumNebula className="pointer-events-none absolute inset-0 opacity-70" />
-      <div className="pointer-events-none absolute inset-0 bg-[var(--color-ink-deep)]/55" />
       <div className="relative mx-auto max-w-[720px] px-6 text-center">
         <Reveal>
           <h2 className="text-3xl leading-tight tracking-tight text-[var(--color-bone)] md:text-4xl">

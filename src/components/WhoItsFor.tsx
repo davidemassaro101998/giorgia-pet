@@ -1,6 +1,4 @@
 import { Reveal } from "./Reveal";
-import calmCat from "../assets/photos/calm-cat.jpg";
-import { RevealImageMask } from "./RevealImageMask";
 import { SectionTitle } from "./SectionTitle";
 
 const cases = [
@@ -15,14 +13,14 @@ const cases = [
 export function WhoItsFor() {
   return (
     <section className="border-b border-[var(--color-border)] bg-[var(--color-bone)] py-20 md:py-28">
-      <div className="mx-auto grid max-w-[1200px] grid-cols-1 items-center gap-14 px-6 md:grid-cols-2">
-        <Reveal className="order-2 md:order-1">
+      <div className="mx-auto max-w-[800px] px-6 text-center">
+        <Reveal>
           <SectionTitle
             firstHalf="Per chi è pensato "
             secondHalf="Armonya"
             className="text-3xl leading-tight tracking-tight text-[var(--color-ink)] md:text-4xl"
           />
-          <div className="mt-7 flex flex-wrap gap-3">
+          <div className="mt-7 flex flex-wrap justify-center gap-3">
             {cases.map((c) => (
               <span
                 key={c}
@@ -33,14 +31,6 @@ export function WhoItsFor() {
             ))}
           </div>
         </Reveal>
-        <div className="order-1 md:order-2">
-          <RevealImageMask
-            src={calmCat}
-            alt="Gatto rilassato e in equilibrio"
-            shape="circle"
-            className="h-[300px] md:h-[380px]"
-          />
-        </div>
       </div>
     </section>
   );

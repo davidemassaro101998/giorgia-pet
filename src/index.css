@@ -5,20 +5,22 @@
 @import "@fontsource/jetbrains-mono/500.css";
 
 @theme {
-  /* Armonya — adattamento caldo dello style-reference integrated-biosciences:
-     stessa disciplina flat/no-shadow, palette scaldata da verde-laboratorio
-     a un duo ambra/corallo con profondità reale (gradienti, non tinte piatte). */
-  --color-ink: #201a16;         /* canvas scuro, quasi-nero caldo */
-  --color-ink-deep: #140f0c;    /* variante più profonda, per gradienti hero */
-  --color-void: #0d0a08;        /* footer, nero pieno riservato */
-  --color-bone: #faf6f1;        /* canvas chiaro, bianco caldo */
-  --color-paper: #fffcf8;       /* superficie card su sezioni chiare */
-  --color-card-alt: #f1e6d8;    /* superficie card alternativa, più calda */
-  --color-graphite: #8a7c70;    /* testo secondario, muted */
-  --color-border: #e6d9cb;      /* hairline, divisori */
-  --color-amber: #f0a25a;       /* accento primario: bagliore risonanza */
-  --color-coral: #ef7d5c;       /* accento secondario, solo in gradiente con amber */
-  --color-amber-soft: #ffd9ab;  /* alone/glow, mai su superfici grandi */
+  /* Armonya — palette "Forest": verde profondo + bone + UN solo accento
+     oro/ambra. Sostituisce la precedente crema+ambra+corallo, che era
+     esattamente la palette banner-consumer bannata dalle nostre skill di
+     taste come il tell più riconoscibile dell'AI (crema/panna + ambra-
+     corallo/ottone + quasi-nero caldo — l'abbiamo scritto noi stessi nel
+     CLAUDE.md.template della libreria e ci siamo ricascati qui). */
+  --color-ink: #16211c;         /* canvas scuro, verde-nero profondo */
+  --color-ink-deep: #0d1712;    /* variante più profonda, footer/CTA */
+  --color-void: #08100c;
+  --color-bone: #f6f5ef;        /* canvas chiaro, neutro leggermente freddo */
+  --color-paper: #fffdf8;       /* superficie card su sezioni chiare */
+  --color-card-alt: #eae7dc;    /* superficie card alternativa */
+  --color-graphite: #6f7a70;    /* testo secondario, grigio-salvia */
+  --color-border: #dcdccd;      /* hairline, divisori */
+  --color-amber: #d4a24e;       /* UNICO accento: oro, mai in coppia con un secondo colore */
+  --color-amber-soft: #e8c98a;  /* variante più chiara dell'accento, solo dettagli piccoli */
 
   --font-display: "Bricolage Grotesque Variable", ui-sans-serif, system-ui, sans-serif;
   --font-body: "Inter Tight Variable", ui-sans-serif, system-ui, sans-serif;
@@ -51,9 +53,6 @@
     text-shadow: 0 0 40px color-mix(in srgb, var(--color-amber) 35%, transparent);
   }
   .text-gradient {
-    background: linear-gradient(100deg, var(--color-amber), var(--color-coral));
-    background-clip: text;
-    -webkit-background-clip: text;
-    color: transparent;
+    color: var(--color-amber);
   }
 }
