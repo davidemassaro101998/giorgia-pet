@@ -1,5 +1,5 @@
 import { Reveal } from "./Reveal";
-import { ShaderOrb } from "./ShaderOrb";
+import { GoldenReveal } from "./GoldenReveal";
 
 export function WhatIsBioresonance() {
   return (
@@ -29,7 +29,10 @@ export function WhatIsBioresonance() {
           index={1}
           className="relative h-[380px] overflow-hidden rounded-3xl ring-1 ring-[color-mix(in_srgb,var(--color-amber)_15%,transparent)] md:h-[460px]"
         >
-          <ShaderOrb className="h-full w-full" />
+          <GoldenReveal className="h-full w-full" />
+          <p className="pointer-events-none absolute bottom-5 left-1/2 hidden -translate-x-1/2 font-mono text-[11px] uppercase tracking-[0.14em] text-[color-mix(in_srgb,var(--color-bone)_55%,transparent)] md:block">
+            muovi il cursore qui sopra
+          </p>
         </Reveal>
       </div>
     </section>

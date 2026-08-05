@@ -1,6 +1,7 @@
 import { ctaLabel } from "../siteConfig";
 import { Reveal } from "./Reveal";
 import { MotionButton } from "./MotionButton";
+import { ScrollParallaxBg } from "./ScrollParallaxBg";
 
 const steps = [
   {
@@ -29,9 +30,19 @@ export function HowItWorks() {
   return (
     <section
       id="come-funziona"
-      className="border-b border-[var(--color-border)] bg-[var(--color-ink)] py-20 md:py-28"
+      className="relative overflow-hidden border-b border-[var(--color-border)] bg-[var(--color-ink)] py-20 md:py-28"
     >
-      <div className="mx-auto max-w-[1200px] px-6">
+      <ScrollParallaxBg range={["-10%", "10%"]} className="pointer-events-none absolute inset-0">
+        <div
+          aria-hidden
+          className="absolute -left-24 top-1/2 h-[420px] w-[420px] -translate-y-1/2 rounded-full opacity-[0.14] blur-[110px]"
+          style={{
+            background:
+              "radial-gradient(circle, var(--color-amber) 0%, var(--color-coral) 60%, transparent 78%)",
+          }}
+        />
+      </ScrollParallaxBg>
+      <div className="relative mx-auto max-w-[1200px] px-6">
         <Reveal>
           <h2 className="max-w-[22ch] text-3xl leading-tight tracking-tight text-[var(--color-bone)] md:text-4xl">
             Come funziona una sessione

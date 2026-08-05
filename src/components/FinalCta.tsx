@@ -2,6 +2,7 @@ import { ctaLabel, site } from "../siteConfig";
 import { Reveal } from "./Reveal";
 import { ShaderOrb } from "./ShaderOrb";
 import { MotionButton } from "./MotionButton";
+import { ScrollParallaxBg } from "./ScrollParallaxBg";
 
 export function FinalCta() {
   return (
@@ -9,10 +10,10 @@ export function FinalCta() {
       id="prenota"
       className="relative overflow-hidden border-b border-[var(--color-border)] bg-[var(--color-ink-deep)] py-24"
     >
-      <div className="pointer-events-none absolute inset-0">
+      <ScrollParallaxBg range={["8%", "-8%"]} className="pointer-events-none absolute inset-0">
         <ShaderOrb className="h-full w-full opacity-60" />
-        <div className="absolute inset-0 bg-[var(--color-ink-deep)]/55" />
-      </div>
+      </ScrollParallaxBg>
+      <div className="pointer-events-none absolute inset-0 bg-[var(--color-ink-deep)]/55" />
       <div className="relative mx-auto max-w-[720px] px-6 text-center">
         <Reveal>
           <h2 className="text-3xl leading-tight tracking-tight text-[var(--color-bone)] md:text-4xl">

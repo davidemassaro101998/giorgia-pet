@@ -1,5 +1,6 @@
 import { Reveal } from "./Reveal";
 import calmCat from "../assets/photos/calm-cat.jpg";
+import { TiltImage } from "./TiltImage";
 
 const cases = [
   "Cani e gatti ansiosi",
@@ -29,16 +30,11 @@ export function WhoItsFor() {
             ))}
           </div>
         </Reveal>
-        <Reveal
-          index={1}
-          className="order-1 h-[280px] overflow-hidden rounded-2xl md:order-2 md:h-[360px]"
-        >
-          <img
+        <Reveal index={1} className="order-1 md:order-2">
+          <TiltImage
             src={calmCat}
             alt="Gatto rilassato e in equilibrio"
-            className="h-full w-full object-cover"
-            width={1200}
-            height={800}
+            className="h-[280px] md:h-[360px]"
           />
         </Reveal>
       </div>
