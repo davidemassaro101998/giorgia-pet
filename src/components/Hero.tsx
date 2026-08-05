@@ -36,7 +36,7 @@ export function Hero() {
         ref={revealRef}
         className="relative z-10 mx-auto flex min-h-[calc(85vh-4rem)] w-full max-w-[900px] flex-col items-center justify-center px-6 py-14 text-center"
       >
-        <p className="mb-5 font-mono text-[11px] font-bold uppercase tracking-[0.28em] text-[var(--color-amber)]">
+        <p className="mb-5 font-mono text-[11px] font-bold uppercase tracking-[0.28em] text-[var(--color-ember)]">
           {site.positioning}
         </p>
         <h1 className="max-w-2xl text-[clamp(2.5rem,6vw,4.75rem)] font-black leading-[0.98] tracking-tighter text-[var(--color-bone)]">

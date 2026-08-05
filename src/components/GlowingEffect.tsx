@@ -1,7 +1,7 @@
 // Da 21st.dev — @manuarora700/glowing-effect (id 1567, "come su Cursor").
 // Codice lasciato fedele all'originale — solo il gradiente conico
 // arcobaleno (rosa/oro/verde/blu) sostituito con un'unica tinta oro,
-// coerente con la regola "un solo accento" della palette Armonya.
+// coerente con la regola "un solo accento" della palette Vibra.
 
 import { memo, useCallback, useEffect, useRef } from "react";
 import { cn } from "../lib/utils";
@@ -108,8 +108,8 @@ export const GlowingEffect = memo(
             "--start": "0",
             "--active": "0",
             "--glowingeffect-border-width": `${borderWidth}px`,
-            "--gradient": `radial-gradient(circle, var(--color-amber-soft) 10%, transparent 30%),
-              conic-gradient(from 0deg, var(--color-amber), var(--color-amber-soft), var(--color-amber))`,
+            "--gradient": `radial-gradient(circle, var(--color-ember-soft) 10%, transparent 30%),
+              conic-gradient(from 0deg, var(--color-ember), var(--color-ember-soft), var(--color-ember))`,
           } as React.CSSProperties
         }
         className={cn(

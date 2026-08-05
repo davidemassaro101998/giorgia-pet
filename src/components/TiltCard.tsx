@@ -86,7 +86,7 @@ export function TiltCard({
               top: `${spotlightPos.y}%`,
               transform: "translate(-50%, -50%)",
               background:
-                "radial-gradient(circle, color-mix(in srgb, var(--color-amber) 18%, transparent) 0%, transparent 40%)",
+                "radial-gradient(circle, color-mix(in srgb, var(--color-ember) 18%, transparent) 0%, transparent 40%)",
             }}
           />
         </div>

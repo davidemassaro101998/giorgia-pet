@@ -19,7 +19,7 @@ export function About() {
           </TiltCard>
         </Reveal>
         <Reveal index={1}>
-          <p className="font-mono text-[13px] uppercase tracking-[0.18em] text-[var(--color-amber)]">
+          <p className="font-mono text-[13px] uppercase tracking-[0.18em] text-[var(--color-ember)]">
             Chi ti segue
           </p>
           <SectionTitle

@@ -1,4 +1,4 @@
-# CLAUDE.md — Armonya (landing page biorisonanza cani/gatti)
+# CLAUDE.md — Vibra (landing page biorisonanza cani/gatti)
 
 Regole standing per questo progetto. Vedi anche
 `~/claude-library-for-site` (repo separato) per la libreria di riferimento
@@ -18,7 +18,11 @@ spacciati per "shader", gradiente CSS spacciato per "combinazione con
 cursor-spotlight") — da qui non si ripete.
 
 ## Il brand
-- **Nome**: Armonya — "Biorisonanza per cani e gatti"
+- **Nome**: Vibra — "Biorisonanza per cani e gatti". Prima era "Armonya",
+  cambiato su feedback esplicito ("armonia è visto e rivisto, serve un
+  nome unico"). "Vibra" (da "vibrazione/frequenza") nomina il meccanismo
+  reale del prodotto invece di usare una parola-ombrello da wellness già
+  abusata ovunque.
 - **Tagline**: "Riequilibrio a distanza — per il tuo animale, per te, per l'ambiente."
 - **Praticante**: Giorgia Bisognin, ex infermiera, kinesiologa, esperta biorisonanza
 - **Fase**: pre-lancio, clienti finora solo via passaparola — nessuna
@@ -61,6 +65,27 @@ scartato: non è un componente standalone ma un re-export che richiede
 l'intero package `reshaped` + il suo theme provider, in conflitto con i
 token Tailwind del progetto — sostituito con `Tilt Card` (id 12246).
 
+**Step 1.6 — Rebrand: nome, palette, bottone "segnale" (fatto)**: dopo
+"Sintonia" (nome scartato: "non è unico") si è arrivati a **Vibra**.
+Rifatta anche la palette: **niente più oro/ambra** (accento più abusato
+nel "premium" AI-generico — fintech, skincare, coaching, non dice nulla
+di specifico su Vibra). Scartate anche due alternative proposte e
+respinte: verde (legge clinico/medico — Vibra non è un'app medica) e
+viola (legge spirituale/new-age, cliché delle app di meditazione). Nuovo
+accento unico: **`--color-ember` `#c9705c`**, rosa-terracotta caldo — il
+calore di un essere vivo (tartufo, orecchio, battito sotto il pelo), non
+uno strumento né un lusso da e-commerce. Base neutra ink/void/bone
+ritinta calda per accompagnarlo (vedi `src/index.css`).
+
+Il bottone (`MotionButton.tsx`) è stato ricostruito da zero una seconda
+volta: il primo giro (profondità/slab, vedi Step 1.5) è stato bocciato
+duramente ("bottoni da app da due euro, non di un brand multimilionario
+che tratta pet") — lo slab colorato spesso sotto il bottone è
+letteralmente il pattern dei bottoni "a caramella" di Duolingo/Candy
+Crush, non un pattern premium. Sostituito con un bottone-segnale
+coerente col concetto di prodotto (biorisonanza = frequenza): vedi la sua
+voce in "Componenti" sotto per i dettagli tecnici.
+
 **Step 2 — Immagini**: da fare. Per lo step 1 le foto di cane/gatto e il
 campo di particelle sono stati **rimossi del tutto** (non solo ritoccati)
 per isolare la valutazione dei colori da altre variabili — vanno
@@ -98,14 +123,23 @@ via `get_component`, non "ispirato"):
   **Non referenziato da nessun componente al momento** (foto rimosse nello
   step colori) — resta come infrastruttura pronta per lo step immagini,
   non è codice morto da cancellare.
-- `MotionButton.tsx` — CTA con pull magnetico GSAP (pattern
-  snippets/r3f-cinematic/MagneticButton.tsx della libreria) + freccia
-  animata (concetto Shatlyk1011/motion-button, id 10384, riscritto da
-  larghezza fissa ad auto-width perché l'originale si rompe con label
-  italiane lunghe tipo "Prenota la chiamata gratuita") + profondità reale
-  al press (@ddoemonn/press-depth, id 23547 — slab colorato sotto la
-  faccia del bottone che si "preme" col click, `group-active:translate-y`,
-  invece di un piatto cambio colore all'hover).
+- `MotionButton.tsx` — CTA "segnale", ricostruito dopo la bocciatura dello
+  slab/press-depth ("app da due euro"). Combina 3 elementi reali: pull
+  magnetico GSAP (pattern snippets/r3f-cinematic/MagneticButton.tsx della
+  libreria) + freccia animata (concetto Shatlyk1011/motion-button, id
+  10384, riscritto ad auto-width per label italiane lunghe) + un hook
+  `useRipple` adattato fedelmente da 21st.dev ddoemonn/ripple (id 23551,
+  anello di risonanza che si espande dal punto esatto del click e si
+  dissolve, invece di uno schiacciamento meccanico) + una waveform di
+  frequenza (canvas) adattata da dhileepkumargm/sonic-waveform (id 6019,
+  originale a schermo intero) confinata in una striscia sottile sul bordo
+  inferiore del bottone, visibile solo in hover — a riposo il bottone è
+  muto. **Iterazione fallita da ricordare**: il primo tentativo disegnava
+  la waveform su tutta l'altezza del bottone con opacità alta, le linee
+  attraversavano la label rendendola illeggibile — se si ritocca ancora,
+  tenerla confinata in una striscia stretta lontana dal testo. Fill
+  sempre piatto/opaco (niente inset-shadow "lucido", altro dettaglio che
+  contribuiva alla lettura "gadget economico").
 - `TiltCard.tsx` — tilt 3D in prospettiva + spotlight che segue il cursore
   (@tom_ui/tilt-card, id 12246), codice fedele all'originale, `tiltLimit`
   ridotto da 15-20 (demo) a 6 per restare sobrio. Usato per le card nelle
@@ -168,7 +202,7 @@ sia `url()` nel CSS sia i riferimenti stringa nel JS.
 ## TODO prima del lancio pubblico (vedi `src/siteConfig.ts`)
 - [ ] Contatti reali: WhatsApp, email, telefono (attualmente placeholder)
 - [ ] Prezzi reali per sessione singola e percorso 3 sessioni (attualmente `€ —`)
-- [ ] Logo vero (attualmente solo wordmark testuale "Armonya")
+- [ ] Logo vero (attualmente solo wordmark testuale "Vibra")
 - [ ] Foto vera di Giorgia Bisognin (attualmente monogramma "GB" — un ritratto
       stock al suo posto sarebbe fuorviante, va sostituito con una foto reale)
 - [ ] Testimonianze reali quando disponibili (sezione `SocialProof.tsx`)

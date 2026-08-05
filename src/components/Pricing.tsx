@@ -8,7 +8,7 @@ const tiers = [
   {
     name: "Chiamata conoscitiva",
     price: "Gratuita",
-    detail: "10 minuti, senza impegno, per capire se Armonya fa al caso vostro.",
+    detail: "10 minuti, senza impegno, per capire se Vibra fa al caso vostro.",
     cta: true,
   },
   {
@@ -40,7 +40,7 @@ export function Pricing() {
               <TiltCard
                 className={`flex flex-col rounded-2xl border p-8 ${
                   t.cta
-                    ? "border-[color-mix(in_srgb,var(--color-amber)_45%,transparent)] bg-[var(--color-paper)] ring-1 ring-[color-mix(in_srgb,var(--color-amber)_20%,transparent)]"
+                    ? "border-[color-mix(in_srgb,var(--color-ember)_45%,transparent)] bg-[var(--color-paper)] ring-1 ring-[color-mix(in_srgb,var(--color-ember)_20%,transparent)]"
                     : "border-[var(--color-border)] bg-[var(--color-paper)]"
                 }`}
               >

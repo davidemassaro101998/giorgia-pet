@@ -5,22 +5,24 @@
 @import "@fontsource/jetbrains-mono/500.css";
 
 @theme {
-  /* Armonya — palette "Forest": verde profondo + bone + UN solo accento
-     oro/ambra. Sostituisce la precedente crema+ambra+corallo, che era
-     esattamente la palette banner-consumer bannata dalle nostre skill di
-     taste come il tell più riconoscibile dell'AI (crema/panna + ambra-
-     corallo/ottone + quasi-nero caldo — l'abbiamo scritto noi stessi nel
-     CLAUDE.md.template della libreria e ci siamo ricascati qui). */
-  --color-ink: #16211c;         /* canvas scuro, verde-nero profondo */
-  --color-ink-deep: #0d1712;    /* variante più profonda, footer/CTA */
-  --color-void: #08100c;
-  --color-bone: #f6f5ef;        /* canvas chiaro, neutro leggermente freddo */
-  --color-paper: #fffdf8;       /* superficie card su sezioni chiare */
-  --color-card-alt: #eae7dc;    /* superficie card alternativa */
-  --color-graphite: #6f7a70;    /* testo secondario, grigio-salvia */
-  --color-border: #dcdccd;      /* hairline, divisori */
-  --color-amber: #d4a24e;       /* UNICO accento: oro, mai in coppia con un secondo colore */
-  --color-amber-soft: #e8c98a;  /* variante più chiara dell'accento, solo dettagli piccoli */
+  /* Vibra — palette "Segnale": neutro quasi-nero + bone + UN solo accento
+     "ember" (rosa-terracotta caldo). Non oro/ambra (il colore più abusato
+     nel "premium" generico — fintech, skincare, coaching, non dice nulla
+     su Vibra), non verde (legge clinico/medico — Vibra non è un'app
+     medica, il veterinario resta l'unico riferimento sanitario), non
+     viola (legge spirituale/new-age, altro cliché da app di meditazione).
+     Ember è il calore di un essere vivo — tartufo, orecchio, battito sotto
+     il pelo — non uno strumento, non un lusso da e-commerce. */
+  --color-ink: #17140f;         /* canvas scuro, neutro quasi-nero caldo */
+  --color-ink-deep: #0d0b08;    /* variante più profonda, footer/CTA */
+  --color-void: #070605;
+  --color-bone: #f6f4ef;        /* canvas chiaro, neutro caldo */
+  --color-paper: #fffdf9;       /* superficie card su sezioni chiare */
+  --color-card-alt: #ebe6dd;    /* superficie card alternativa */
+  --color-graphite: #7a726a;    /* testo secondario, grigio-caldo */
+  --color-border: #ded7ca;      /* hairline, divisori */
+  --color-ember: #c9705c;       /* UNICO accento: rosa-terracotta caldo, mai in coppia con un secondo colore */
+  --color-ember-soft: #e0a292;  /* variante più chiara dell'accento, solo dettagli piccoli */
 
   --font-display: "Bricolage Grotesque Variable", ui-sans-serif, system-ui, sans-serif;
   --font-body: "Inter Tight Variable", ui-sans-serif, system-ui, sans-serif;
@@ -50,9 +52,9 @@
 
 @layer utilities {
   .glow-text {
-    text-shadow: 0 0 40px color-mix(in srgb, var(--color-amber) 35%, transparent);
+    text-shadow: 0 0 40px color-mix(in srgb, var(--color-ember) 35%, transparent);
   }
   .text-gradient {
-    color: var(--color-amber);
+    color: var(--color-ember);
   }
 }

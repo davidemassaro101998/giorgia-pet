@@ -2,7 +2,7 @@
 // accordion numerato con spring animation, indicatore +/x rotante,
 // underline hover progressiva. Import spostato da "framer-motion" a
 // "motion/react" (pacchetto installato in questo progetto, stesso runtime,
-// convenzione della libreria), ricolorato sui token Armonya.
+// convenzione della libreria), ricolorato sui token Vibra.
 
 import { useState } from "react";
 import { motion, AnimatePresence } from "motion/react";
@@ -61,7 +61,7 @@ export function Faq() {
                     <div className="relative flex h-9 w-9 shrink-0 items-center justify-center">
                       <motion.div
                         className="absolute inset-0 rounded-full"
-                        style={{ background: "var(--color-amber)" }}
+                        style={{ background: "var(--color-ember)" }}
                         initial={false}
                         animate={{
                           scale: isActive ? 1 : isHovered ? 0.85 : 0,
@@ -88,7 +88,7 @@ export function Faq() {
                     </motion.h3>
 
                     <motion.span
-                      className="ml-auto flex h-7 w-7 shrink-0 items-center justify-center font-mono text-[var(--color-amber)]"
+                      className="ml-auto flex h-7 w-7 shrink-0 items-center justify-center font-mono text-[var(--color-ember)]"
                       animate={{ rotate: isActive ? 45 : 0 }}
                       transition={{ type: "spring", stiffness: 300, damping: 20 }}
                     >
@@ -99,7 +99,7 @@ export function Faq() {
                   <div className="absolute bottom-0 left-0 right-0 h-px bg-[var(--color-border)]" />
                   <motion.div
                     className="absolute bottom-0 left-0 h-px origin-left"
-                    style={{ background: "var(--color-amber)" }}
+                    style={{ background: "var(--color-ember)" }}
                     initial={{ scaleX: 0 }}
                     animate={{ scaleX: isActive ? 1 : isHovered ? 0.3 : 0 }}
                     transition={{ type: "spring", stiffness: 300, damping: 30 }}

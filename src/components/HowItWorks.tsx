@@ -40,7 +40,7 @@ export function HowItWorks() {
           className="absolute -left-24 top-1/2 h-[420px] w-[420px] -translate-y-1/2 rounded-full opacity-[0.14] blur-[110px]"
           style={{
             background:
-              "radial-gradient(circle, var(--color-amber) 0%, transparent 75%)",
+              "radial-gradient(circle, var(--color-ember) 0%, transparent 75%)",
           }}
         />
       </ScrollParallaxBg>
@@ -55,7 +55,7 @@ export function HowItWorks() {
           {steps.map((s, i) => (
             <Reveal key={s.n} index={i}>
               <GlassCard className="p-6">
-                <span className="inline-flex items-center rounded-full border border-[color-mix(in_srgb,var(--color-bone)_25%,transparent)] px-3 py-1 font-mono text-[13px] text-[var(--color-amber)]">
+                <span className="inline-flex items-center rounded-full border border-[color-mix(in_srgb,var(--color-bone)_25%,transparent)] px-3 py-1 font-mono text-[13px] text-[var(--color-ember)]">
                   {s.n}
                 </span>
                 <h3 className="mt-4 text-lg text-[var(--color-bone)]">

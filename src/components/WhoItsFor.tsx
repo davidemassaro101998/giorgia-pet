@@ -17,7 +17,7 @@ export function WhoItsFor() {
         <Reveal>
           <SectionTitle
             firstHalf="Per chi è pensato "
-            secondHalf="Armonya"
+            secondHalf="Vibra"
             className="text-3xl leading-tight tracking-tight text-[var(--color-ink)] md:text-4xl"
           />
           <div className="mt-7 flex flex-wrap justify-center gap-3">

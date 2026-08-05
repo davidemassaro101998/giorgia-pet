@@ -15,7 +15,7 @@ export function FinalCta() {
           </h2>
           <p className="mx-auto mt-4 max-w-[46ch] text-base leading-relaxed text-[color-mix(in_srgb,var(--color-bone)_70%,transparent)]">
             Racconta a Giorgia la situazione del tuo cane o gatto: capiremo
-            insieme se e come Armonya può aiutarvi.
+            insieme se e come Vibra può aiutarvi.
           </p>
           <div className="mt-8 flex flex-wrap items-center justify-center gap-4">
             <MotionButton href={site.contact.whatsapp} label={ctaLabel} />
