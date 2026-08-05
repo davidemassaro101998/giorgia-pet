@@ -1,9 +1,7 @@
 import { ctaLabel } from "../siteConfig";
 import { Reveal } from "./Reveal";
 import { MotionButton } from "./MotionButton";
-import { ScrollParallaxBg } from "./ScrollParallaxBg";
 import { SectionTitle } from "./SectionTitle";
-import { GlassCard } from "./GlassCard";
 
 const steps = [
   {
@@ -32,39 +30,29 @@ export function HowItWorks() {
   return (
     <section
       id="come-funziona"
-      className="relative overflow-hidden border-b border-[var(--color-border)] bg-[var(--color-ink)] py-20 md:py-28"
+      className="border-b border-[var(--color-hairline)] bg-[var(--color-pure-white)] py-20 md:py-28"
     >
-      <ScrollParallaxBg range={["-10%", "10%"]} className="pointer-events-none absolute inset-0">
-        <div
-          aria-hidden
-          className="absolute -left-24 top-1/2 h-[420px] w-[420px] -translate-y-1/2 rounded-full opacity-[0.14] blur-[110px]"
-          style={{
-            background:
-              "radial-gradient(circle, var(--color-ember) 0%, transparent 75%)",
-          }}
-        />
-      </ScrollParallaxBg>
-      <div className="relative mx-auto max-w-[1200px] px-6">
+      <div className="mx-auto max-w-[1200px] px-6">
         <SectionTitle
           firstHalf="Come funziona "
           secondHalf="una sessione"
-          className="max-w-[22ch] text-3xl leading-tight tracking-tight text-[var(--color-bone)] md:text-4xl"
+          className="max-w-[22ch] text-3xl leading-tight text-[var(--color-off-black)] md:text-4xl"
         />
 
         <div className="mt-14 grid grid-cols-1 gap-x-6 gap-y-6 md:grid-cols-4">
           {steps.map((s, i) => (
             <Reveal key={s.n} index={i}>
-              <GlassCard className="p-6">
-                <span className="inline-flex items-center rounded-full border border-[color-mix(in_srgb,var(--color-bone)_25%,transparent)] px-3 py-1 font-mono text-[13px] text-[var(--color-ember)]">
+              <div className="rounded-[var(--radius-card)] border border-[var(--color-hairline)] bg-[var(--color-off-white)] p-6">
+                <span className="inline-flex items-center rounded-[var(--radius-pill)] border border-[var(--color-ember)] px-3 py-1 font-body text-[12px] text-[var(--color-ember)]">
                   {s.n}
                 </span>
-                <h3 className="mt-4 text-lg text-[var(--color-bone)]">
+                <h3 className="mt-4 text-lg text-[var(--color-off-black)]">
                   {s.title}
                 </h3>
-                <p className="mt-2 text-[15px] leading-relaxed text-[color-mix(in_srgb,var(--color-bone)_65%,transparent)]">
+                <p className="mt-2 text-[15px] leading-relaxed text-[var(--color-steel)]">
                   {s.body}
                 </p>
-              </GlassCard>
+              </div>
             </Reveal>
           ))}
         </div>

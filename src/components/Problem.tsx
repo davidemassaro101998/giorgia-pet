@@ -1,6 +1,5 @@
 import { Reveal } from "./Reveal";
 import { SectionTitle } from "./SectionTitle";
-import { TiltCard } from "./TiltCard";
 
 const signals = [
   {
@@ -23,23 +22,23 @@ const signals = [
 
 export function Problem() {
   return (
-    <section className="border-b border-[var(--color-border)] bg-[var(--color-bone)] py-20 md:py-28">
+    <section className="border-b border-[var(--color-hairline)] bg-[var(--color-off-white)] py-20 md:py-28">
       <div className="mx-auto max-w-[1200px] px-6">
         <SectionTitle
           firstHalf="Riconosci uno di questi segnali "
           secondHalf="nel tuo cane o gatto?"
-          className="max-w-[30ch] text-3xl leading-tight tracking-tight text-[var(--color-ink)] md:text-4xl"
+          className="max-w-[30ch] text-3xl leading-tight tracking-tight text-[var(--color-off-black)] md:text-4xl"
         />
 
         <div className="mt-12 grid grid-cols-1 gap-5 sm:grid-cols-2 md:grid-cols-4">
           {signals.map((s, i) => (
             <Reveal key={s.title} index={i}>
-              <TiltCard className="rounded-2xl border border-[var(--color-border)] bg-[var(--color-paper)] p-7">
-                <h3 className="text-lg text-[var(--color-ink)]">{s.title}</h3>
-                <p className="mt-2 text-[15px] leading-relaxed text-[var(--color-graphite)]">
+              <div className="rounded-[var(--radius-card)] border border-[var(--color-hairline)] bg-[var(--color-pure-white)] p-7">
+                <h3 className="text-lg text-[var(--color-off-black)]">{s.title}</h3>
+                <p className="mt-2 text-[15px] leading-relaxed text-[var(--color-steel)]">
                   {s.body}
                 </p>
-              </TiltCard>
+              </div>
             </Reveal>
           ))}
         </div>

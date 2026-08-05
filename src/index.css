@@ -1,32 +1,30 @@
 @import "tailwindcss";
-@import "@fontsource-variable/bricolage-grotesque";
 @import "@fontsource-variable/inter-tight";
-@import "@fontsource/jetbrains-mono/400.css";
-@import "@fontsource/jetbrains-mono/500.css";
 
 @theme {
-  /* Vibra — palette "Segnale": neutro quasi-nero + bone + UN solo accento
-     "ember" (rosa-terracotta caldo). Non oro/ambra (il colore più abusato
-     nel "premium" generico — fintech, skincare, coaching, non dice nulla
-     su Vibra), non verde (legge clinico/medico — Vibra non è un'app
-     medica, il veterinario resta l'unico riferimento sanitario), non
-     viola (legge spirituale/new-age, altro cliché da app di meditazione).
-     Ember è il calore di un essere vivo — tartufo, orecchio, battito sotto
-     il pelo — non uno strumento, non un lusso da e-commerce. */
-  --color-ink: #17140f;         /* canvas scuro, neutro quasi-nero caldo */
-  --color-ink-deep: #0d0b08;    /* variante più profonda, footer/CTA */
-  --color-void: #070605;
-  --color-bone: #f6f4ef;        /* canvas chiaro, neutro caldo */
-  --color-paper: #fffdf9;       /* superficie card su sezioni chiare */
-  --color-card-alt: #ebe6dd;    /* superficie card alternativa */
-  --color-graphite: #7a726a;    /* testo secondario, grigio-caldo */
-  --color-border: #ded7ca;      /* hairline, divisori */
-  --color-ember: #c9705c;       /* UNICO accento: rosa-terracotta caldo, mai in coppia con un secondo colore */
-  --color-ember-soft: #e0a292;  /* variante più chiara dell'accento, solo dettagli piccoli */
+  /* Vibra — sistema "Segnale", ricalcato 1:1 sulla struttura di un
+     riferimento stilistico scelto esplicitamente dall'utente (void
+     chiarissimo monocromatico + UN solo accento, mai come riempimento,
+     tipografia peso 350 uniforme, raggi enormi, bordi hairline, zero
+     ombre/gradienti). Stessa disciplina, palette adattata a un brand
+     pet invece che al blu clinico dell'originale — ember (rosa-terracotta
+     caldo, il calore di un essere vivo) al posto del blu segnale. */
+  --color-off-black: #15130f;   /* testo primario, sfondo hero/footer */
+  --color-pure-black: #050403;  /* testo enfasi, massimo contrasto */
+  --color-off-white: #f3f1ec;   /* canvas di pagina */
+  --color-pure-white: #fbfaf6;  /* superfici elevate: card, nav, tag */
+  --color-steel: #6b645c;       /* testo secondario */
+  --color-ash: #9a9288;         /* testo terziario, disabled */
+  --color-hairline: rgba(21, 19, 15, 0.08);
+  --color-hairline-on-dark: rgba(251, 250, 246, 0.14);
+  --color-ember: #c9705c;       /* UNICO accento — solo testo/bordo, mai riempimento */
 
-  --font-display: "Bricolage Grotesque Variable", ui-sans-serif, system-ui, sans-serif;
   --font-body: "Inter Tight Variable", ui-sans-serif, system-ui, sans-serif;
-  --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, monospace;
+
+  --radius-pill: 9999px;
+  --radius-button: 26px;
+  --radius-nav: 10px;
+  --radius-card: 40px;
 }
 
 @layer base {
@@ -39,21 +37,21 @@
   }
   body {
     margin: 0;
-    background-color: var(--color-bone);
-    color: var(--color-ink);
+    background-color: var(--color-off-white);
+    color: var(--color-off-black);
     font-family: var(--font-body);
+    font-weight: 350;
+    letter-spacing: -0.02em;
     -webkit-font-smoothing: antialiased;
   }
   h1, h2, h3 {
-    font-family: var(--font-display);
-    font-weight: 560;
+    font-family: var(--font-body);
+    font-weight: 350;
+    letter-spacing: -0.02em;
   }
 }
 
 @layer utilities {
-  .glow-text {
-    text-shadow: 0 0 40px color-mix(in srgb, var(--color-ember) 35%, transparent);
-  }
   .text-gradient {
     color: var(--color-ember);
   }

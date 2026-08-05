@@ -86,24 +86,66 @@ Crush, non un pattern premium. Sostituito con un bottone-segnale
 coerente col concetto di prodotto (biorisonanza = frequenza): vedi la sua
 voce in "Componenti" sotto per i dettagli tecnici.
 
-**Step 2 — Immagini**: da fare. Per lo step 1 le foto di cane/gatto e il
-campo di particelle sono stati **rimossi del tutto** (non solo ritoccati)
-per isolare la valutazione dei colori da altre variabili — vanno
-riprogettati da zero nello step immagini, non semplicemente reintrodotti
-come prima.
+**Step 1.7 — Rebuild completo su style-reference esterno (fatto, sostituisce
+1/1.5/1.6)**: dopo il rifiuto totale ("tutto non ci siamo") l'utente ha
+passato lo style-reference completo di un sito che gli piace ("Augen Pro":
+void chiarissimo monocromatico, UN accento cromatico mai come riempimento,
+tipografia peso 350 uniforme senza bold, raggi enormi/pillole, bordi
+hairline 0.5px, **zero ombre/gradienti/chrome decorativa**) e ha chiesto di
+replicarne 1:1 animazioni/impaginazione/stile con testi e immagini proprie.
+Questo **sostituisce** tutto il lavoro precedente su colori (Forest verde,
+poi ember su fondo scuro) e sul bottone (slab/press-depth, poi
+waveform+ripple) — entrambi gli approcci precedenti erano "chrome
+decorativa" nel senso esplicito vietato da questo riferimento, non solo
+sbagliati nel colore. Vedi `src/index.css` per i nuovi token:
+- Base monocromatica: `--color-off-black` `#15130f`, `--color-pure-black`
+  `#050403`, `--color-off-white` `#f3f1ec` (canvas), `--color-pure-white`
+  `#fbfaf6` (superfici elevate), `--color-steel`/`--color-ash` (testo
+  secondario/terziario), `--color-hairline` (bordi 0.5-1px, mai più
+  spessi).
+- **Un solo accento**: `--color-ember` `#c9705c` (rosa-terracotta caldo al
+  posto del blu clinico dell'originale — scelto per non leggere "app
+  medica", vincolo esplicito di questo progetto). Usato **solo** come
+  testo o bordo (tag, link, piccola icona freccia) — **mai** come
+  riempimento di un bottone o di un blocco, esattamente come il blu nel
+  riferimento.
+- Tipografia: un solo font (Inter Tight Variable) a **peso 350** ovunque
+  (titoli inclusi — via `h1,h2,h3 { font-weight: 350 }`), niente bold,
+  niente monospace, tracking `-0.02em` uniforme. Rimossi Bricolage
+  Grotesque e JetBrains Mono dalle dipendenze.
+- Struttura sezioni scure ridotta a due soli bookend (Hero + Footer/
+  FinalCta), come nel riferimento ("Dark Band Footer" + hero full-bleed) —
+  `WhatIsBioresonance`, `HowItWorks`, `SocialProof` erano scure prima,
+  ora sono su canvas chiaro.
+- Nav sticky full-width sostituita da una **pillola flottante** centrata
+  (wordmark + link + CTA in un unico contenitore arrotondato,
+  `--radius-nav`), come "Pill Navigation Bar" del riferimento.
+- Card: bordo hairline + raggio enorme (`--radius-card`, 40px) + **zero
+  ombre**, mai riempimento colorato — sostituiscono `TiltCard`/
+  `GlassCard`/entrambi eliminati (vedi sotto).
+- Tag/badge: pillola (`--radius-pill`), bordo ember, testo ember, **niente
+  sfondo** — pattern "Pill Tag Chip" del riferimento.
+- Bottoni: vedi voce `MotionButton.tsx` sotto — anche questo riscritto da
+  zero una terza volta, stessa filosofia "presente ma non urlato".
 
-**Step 3 — Animazioni**: da fare.
+**Componenti eliminati in questo rebuild** (violavano "zero chrome
+decorativa" del nuovo riferimento, non solo esteticamente ma per
+principio esplicito): `TiltCard.tsx` (tilt 3D + spotlight-gradient),
+`GlassCard.tsx` (backdrop-blur), `GlowingEffect.tsx` (bordo conic-gradient
+animato). File cancellati, non lasciati come infrastruttura morta.
 
-**Step 4 — Transizioni tra sezioni**: da fare. Direzione già discussa e
-approvata concettualmente (vedi commit precedenti) ma non ancora
-implementata: 2 famiglie soltanto per coerenza — dissolvenza a particelle
-sui 3 snodi narrativi principali, wipe editoriale sul titolo per i 6
-passaggi minori. **Va rivista alla luce della nuova palette** (le
-particelle vecchie erano legate all'ambra/corallo bocciato).
+**Step 2 — Immagini (fatto in questo stesso giro)**: hero con foto vere di
+un cane e un gatto (Unsplash, licenza libera, scaricate e self-hostate in
+`src/assets/`) al posto del render 3D umano del riferimento — stesso
+trattamento visivo: `mask-image: radial-gradient(...)` per farle dissolvere
+nel nero ai bordi invece di un taglio netto, posizionate a destra con il
+testo a sinistra (era centrato, ora asimmetrico come il riferimento).
 
-Font: Bricolage Grotesque (display) + Inter Tight (body) — non Inter
-Tight ovunque, letto come troppo neutro/anonimo nella prima versione.
-Questa parte resta valida, non toccata dal reset.
+**Step 3 — Animazioni / Step 4 — Transizioni**: il riferimento stesso è
+minimale su questo fronte (fade-up all'ingresso, hover state, niente di
+più) — la disciplina "presente ma non urlato" vale anche qui. Non
+reintrodurre dissolvenze a particelle o wipe complessi senza che l'utente
+li richieda esplicitamente all'interno di questo nuovo linguaggio visivo.
 
 ## Componenti: 21st.dev prima, custom solo se non c'è nulla di adatto
 Regola cambiata a metà progetto — la prima versione aveva troppi componenti
@@ -123,37 +165,20 @@ via `get_component`, non "ispirato"):
   **Non referenziato da nessun componente al momento** (foto rimosse nello
   step colori) — resta come infrastruttura pronta per lo step immagini,
   non è codice morto da cancellare.
-- `MotionButton.tsx` — CTA "segnale", ricostruito dopo la bocciatura dello
-  slab/press-depth ("app da due euro"). Combina 3 elementi reali: pull
-  magnetico GSAP (pattern snippets/r3f-cinematic/MagneticButton.tsx della
-  libreria) + freccia animata (concetto Shatlyk1011/motion-button, id
-  10384, riscritto ad auto-width per label italiane lunghe) + un hook
-  `useRipple` adattato fedelmente da 21st.dev ddoemonn/ripple (id 23551,
-  anello di risonanza che si espande dal punto esatto del click e si
-  dissolve, invece di uno schiacciamento meccanico) + una waveform di
-  frequenza (canvas) adattata da dhileepkumargm/sonic-waveform (id 6019,
-  originale a schermo intero) confinata in una striscia sottile sul bordo
-  inferiore del bottone, visibile solo in hover — a riposo il bottone è
-  muto. **Iterazione fallita da ricordare**: il primo tentativo disegnava
-  la waveform su tutta l'altezza del bottone con opacità alta, le linee
-  attraversavano la label rendendola illeggibile — se si ritocca ancora,
-  tenerla confinata in una striscia stretta lontana dal testo. Fill
-  sempre piatto/opaco (niente inset-shadow "lucido", altro dettaglio che
-  contribuiva alla lettura "gadget economico").
-- `TiltCard.tsx` — tilt 3D in prospettiva + spotlight che segue il cursore
-  (@tom_ui/tilt-card, id 12246), codice fedele all'originale, `tiltLimit`
-  ridotto da 15-20 (demo) a 6 per restare sobrio. Usato per le card nelle
-  sezioni chiare: segnali (`Problem.tsx`), percorsi (`Pricing.tsx`),
-  monogramma "chi ti segue" (`About.tsx`).
-- `GlassCard.tsx` — superficie vetro smerigliato con backdrop-blur
-  (molecule-lab-rushil/glass-card, id 5588), semplificata al solo
-  contenitore base (sotto-componenti header/footer non servono qui).
-  Usato per le 4 card step-by-step in `HowItWorks.tsx` (sezione scura).
-- `GlowingEffect.tsx` — bordo che si illumina seguendo il cursore
-  (@manuarora700/glowing-effect, Aceternity, id 1567, "come su Cursor"),
-  gradiente conico arcobaleno originale ricolorato in un'unica tinta oro
-  per coerenza con la regola "un solo accento" della palette. Usato solo
-  sulla card in evidenza in `Pricing.tsx` ("Chiamata conoscitiva").
+- `MotionButton.tsx` — **riscritto una terza volta** nello Step 1.7 per
+  aderire al nuovo riferimento stilistico. Le due versioni precedenti
+  (slab/press-depth "a caramella", poi waveform+ripple "strumento di
+  segnale") sono state entrambe scartate: non per il colore, ma perché
+  *qualsiasi* effetto vistoso viola "zero chrome decorativa". Versione
+  attuale: due varianti sole, "Floating CTA Pill" (wash quasi-trasparente
+  sul colore di sfondo, `color-mix(...6%,transparent)`, mai un blocco di
+  colore pieno) per il primario, "Ghost Link" (solo testo, sottolineatura
+  all'hover) per il secondario — pattern presi 1:1 dal riferimento
+  fornito dall'utente. Resta solo la freccia animata (concetto
+  Shatlyk1011/motion-button, id 10384) in colore ember, mai il bottone
+  intero. **Pull magnetico GSAP rimosso**: il riferimento non ha micro-
+  interazioni vistose, "presente ma non urlato" — se richiesto in futuro
+  reintrodurlo solo su richiesta esplicita.
 - `Faq.tsx` — accordion numerato con spring animation (jatin-yadav05/
   interactive-accordion, id 9602), import spostato da `framer-motion` a
   `motion/react` (pacchetto già installato in questo progetto).
@@ -205,6 +230,10 @@ sia `url()` nel CSS sia i riferimenti stringa nel JS.
 - [ ] Logo vero (attualmente solo wordmark testuale "Vibra")
 - [ ] Foto vera di Giorgia Bisognin (attualmente monogramma "GB" — un ritratto
       stock al suo posto sarebbe fuorviante, va sostituito con una foto reale)
+- [ ] Le foto di cane/gatto nella hero (`src/assets/hero-dog.jpg`,
+      `hero-cat.jpg`) sono stock Unsplash usate come placeholder per lo
+      stile — sostituire con foto reali (dei clienti, con consenso, o
+      commissionate) prima del lancio pubblico
 - [ ] Testimonianze reali quando disponibili (sezione `SocialProof.tsx`)
 - [ ] Dominio + deploy (in pausa su richiesta esplicita)
 

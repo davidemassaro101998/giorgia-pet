@@ -36,10 +36,10 @@ export function Faq() {
   const [hoveredId, setHoveredId] = useState<string | null>(null);
 
   return (
-    <section className="border-b border-[var(--color-border)] bg-[var(--color-bone)] py-20 md:py-28">
+    <section className="border-b border-[var(--color-hairline)] bg-[var(--color-off-white)] py-20 md:py-28">
       <div className="mx-auto max-w-[800px] px-6">
         <Reveal>
-          <h2 className="text-3xl leading-tight tracking-tight text-[var(--color-ink)] md:text-4xl">
+          <h2 className="text-3xl leading-tight tracking-tight text-[var(--color-off-black)] md:text-4xl">
             Domande frequenti
           </h2>
         </Reveal>
@@ -70,9 +70,9 @@ export function Faq() {
                         transition={{ type: "spring", stiffness: 400, damping: 25 }}
                       />
                       <span
-                        className="relative z-10 font-mono text-[13px]"
+                        className="relative z-10 font-body text-[13px]"
                         style={{
-                          color: isActive ? "var(--color-ink-deep)" : "var(--color-graphite)",
+                          color: isActive ? "var(--color-off-black)" : "var(--color-steel)",
                         }}
                       >
                         {item.n}
@@ -80,7 +80,7 @@ export function Faq() {
                     </div>
 
                     <motion.h3
-                      className="text-[17px] text-[var(--color-ink)] md:text-lg"
+                      className="text-[17px] text-[var(--color-off-black)] md:text-lg"
                       animate={{ x: isActive || isHovered ? 4 : 0 }}
                       transition={{ type: "spring", stiffness: 400, damping: 30 }}
                     >
@@ -88,7 +88,7 @@ export function Faq() {
                     </motion.h3>
 
                     <motion.span
-                      className="ml-auto flex h-7 w-7 shrink-0 items-center justify-center font-mono text-[var(--color-ember)]"
+                      className="ml-auto flex h-7 w-7 shrink-0 items-center justify-center font-body text-[var(--color-ember)]"
                       animate={{ rotate: isActive ? 45 : 0 }}
                       transition={{ type: "spring", stiffness: 300, damping: 20 }}
                     >
@@ -96,7 +96,7 @@ export function Faq() {
                     </motion.span>
                   </div>
 
-                  <div className="absolute bottom-0 left-0 right-0 h-px bg-[var(--color-border)]" />
+                  <div className="absolute bottom-0 left-0 right-0 h-px bg-[var(--color-hairline)]" />
                   <motion.div
                     className="absolute bottom-0 left-0 h-px origin-left"
                     style={{ background: "var(--color-ember)" }}
@@ -128,7 +128,7 @@ export function Faq() {
                       }}
                       className="overflow-hidden"
                     >
-                      <p className="max-w-[65ch] py-1 pb-6 pl-14 pr-6 text-[15px] leading-relaxed text-[var(--color-graphite)]">
+                      <p className="max-w-[65ch] py-1 pb-6 pl-14 pr-6 text-[15px] leading-relaxed text-[var(--color-steel)]">
                         {item.a}
                       </p>
                     </motion.div>
