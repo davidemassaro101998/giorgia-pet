@@ -1,7 +1,5 @@
 import { Reveal } from "./Reveal";
 import { SectionTitle } from "./SectionTitle";
-import { RevealImageMask } from "./RevealImageMask";
-import heroDog from "../assets/photos/hero-dog.jpg";
 
 const signals = [
   {
@@ -32,28 +30,19 @@ export function Problem() {
           className="max-w-[30ch] text-3xl leading-tight tracking-tight text-[var(--color-ink)] md:text-4xl"
         />
 
-        <div className="mt-12 grid grid-cols-1 gap-10 md:grid-cols-[minmax(0,1fr)_minmax(0,1.1fr)] md:items-center">
-          <RevealImageMask
-            src={heroDog}
-            alt="Cane attento e presente, momento di connessione con il proprietario"
-            shape="rounded"
-            className="h-[320px] md:h-[440px]"
-          />
-
-          <div className="grid grid-cols-1 gap-5 sm:grid-cols-2">
-            {signals.map((s, i) => (
-              <Reveal
-                key={s.title}
-                index={i}
-                className="rounded-2xl border border-[var(--color-border)] bg-[var(--color-paper)] p-7"
-              >
-                <h3 className="text-lg text-[var(--color-ink)]">{s.title}</h3>
-                <p className="mt-2 text-[15px] leading-relaxed text-[var(--color-graphite)]">
-                  {s.body}
-                </p>
-              </Reveal>
-            ))}
-          </div>
+        <div className="mt-12 grid grid-cols-1 gap-5 sm:grid-cols-2 md:grid-cols-4">
+          {signals.map((s, i) => (
+            <Reveal
+              key={s.title}
+              index={i}
+              className="rounded-2xl border border-[var(--color-border)] bg-[var(--color-paper)] p-7"
+            >
+              <h3 className="text-lg text-[var(--color-ink)]">{s.title}</h3>
+              <p className="mt-2 text-[15px] leading-relaxed text-[var(--color-graphite)]">
+                {s.body}
+              </p>
+            </Reveal>
+          ))}
         </div>
       </div>
     </section>

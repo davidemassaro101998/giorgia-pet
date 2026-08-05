@@ -9,11 +9,16 @@ import { useEffect, useRef } from "react";
 import type * as THREE from "three";
 
 const config = {
-  particles: { count: 50000, size: 0.022, boxSize: 5 },
+  // Ritoccato dopo revisione: threshold 0.08 faceva brillare quasi ogni
+  // particella → foschia piatta ("vetro sporco"). Threshold più alto fa
+  // brillare solo i punti più luminosi = contrasto vero, non nebbia
+  // uniforme. boxSize ridotto concentra le particelle in un nucleo
+  // invece di riempire lo schermo in modo omogeneo.
+  particles: { count: 32000, size: 0.024, boxSize: 3.4 },
   colors: { baseHue: 38, hueVariance: 22 },
   simulation: { noiseSpeed: 0.1, noiseScale: 1.2, mouseRepulsion: 0.005, friction: 0.95 },
-  bloom: { strength: 0.7, radius: 0.45, threshold: 0.08 },
-  camera: { initialDistance: 5, parallaxIntensity: 0.005 },
+  bloom: { strength: 0.85, radius: 0.32, threshold: 0.35 },
+  camera: { initialDistance: 4.4, parallaxIntensity: 0.005 },
 };
 
 export function QuantumNebula({ className }: { className?: string }) {
