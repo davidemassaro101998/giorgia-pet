@@ -496,6 +496,39 @@ Step 9.
   regola "l'accento mai come riempimento"** del resto del sito — qui il
   colore pieno è il punto, non un errore da correggere in futuro.
 
+**Step 11 — Rimosso tilt 3D e float continuo da cane/gatto, tolto
+l'ultimo alone, dimensioni vincolate per reggere su schermi molto
+larghi/stretti, testo delle card di `HowItWorks` spostato più in alto
+(fatto)**: feedback diretto dell'utente su due punti distinti dello
+Step 10.
+- **Tilt 3D + galleggiamento rimossi**: il cane (`CinematicIntro.tsx`)
+  aveva un tilt che seguiva il mouse (`gsap.quickTo` su `rotationY`/
+  `rotationX`, `perspective`/`transformStyle: preserve-3d`); il gatto
+  (`WhoItsFor.tsx`) aveva un bob verticale infinito dopo l'entrata
+  (`y: -14` yoyo `repeat: -1`). Entrambi tolti su richiesta esplicita
+  ("non devono fluttuare") — resta solo l'animazione di ingresso
+  (blur/scale per il cane, slide diagonale con rimbalzo per il gatto).
+- **Alone residuo sul cane**: nonostante il filtro erode+sfuma
+  (`url(#pet-cutout-feather)`, Step 9), il cane aveva ancora "un alone
+  nero leggero" — causa non era più il bordo del cutout ma il
+  `drop-shadow` stesso, che su un fondo quasi nero proietta comunque un
+  anello scuro percepibile per quanto contenuto. Rimosso del tutto (sia
+  per il cane che, per coerenza, per il gatto) — resta solo il filtro
+  di pulizia bordo, zero `drop-shadow`, "sfondo completamente uniforme"
+  come richiesto.
+- **Dimensioni vincolate**: `w-[52%]`/`h-[104%] w-auto max-w-none` (cane)
+  e `w-[34%]`/`w-[92%] max-w-none` (gatto) scalavano senza limite
+  superiore — su schermi molto larghi ("a stretch") diventavano
+  sproporzionati. Sostituito con `w-[min(52%,640px)]` + `max-w-[560px]
+  max-h-[92%]` per il cane e `w-[min(34%,420px)]` + `max-h-[70vh]` per
+  il gatto: percentuale fluida fino a un tetto assoluto, verificato via
+  screenshot a 2560px, 1440px, 1024px e mobile 390px.
+- **Testo delle card `HowItWorks` più in alto e prominente**: il
+  `flex-col justify-between` teneva numero in alto e titolo/corpo
+  ancorati in fondo alla card — tolto `justify-between`, il blocco
+  titolo+corpo ora segue subito il numero in cima, titolo passato da
+  `text-xl font-medium` a `text-2xl font-semibold` per più peso visivo.
+
 ## Gate prima di dire "fatto" (applicato alla build iniziale, riapplicare a ogni modifica)
 1. Dev server avviato e guardato via screenshot reale (Playwright + Chromium
    preinstallati in questo ambiente), non dedotto dal build che passa

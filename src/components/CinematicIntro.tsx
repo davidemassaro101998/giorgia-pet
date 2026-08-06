@@ -10,15 +10,17 @@
 // laterali e audio) a due sole slide, senza liste/suoni non pertinenti
 // qui. I titoli usano VerticalCutReveal (id 18595) per il wipe verticale.
 //
-// Il cane è un ritaglio vero (PNG con alpha, fornito dall'utente) trattato
-// come un elemento che GALLEGGIA sopra il canvas invece di fondersi dentro
-// — capovolgimento voluto rispetto al tentativo precedente (una foto con
-// sfondo scuro mascherata con un fade ampio per dissolversi nel nero):
-// qui niente più grayscale/desaturazione, un'ombra morbida (`drop-shadow`,
-// rispetta l'alpha del PNG — `box-shadow` non lo farebbe) dà la
-// profondità, e un tilt 3D che segue il mouse (GSAP `quickTo` su
-// rotationX/rotationY, dentro un contenitore con `perspective`) rinforza
-// la sensazione "sopra lo sfondo in 3D" richiesta esplicitamente.
+// Il cane è un ritaglio vero (PNG con alpha, fornito dall'utente).
+// **Il tilt 3D che seguiva il mouse e l'ombra sono stati rimossi** su
+// feedback diretto ("rimuovi l'effetto 3D... non devono fluttuare... il
+// cane ha ancora un alone nero intorno a lui") — l'ombra, anche
+// contenuta, proiettava comunque un anello scuro percepibile su un fondo
+// già quasi nero, letto come "alone". Resta solo il filtro che erode e
+// sfuma il bordo del cutout (`url(#pet-cutout-feather)`), niente
+// `drop-shadow`. Dimensioni ora vincolate con un `max-width`/`max-height`
+// oltre alla percentuale — la versione precedente (`h-[104%] w-auto
+// max-w-none`) scalava senza limite su schermi molto larghi o molto
+// stretti-e-alti, "non impaginata bene" su quei casi.
 //
 // GOTCHAS #1: il contenuto sopra la piega (slide 1, la hero) si rivela
 // via GSAP al mount, mai via IntersectionObserver — il crossfade legato
@@ -35,13 +37,10 @@ import { VerticalCutReveal, type VerticalCutRevealRef } from "./VerticalCutRevea
 import heroDog from "../assets/hero-dog-cutout.png";
 
 // `url(#pet-cutout-feather)` (definito in CutoutFilterDefs.tsx, montato
-// una volta in App.tsx) erode e sfuma il bordo alpha del ritaglio prima
-// di applicare l'ombra — senza, la frangia dura del cutout PNG proietta
-// la sua stessa ombra e legge come un "alone incollato" invece che una
-// vera profondità. Ombra singola e più contenuta rispetto al primo
-// tentativo (due drop-shadow sommate, troppo larghe): quella aggravava
-// l'alone invece di dare profondità pulita.
-const DOG_SHADOW = "url(#pet-cutout-feather) drop-shadow(0 22px 26px rgba(0,0,0,0.4))";
+// una volta in App.tsx) erode e sfuma il bordo alpha del ritaglio —
+// nessun drop-shadow: su un fondo quasi nero anche un'ombra contenuta
+// leggeva come un alone scuro attorno al cane.
+const DOG_FILTER = "url(#pet-cutout-feather)";
 
 if (typeof window !== "undefined") {
   gsap.registerPlugin(ScrollTrigger);
@@ -65,7 +64,7 @@ export function CinematicIntro() {
     const ctx = gsap.context(() => {
       if (reduce) {
         gsap.set(heroRevealRef.current, { filter: "blur(0px)", opacity: 1, scale: 1 });
-        gsap.set(heroImgWrapRef.current, { filter: `blur(0px) ${DOG_SHADOW}`, opacity: 1, scale: 1 });
+        gsap.set(heroImgWrapRef.current, { filter: `blur(0px) ${DOG_FILTER}`, opacity: 1, scale: 1 });
         heroTitleRef.current?.startAnimation();
         return;
       }
@@ -77,24 +76,10 @@ export function CinematicIntro() {
       );
       gsap.fromTo(
         heroImgWrapRef.current,
-        { opacity: 0, scale: 1.08, filter: `blur(18px) ${DOG_SHADOW}` },
-        { opacity: 1, scale: 1, filter: `blur(0px) ${DOG_SHADOW}`, duration: 2.2, ease: "expo.out", delay: 0.15 },
+        { opacity: 0, scale: 1.08, filter: `blur(18px) ${DOG_FILTER}` },
+        { opacity: 1, scale: 1, filter: `blur(0px) ${DOG_FILTER}`, duration: 2.2, ease: "expo.out", delay: 0.15 },
       );
       heroTitleRef.current?.startAnimation();
-
-      // Tilt 3D che segue il mouse — sottile (±5deg), niente sulla verticale
-      // per non far "annuire" il cane in modo strano.
-      if (heroImgRef.current) {
-        const quickX = gsap.quickTo(heroImgRef.current, "rotationY", { duration: 0.7, ease: "power3.out" });
-        const quickY = gsap.quickTo(heroImgRef.current, "rotationX", { duration: 0.7, ease: "power3.out" });
-        const onMove = (e: MouseEvent) => {
-          const w = window.innerWidth;
-          const h = window.innerHeight;
-          quickX((e.clientX / w - 0.5) * 10);
-          quickY(-(e.clientY / h - 0.5) * 6);
-        };
-        stageRef.current?.addEventListener("mousemove", onMove);
-      }
 
       gsap.set(whatIsLayerRef.current, { opacity: 0, pointerEvents: "none" });
 
@@ -107,7 +92,7 @@ export function CinematicIntro() {
         gsap.to(heroImgWrapRef.current, {
           opacity: showHero ? 1 : 0,
           scale: showHero ? 1 : 1.15,
-          filter: showHero ? `blur(0px) ${DOG_SHADOW}` : `blur(20px) ${DOG_SHADOW}`,
+          filter: showHero ? `blur(0px) ${DOG_FILTER}` : `blur(20px) ${DOG_FILTER}`,
           duration: 1.2,
           ease: "power2.inOut",
         });
@@ -147,15 +132,13 @@ export function CinematicIntro() {
           <div
             ref={heroImgWrapRef}
             aria-hidden
-            className="pointer-events-none absolute inset-y-0 right-0 hidden w-[52%] items-end justify-end md:flex"
-            style={{ perspective: "1400px" }}
+            className="pointer-events-none absolute inset-y-0 right-0 hidden w-[min(52%,640px)] items-end justify-end md:flex"
           >
             <img
               ref={heroImgRef}
               src={heroDog}
               alt=""
-              className="h-[104%] w-auto max-w-none translate-x-[6%] object-contain object-bottom"
-              style={{ transformStyle: "preserve-3d" }}
+              className="h-auto max-h-[92%] w-full max-w-[560px] translate-x-[6%] object-contain object-bottom"
             />
           </div>
 

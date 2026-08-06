@@ -7,6 +7,13 @@
 // devono "risaltare dallo sfondo bianco". `CoverflowCarousel` ora
 // supporta un campo `content` per slide (aggiunto rispetto all'originale
 // fornito dall'utente, che prevedeva solo immagini + caption sotto).
+//
+// Quinto giro: il layout `justify-between` teneva titolo/testo ancorati
+// in basso, col numero solo che occupava la parte alta — su richiesta
+// ("impagina meglio il testo piu in alto e piu importante") il blocco
+// titolo+corpo è stato spostato subito sotto il numero (niente più
+// `justify-between`) e il titolo è più grande/pesante per darne più
+// rilievo visivo.
 
 import { ctaLabel } from "../siteConfig";
 import { Reveal } from "./Reveal";
@@ -40,18 +47,16 @@ const steps = [
 const slides: CoverflowSlide[] = steps.map((s) => ({
   alt: `Passo ${s.n}: ${s.title}`,
   content: (
-    <div className="flex h-full w-full flex-col justify-between bg-[var(--color-ember)] p-7 text-left">
+    <div className="flex h-full w-full flex-col bg-[var(--color-ember)] p-7 text-left">
       <span className="font-body text-[13px] text-[color-mix(in_srgb,var(--color-off-white)_75%,transparent)]">
         {s.n}
       </span>
-      <div>
-        <h3 className="text-xl font-medium leading-snug text-[var(--color-off-white)] md:text-[22px]">
-          {s.title}
-        </h3>
-        <p className="mt-3 text-[14px] leading-relaxed text-[color-mix(in_srgb,var(--color-off-white)_88%,transparent)]">
-          {s.body}
-        </p>
-      </div>
+      <h3 className="mt-4 text-2xl font-semibold leading-[1.1] text-[var(--color-off-white)] md:text-[26px]">
+        {s.title}
+      </h3>
+      <p className="mt-4 text-[15px] leading-relaxed text-[color-mix(in_srgb,var(--color-off-white)_90%,transparent)]">
+        {s.body}
+      </p>
     </div>
   ),
 }));
