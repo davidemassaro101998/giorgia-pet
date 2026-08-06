@@ -678,6 +678,43 @@ pilastro del sito").
   questo caso (serviva contro lo spacer di un pin nativo, non più in
   gioco con l'approccio "niente pin" di questa sezione).
 
+**Step 16 — Audit di fluidità grafica e tre interventi di connessione
+tra sezioni (fatto)**: su richiesta esplicita ("analizza il sito in
+modo grafico e di fluidità e connessione tra sezioni"), audit completo
+con screenshot reali di ogni giunzione (non dedotto dal codice) prima
+di intervenire. Trovati due problemi strutturali, poi risolti uno alla
+volta:
+- **Ogni giunzione tra sezioni era un taglio secco** su un hairline da
+  1px, indipendentemente dal salto di colore — 5 giunzioni a forte
+  contrasto (bianco↔nero) ne risentivano particolarmente: HowItWorks→
+  About, About→WhoItsFor, Pricing→FinalCta, FinalCta→Faq (trovata
+  **rianalizzando con screenshot reali**, mancava nella prima lettura a
+  occhio del codice) e Faq→Footer. Fix: nuovo `SeamFade.tsx` — un velo
+  del colore della sezione uscente, primo figlio di quella entrante,
+  che si dirada con lo scroll (`ScrollTrigger` scrub, stesso pattern di
+  `About.tsx`, **niente pin**). Hairline rimossi sulle sezioni uscenti
+  corrispondenti, ridondanti col nuovo overlay.
+- **Zona morta al centro del sito**: WhoItsFor → SocialProof → Pricing
+  erano tre sezioni chiare quasi indistinguibili di fila (off-white,
+  pure-white, off-white — a schermo indistinguibili). Fix mirato solo a
+  `SocialProof.tsx` (non un cambio di contenuto/IA, resta un problema
+  aperto per quando arriveranno testimonianze vere): fondo scaldato
+  verso l'ember via `color-mix(in srgb, var(--color-ember) 5%, ...)`
+  (un tint minimo, non un riempimento — resta "off-white" ma
+  percettibilmente diverso dai vicini) più un grande segno di citazione
+  decorativo in ember, così la sezione si legge come un momento
+  progettato invece che come uno spazio vuoto tra due blocchi.
+- **Nessun "atterraggio" dopo il momento pesante di Giorgia**: WhoItsFor,
+  la sezione subito dopo il pin/scroll-scrub di 220vh di `About.tsx`,
+  usava lo stesso reveal a scatto (`Reveal.tsx`, 0.8s) di ogni altra
+  sezione del sito — dopo un momento così costruito, il cambio di ritmo
+  era troppo brusco. Nuova variante dedicata `landReveal` in
+  `lib/motion.ts` (blur 14px invece di 6px, spostamento 40px invece di
+  28px, durata 1.4s invece di 0.8s) usata **una sola volta**, solo sul
+  blocco titolo+tag di `WhoItsFor.tsx` — non un nuovo default per il
+  resto del sito, un trattamento deliberatamente unico per questo punto
+  preciso.
+
 ## Gate prima di dire "fatto" (applicato alla build iniziale, riapplicare a ogni modifica)
 1. Dev server avviato e guardato via screenshot reale (Playwright + Chromium
    preinstallati in questo ambiente), non dedotto dal build che passa

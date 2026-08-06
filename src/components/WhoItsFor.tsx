@@ -14,11 +14,19 @@
 // alto, quindi la sua testa superava il bordo alto della sezione e veniva
 // tagliata dall'`overflow-hidden`. Più padding verticale = sezione più
 // alta = spazio sufficiente sopra il gatto perché non venga tagliato.
+//
+// Il blocco titolo+tag usa `landReveal` (vedi `lib/motion.ts`) invece
+// del `Reveal` standard: questa è la prima sezione dopo il pin/scroll-
+// scrub cinematografico di Giorgia (`About.tsx`, ~220vh) — un reveal a
+// scatto identico a tutte le altre sezioni faceva sembrare il sito
+// "sgonfiarsi" subito dopo un momento pesante. Qui l'ingresso è più
+// lento e sfocato, un vero atterraggio invece di ripartire di scatto.
 
+import { motion } from "motion/react";
 import { useEffect, useRef } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { Reveal } from "./Reveal";
+import { landReveal, viewportOnce } from "../lib/motion";
 import { SeamFade } from "./SeamFade";
 import { SectionTitle } from "./SectionTitle";
 import heroCat from "../assets/hero-cat-cutout.png";
@@ -100,7 +108,7 @@ export function WhoItsFor() {
         />
       </div>
       <div className="relative mx-auto grid max-w-[1200px] grid-cols-1 px-6 md:grid-cols-[1fr_1fr]">
-        <Reveal>
+        <motion.div initial="hidden" whileInView="shown" viewport={viewportOnce} variants={landReveal}>
           <SectionTitle
             firstHalf="Per chi è pensato "
             secondHalf="Vibra"
@@ -116,7 +124,7 @@ export function WhoItsFor() {
               </span>
             ))}
           </div>
-        </Reveal>
+        </motion.div>
         <div aria-hidden />
       </div>
     </section>
