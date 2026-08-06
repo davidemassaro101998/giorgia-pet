@@ -1,28 +1,25 @@
-// Il gatto qui usa la stessa tecnica del cane in hero
-// (CinematicIntro.tsx) — invertita per un canvas chiaro — e la stessa
-// animazione: si dissolve/appare con blur+scale invece di un semplice
-// fade, così sembra affiorare dallo sfondo invece di comparire sopra. A
-// differenza del cane (dentro un pin a schermo intero) qui non c'è pin —
-// GSAP ScrollTrigger normale con `toggleActions: "play reverse play
-// reverse"`: appare entrando in viewport, si dissolve uscendo, riappare
-// se si torna indietro. Foto aggiornata (era stata scartata due volte:
-// la prima con un ritaglio troppo stretto, la seconda con
-// un'espressione troppo comica) — questa ha sfondo bianco pulito e
-// sguardo laterale calmo, approvata dall'utente.
+// Il gatto è un ritaglio vero (PNG con alpha) come il cane in hero, ma
+// con un'animazione volutamente diversa (richiesta esplicita: "l'animazione
+// del gatto falla particolare e diversa"). Il cane si dissolve/riappare con
+// blur+scale; il gatto invece entra scivolando in diagonale da destra con
+// una leggera rotazione che si raddrizza (ease "back", un piccolo rimbalzo
+// finale) e poi resta con un galleggiamento continuo (bob verticale lento,
+// loop infinito) — più giocoso, coerente con un gatto invece che con la
+// gravità di un labrador. Ombra `drop-shadow` (rispetta l'alpha) per la
+// stessa sensazione "sopra lo sfondo in 3D" del cane.
 
 import { useEffect, useRef } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { Reveal } from "./Reveal";
 import { SectionTitle } from "./SectionTitle";
-import heroCat from "../assets/hero-cat.jpg";
+import heroCat from "../assets/hero-cat-cutout.png";
 
 if (typeof window !== "undefined") {
   gsap.registerPlugin(ScrollTrigger);
 }
 
-const CAT_FILTER = "grayscale(0.35) brightness(1.08) contrast(0.95)";
-const CAT_MAX_OPACITY = 0.9;
+const CAT_SHADOW = "drop-shadow(0 30px 40px rgba(0,0,0,0.18)) drop-shadow(0 8px 12px rgba(0,0,0,0.12))";
 
 const cases = [
   "Cani e gatti ansiosi",
@@ -35,34 +32,84 @@ const cases = [
 
 export function WhoItsFor() {
   const sectionRef = useRef<HTMLDivElement>(null);
-  const catRef = useRef<HTMLDivElement>(null);
+  const catRef = useRef<HTMLImageElement>(null);
+  const floatTween = useRef<gsap.core.Tween | null>(null);
 
   useEffect(() => {
     const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     const ctx = gsap.context(() => {
       if (reduce) {
-        gsap.set(catRef.current, { opacity: CAT_MAX_OPACITY, scale: 1, filter: `blur(0px) ${CAT_FILTER}` });
+        gsap.set(catRef.current, { opacity: 1, x: 0, rotate: 0, filter: CAT_SHADOW });
         return;
       }
-      gsap.fromTo(
-        catRef.current,
-        { opacity: 0, scale: 1.1, filter: `blur(20px) ${CAT_FILTER}` },
-        {
-          opacity: CAT_MAX_OPACITY,
-          scale: 1,
-          filter: `blur(0px) ${CAT_FILTER}`,
-          duration: 1.4,
-          ease: "power2.out",
-          scrollTrigger: {
-            trigger: sectionRef.current,
-            start: "top 75%",
-            end: "bottom 25%",
-            toggleActions: "play reverse play reverse",
-          },
+      gsap.set(catRef.current, { filter: CAT_SHADOW });
+
+      ScrollTrigger.create({
+        trigger: sectionRef.current,
+        start: "top 75%",
+        end: "bottom 25%",
+        onEnter: () => {
+          floatTween.current?.kill();
+          gsap.fromTo(
+            catRef.current,
+            { opacity: 0, x: 90, rotate: -9, scale: 0.94 },
+            {
+              opacity: 1,
+              x: 0,
+              rotate: 0,
+              scale: 1,
+              duration: 1.1,
+              ease: "back.out(1.4)",
+              onComplete: () => {
+                floatTween.current = gsap.to(catRef.current, {
+                  y: -14,
+                  duration: 2.6,
+                  ease: "sine.inOut",
+                  yoyo: true,
+                  repeat: -1,
+                });
+              },
+            },
+          );
         },
-      );
+        onLeave: () => {
+          floatTween.current?.kill();
+          gsap.to(catRef.current, { opacity: 0, x: 90, rotate: -9, duration: 0.6, ease: "power2.in" });
+        },
+        onEnterBack: () => {
+          floatTween.current?.kill();
+          gsap.fromTo(
+            catRef.current,
+            { opacity: 0, x: 90, rotate: -9, scale: 0.94 },
+            {
+              opacity: 1,
+              x: 0,
+              rotate: 0,
+              scale: 1,
+              duration: 1.1,
+              ease: "back.out(1.4)",
+              onComplete: () => {
+                floatTween.current = gsap.to(catRef.current, {
+                  y: -14,
+                  duration: 2.6,
+                  ease: "sine.inOut",
+                  yoyo: true,
+                  repeat: -1,
+                });
+              },
+            },
+          );
+        },
+        onLeaveBack: () => {
+          floatTween.current?.kill();
+          gsap.to(catRef.current, { opacity: 0, x: 90, rotate: -9, duration: 0.6, ease: "power2.in" });
+        },
+      });
     }, sectionRef);
-    return () => ctx.revert();
+    return () => {
+      floatTween.current?.kill();
+      ctx.revert();
+    };
   }, []);
 
   return (
@@ -70,18 +117,15 @@ export function WhoItsFor() {
       ref={sectionRef}
       className="relative overflow-hidden border-b border-[var(--color-hairline)] bg-[var(--color-off-white)] py-20 md:py-28"
     >
-      <div
-        ref={catRef}
-        aria-hidden
-        className="pointer-events-none absolute inset-y-0 right-0 hidden w-[46%] md:block"
-        style={{
-          backgroundImage: `url(${heroCat})`,
-          backgroundSize: "cover",
-          backgroundPosition: "center 32%",
-          maskImage: "radial-gradient(85% 80% at 68% 48%, black 30%, transparent 80%)",
-          WebkitMaskImage: "radial-gradient(85% 80% at 68% 48%, black 30%, transparent 80%)",
-        }}
-      />
+      <div className="pointer-events-none absolute inset-y-0 right-0 hidden w-[42%] items-center justify-center md:flex">
+        <img
+          ref={catRef}
+          src={heroCat}
+          alt=""
+          aria-hidden
+          className="max-h-[70%] w-auto max-w-[80%] object-contain opacity-0"
+        />
+      </div>
       <div className="relative mx-auto grid max-w-[1200px] grid-cols-1 px-6 md:grid-cols-[1fr_1fr]">
         <Reveal>
           <SectionTitle

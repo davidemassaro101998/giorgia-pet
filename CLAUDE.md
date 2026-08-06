@@ -286,6 +286,63 @@ Nessun bordo percepibile ora: la bassa risoluzione (190×245) aiuta,
 paradossalmente, perché la sfumatura ampia la nasconde meglio di quanto
 farebbe in un riquadro nitido e piccolo.
 
+**Step 8 — Ritagli veri (PNG con alpha) per cane e gatto, coverflow per
+"Come funziona" (fatto)**: capovolgimento voluto della tecnica
+precedente. L'utente ha fornito due nuove foto **già ritagliate** (PNG
+con canale alpha, sfondo trasparente verificato via Pillow — angolo
+alpha=0, soggetto alpha=255) chiedendo che cane e gatto sembrino
+"sopra lo sfondo in 3D" invece che fusi dentro, ribaltando la direzione
+di `WhoItsFor`/`CinematicIntro` degli step precedenti (mask-image
+radiale per dissolversi nel canvas). Ora sono `<img>` con canale alpha
+vero:
+- **Cane** (`hero-dog-cutout.png`, `CinematicIntro.tsx`): niente più
+  `grayscale`/`brightness` ridotta — colori naturali, profondità data da
+  `filter: drop-shadow(...)` (rispetta l'alpha del PNG, `box-shadow` non
+  lo farebbe) invece che da un blend nel nero. Aggiunto un tilt 3D che
+  segue il mouse (`gsap.quickTo` su `rotationY`/`rotationX`, ±5-6°,
+  dentro un contenitore con `perspective: 1400px`) per rinforzare la
+  sensazione di profondità reale. Le due animazioni già esistenti
+  (mount reveal blur+scale, dissolve nel crossfade hero→"cos'è") restano,
+  semplicemente ora animano un `<img>` invece di un `background-image`.
+- **Gatto** (`hero-cat-cutout.png`, `WhoItsFor.tsx`): animazione
+  **volutamente diversa** dal cane (richiesta esplicita: "l'animazione
+  del gatto falla particolare e diversa") — entra scivolando in
+  diagonale da destra con una rotazione che si raddrizza
+  (`ease: "back.out(1.4)"`, un piccolo rimbalzo finale, non il
+  blur+scale del cane), poi un galleggiamento continuo una volta fermo
+  (`y` sine yoyo infinito, `repeat: -1`) — più giocoso, coerente con un
+  gatto invece che con la gravità di un labrador.
+- File raster precedenti (`hero-dog.jpg`, `hero-cat.jpg`, foto intere
+  con sfondo) **cancellati**, non più referenziati da nessun componente
+  dopo il passaggio ai ritagli.
+
+**"Come funziona una sessione" ricostruita una terza volta** (la lista
+editoriale a 3 colonne dello Step 6 non piaceva "per niente" — restava
+comunque statica, tutti e 4 gli step leggibili insieme senza gerarchia).
+L'utente ha fornito per intero il codice di un **coverflow 3D**
+(`CoverflowCarousel.tsx` — drag/tocco, prospettiva reale via CSS
+`perspective`/`rotateY` calcolati a mano, loop, throw-on-release): il
+pattern iconico "Apple Music/iTunes", esattamente "in stile app" come
+richiesto. Codice lasciato fedele all'originale — solo `lucide-react`
+(non nel progetto) sostituita con `@phosphor-icons/react` per
+convenzione, l'import di `cn` reso relativo (niente alias `"@/"` in
+questo progetto), e le classi `animate-in fade-in` rimosse (richiedono
+il plugin `tailwindcss-animate`, non installato — erano inerti senza).
+Aggiunta una prop `dark` (assente nell'originale) per i colori di
+caption/paginazione, dato che la sezione è passata a sfondo scuro
+apposta — il coverflow "brilla" su nero come l'App Store, uniche card
+chiare della sezione. **Seconda eccezione esplicita alla regola "sfondi
+scuri solo hero+footer"** dello Step 1.7 (la prima era la cinematic
+intro) — qui per lo stesso motivo: scelta esplicita dell'utente, non
+un'abitudine.
+
+Le "copertine" del coverflow sono SVG generati inline (data URI in
+`stepCardImage()`, non un asset esterno) — non ci sono foto per singolo
+step, un numero enorme in ember su nero fa da visual riconoscibile.
+Titolo/corpo veri di ogni step restano testo HTML reale sotto il
+coverflow (via `showCaption`+`meta` del componente), non dentro l'SVG —
+leggibile e accessibile, non testo rasterizzato.
+
 ## Componenti: 21st.dev prima, custom solo se non c'è nulla di adatto
 Regola cambiata a metà progetto — la prima versione aveva troppi componenti
 fatti a mano (cerchi CSS per il visual di risonanza, bottoni custom, FAQ con

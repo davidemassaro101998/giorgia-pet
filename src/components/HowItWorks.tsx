@@ -1,18 +1,28 @@
-// Ricostruita da zero: la versione a 4 card in griglia (FeatureCard)
-// leggeva come un elenco puntato vestito bene, "non ha un peso
-// importante" (feedback diretto). Sostituita con una lista editoriale
-// verticale — righe a tutta larghezza in 3 colonne (numero grande |
-// titolo | testo), separate da hairline, senza contenitori/bordi attorno
-// a ogni riga: è il pattern "Breakthrough" a griglia asimmetrica descritto
-// nello style-reference scelto dall'utente (Augen Pro — "narrow label |
-// wide heading | side paragraph"), mai usato altrove sul sito finora. Il
-// numero enorme dà peso senza bisogno di un box; la vita all'hover (numero
-// che diventa ember, titolo che scivola) resta coerente con FeatureCard.
+// Ricostruita una seconda volta su richiesta esplicita ("non mi piace per
+// niente... rifalla più premium in stile dell'app, ha un peso molto
+// importante, deve avere un'animazione di transizione solo sua"). La
+// versione precedente (lista editoriale a 3 colonne, vedi git log) restava
+// comunque statica — si leggono tutti e 4 gli step insieme, nessuna
+// sensazione di sequenza. Sostituita con un coverflow 3D (drag/tocco,
+// prospettiva, il pattern iconico "Apple Music/iTunes" — esattamente "in
+// stile app"): un solo step alla volta è a fuoco e a centro, gli altri
+// si allontanano in prospettiva ai lati. Componente fornito per intero
+// dall'utente (CoverflowCarousel.tsx) — vedi lì per i dettagli di
+// adattamento. Sezione passata a sfondo scuro apposta: il coverflow
+// "brilla" su nero (com'è per l'App Store/Apple Music), le card chiare
+// fanno da unico contrasto — coerente col resto del sito (bookend scuri)
+// ma con un peso visivo che le altre sezioni chiare non hanno.
+//
+// Le "copertine" sono generate come SVG inline (data URI) — non abbiamo
+// foto per singolo step, il numero enorme in ember su nero fa da visual
+// riconoscibile invece di un'icona stock. Titolo/corpo veri restano sotto
+// il coverflow come testo HTML vero (leggibile, non dentro l'immagine).
 
 import { ctaLabel } from "../siteConfig";
 import { Reveal } from "./Reveal";
 import { MotionButton } from "./MotionButton";
 import { SectionTitle } from "./SectionTitle";
+import { CoverflowCarousel, type CoverflowSlide } from "./CoverflowCarousel";
 
 const steps = [
   {
@@ -37,39 +47,51 @@ const steps = [
   },
 ];
 
+function stepCardImage(n: string): string {
+  const svg = `
+    <svg xmlns="http://www.w3.org/2000/svg" width="640" height="640" viewBox="0 0 640 640">
+      <rect width="640" height="640" fill="#15130f" />
+      <circle cx="320" cy="320" r="196" fill="none" stroke="#c9705c" stroke-opacity="0.35" stroke-width="1.5" />
+      <text x="320" y="360" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="220" font-weight="400" fill="#c9705c" text-anchor="middle">${n}</text>
+    </svg>
+  `.trim();
+  return `data:image/svg+xml,${encodeURIComponent(svg)}`;
+}
+
+const slides: CoverflowSlide[] = steps.map((s) => ({
+  src: stepCardImage(s.n),
+  alt: `Passo ${s.n}: ${s.title}`,
+  title: s.title,
+  subtitle: s.body,
+}));
+
 export function HowItWorks() {
   return (
     <section
       id="come-funziona"
-      className="border-b border-[var(--color-hairline)] bg-[var(--color-pure-white)] py-20 md:py-28"
+      className="border-b border-[var(--color-hairline)] bg-[var(--color-off-black)] py-20 md:py-28"
     >
       <div className="mx-auto max-w-[1200px] px-6">
         <SectionTitle
           firstHalf="Come funziona "
           secondHalf="una sessione"
-          className="max-w-[22ch] text-3xl leading-tight text-[var(--color-off-black)] md:text-4xl"
+          className="max-w-[22ch] text-3xl leading-tight text-[var(--color-off-white)] md:text-4xl"
         />
 
-        <div className="mt-16 border-t border-[var(--color-hairline)]">
-          {steps.map((s, i) => (
-            <Reveal key={s.n} index={i}>
-              <div className="group/step grid grid-cols-1 items-baseline gap-x-8 gap-y-3 border-b border-[var(--color-hairline)] py-10 transition-colors duration-300 md:grid-cols-[0.9fr_1.6fr_2fr] md:gap-y-0 md:py-12">
-                <span className="font-body text-[clamp(2.75rem,5vw,4rem)] leading-none text-[var(--color-ash)] transition-colors duration-300 group-hover/step:text-[var(--color-ember)]">
-                  {s.n}
-                </span>
-                <h3 className="text-xl text-[var(--color-off-black)] transition-transform duration-300 group-hover/step:translate-x-1.5 md:text-2xl">
-                  {s.title}
-                </h3>
-                <p className="max-w-[46ch] text-[15px] leading-relaxed text-[var(--color-steel)] md:text-base">
-                  {s.body}
-                </p>
-              </div>
-            </Reveal>
-          ))}
-        </div>
+        <Reveal index={1} className="mt-16">
+          <CoverflowCarousel
+            slides={slides}
+            showCaption
+            showPagination
+            showNavigation
+            dark
+            cardWidth="clamp(200px, 30vw, 340px)"
+            label="Come funziona una sessione"
+          />
+        </Reveal>
 
-        <Reveal index={4} className="mt-14">
-          <MotionButton href="#prenota" label={ctaLabel} />
+        <Reveal index={2} className="mt-10 flex justify-center">
+          <MotionButton href="#prenota" label={ctaLabel} variant="primary-on-dark" />
         </Reveal>
       </div>
     </section>

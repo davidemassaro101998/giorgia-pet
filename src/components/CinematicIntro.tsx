@@ -10,6 +10,16 @@
 // laterali e audio) a due sole slide, senza liste/suoni non pertinenti
 // qui. I titoli usano VerticalCutReveal (id 18595) per il wipe verticale.
 //
+// Il cane è un ritaglio vero (PNG con alpha, fornito dall'utente) trattato
+// come un elemento che GALLEGGIA sopra il canvas invece di fondersi dentro
+// — capovolgimento voluto rispetto al tentativo precedente (una foto con
+// sfondo scuro mascherata con un fade ampio per dissolversi nel nero):
+// qui niente più grayscale/desaturazione, un'ombra morbida (`drop-shadow`,
+// rispetta l'alpha del PNG — `box-shadow` non lo farebbe) dà la
+// profondità, e un tilt 3D che segue il mouse (GSAP `quickTo` su
+// rotationX/rotationY, dentro un contenitore con `perspective`) rinforza
+// la sensazione "sopra lo sfondo in 3D" richiesta esplicitamente.
+//
 // GOTCHAS #1: il contenuto sopra la piega (slide 1, la hero) si rivela
 // via GSAP al mount, mai via IntersectionObserver — il crossfade legato
 // allo scroll parte solo DOPO che l'utente ha iniziato a scrollare, quindi
@@ -22,17 +32,9 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { ctaLabel, site } from "../siteConfig";
 import { MotionButton } from "./MotionButton";
 import { VerticalCutReveal, type VerticalCutRevealRef } from "./VerticalCutReveal";
-import heroDog from "../assets/hero-dog.jpg";
+import heroDog from "../assets/hero-dog-cutout.png";
 
-// Filtro sempre applicato al cane di sfondo — desaturato e scurito per
-// farlo leggere come atmosfera dentro il canvas nero invece che come una
-// foto "incollata sopra": il primo tentativo era un ritaglio quadrato a
-// piena luminosità con un vignette stretto, leggeva come sticker.
-// Un ulteriore giro di scurimento è stato provato e poi scartato
-// dall'utente ("rimetti il cane come prima, togli lo scurimento") —
-// questi restano i valori giusti, non ritoccarli senza richiesta esplicita.
-const DOG_FILTER = "grayscale(0.3) brightness(0.5) contrast(1.05)";
-const DOG_MAX_OPACITY = 1;
+const DOG_SHADOW = "drop-shadow(0 45px 55px rgba(0,0,0,0.55)) drop-shadow(0 10px 18px rgba(0,0,0,0.4))";
 
 if (typeof window !== "undefined") {
   gsap.registerPlugin(ScrollTrigger);
@@ -43,7 +45,8 @@ export function CinematicIntro() {
   const stageRef = useRef<HTMLDivElement>(null);
   const heroLayerRef = useRef<HTMLDivElement>(null);
   const whatIsLayerRef = useRef<HTMLDivElement>(null);
-  const heroImgRef = useRef<HTMLDivElement>(null);
+  const heroImgWrapRef = useRef<HTMLDivElement>(null);
+  const heroImgRef = useRef<HTMLImageElement>(null);
   const heroRevealRef = useRef<HTMLDivElement>(null);
   const heroTitleRef = useRef<VerticalCutRevealRef>(null);
   const whatIsTitleRef = useRef<VerticalCutRevealRef>(null);
@@ -55,7 +58,7 @@ export function CinematicIntro() {
     const ctx = gsap.context(() => {
       if (reduce) {
         gsap.set(heroRevealRef.current, { filter: "blur(0px)", opacity: 1, scale: 1 });
-        gsap.set(heroImgRef.current, { filter: `blur(0px) ${DOG_FILTER}`, opacity: DOG_MAX_OPACITY, scale: 1 });
+        gsap.set(heroImgWrapRef.current, { filter: `blur(0px) ${DOG_SHADOW}`, opacity: 1, scale: 1 });
         heroTitleRef.current?.startAnimation();
         return;
       }
@@ -66,11 +69,25 @@ export function CinematicIntro() {
         { filter: "blur(0px)", opacity: 1, scale: 1, duration: 1.6, ease: "expo.out" },
       );
       gsap.fromTo(
-        heroImgRef.current,
-        { opacity: 0, scale: 1.08, filter: `blur(18px) ${DOG_FILTER}` },
-        { opacity: DOG_MAX_OPACITY, scale: 1, filter: `blur(0px) ${DOG_FILTER}`, duration: 2.2, ease: "expo.out", delay: 0.15 },
+        heroImgWrapRef.current,
+        { opacity: 0, scale: 1.08, filter: `blur(18px) ${DOG_SHADOW}` },
+        { opacity: 1, scale: 1, filter: `blur(0px) ${DOG_SHADOW}`, duration: 2.2, ease: "expo.out", delay: 0.15 },
       );
       heroTitleRef.current?.startAnimation();
+
+      // Tilt 3D che segue il mouse — sottile (±5deg), niente sulla verticale
+      // per non far "annuire" il cane in modo strano.
+      if (heroImgRef.current) {
+        const quickX = gsap.quickTo(heroImgRef.current, "rotationY", { duration: 0.7, ease: "power3.out" });
+        const quickY = gsap.quickTo(heroImgRef.current, "rotationX", { duration: 0.7, ease: "power3.out" });
+        const onMove = (e: MouseEvent) => {
+          const w = window.innerWidth;
+          const h = window.innerHeight;
+          quickX((e.clientX / w - 0.5) * 10);
+          quickY(-(e.clientY / h - 0.5) * 6);
+        };
+        stageRef.current?.addEventListener("mousemove", onMove);
+      }
 
       gsap.set(whatIsLayerRef.current, { opacity: 0, pointerEvents: "none" });
 
@@ -79,15 +96,11 @@ export function CinematicIntro() {
         lastSlide.current = index;
         const showHero = index === 0;
 
-        // Il testo della hero e lo sfondo del cane si dissolvono con
-        // ritmi diversi — il cane si allontana/sfoca come se affondasse
-        // nel nero, il testo si limita a un fade più secco: fa sentire il
-        // cane come parte dell'ambiente, non un livello incollato sopra.
         gsap.to(heroRevealRef.current, { opacity: showHero ? 1 : 0, duration: 0.8, ease: "power3.out" });
-        gsap.to(heroImgRef.current, {
-          opacity: showHero ? DOG_MAX_OPACITY : 0,
+        gsap.to(heroImgWrapRef.current, {
+          opacity: showHero ? 1 : 0,
           scale: showHero ? 1 : 1.15,
-          filter: showHero ? `blur(0px) ${DOG_FILTER}` : `blur(20px) ${DOG_FILTER}`,
+          filter: showHero ? `blur(0px) ${DOG_SHADOW}` : `blur(20px) ${DOG_SHADOW}`,
           duration: 1.2,
           ease: "power2.inOut",
         });
@@ -119,24 +132,20 @@ export function CinematicIntro() {
       <div ref={stageRef} className="relative h-screen w-full overflow-hidden bg-[var(--color-off-black)]">
         {/* Slide 1 — Hero */}
         <div ref={heroLayerRef} className="absolute inset-0 pt-16">
-          {/* Cane come atmosfera di sfondo, non un ritaglio incollato
-              sopra: copre buona parte del lato destro, sfumato ampiamente
-              su tutti i bordi (non solo un vignette stretto) e scurito/
-              desaturato perché si fonda nel canvas nero invece di
-              staccarsi come uno sticker. */}
           <div
-            ref={heroImgRef}
+            ref={heroImgWrapRef}
             aria-hidden
-            className="pointer-events-none absolute inset-y-0 right-0 hidden w-[62%] md:block"
-            style={{
-              backgroundImage: `url(${heroDog})`,
-              backgroundSize: "cover",
-              backgroundPosition: "center 30%",
-              filter: DOG_FILTER,
-              maskImage: "radial-gradient(85% 75% at 80% 45%, black 25%, transparent 78%)",
-              WebkitMaskImage: "radial-gradient(85% 75% at 80% 45%, black 25%, transparent 78%)",
-            }}
-          />
+            className="pointer-events-none absolute inset-y-0 right-0 hidden w-[46%] items-center justify-center md:flex"
+            style={{ perspective: "1400px" }}
+          >
+            <img
+              ref={heroImgRef}
+              src={heroDog}
+              alt=""
+              className="max-h-[80%] w-auto max-w-[85%] object-contain"
+              style={{ transformStyle: "preserve-3d" }}
+            />
+          </div>
 
           <div
             ref={heroRevealRef}
