@@ -112,13 +112,13 @@ export function About() {
           tocca il fondo della sezione, il lato sinistro esce dalla
           cornice — coerente con la regola "ancorata a un bordo reale,
           mai centrata nel vuoto" (Step 10). */}
-      <div className="pointer-events-none absolute inset-y-0 left-0 hidden w-[min(40%,460px)] items-end justify-start md:flex">
+      <div className="pointer-events-none absolute inset-y-0 left-0 hidden w-[min(46%,520px)] items-end justify-start md:flex">
         <img
           ref={photoRef}
           src={giorgiaPhoto}
           alt=""
           aria-hidden
-          className="h-full max-h-full w-full max-w-[420px] -translate-x-[6%] object-contain object-bottom opacity-0"
+          className="h-full max-h-full w-full max-w-[480px] -translate-x-[6%] object-contain object-bottom opacity-0"
         />
       </div>
       <div className="relative mx-auto grid max-w-[1200px] grid-cols-1 px-6 md:grid-cols-[1fr_1fr]">
