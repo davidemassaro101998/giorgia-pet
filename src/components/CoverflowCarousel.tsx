@@ -15,11 +15,16 @@ const useIsoLayoutEffect =
   typeof window !== "undefined" ? React.useLayoutEffect : React.useEffect;
 
 export interface CoverflowSlide {
-  src: string;
-  alt: string;
+  /** Facoltativo se si passa `content` — una card può essere solo contenuto. */
+  src?: string;
+  alt?: string;
   title?: string;
   subtitle?: string;
   meta?: { label: string; value: string }[];
+  /** Contenuto reale (testo, layout) al posto dell'immagine — aggiunto per
+      "Come funziona una sessione": il testo dello step dentro la card
+      invece che sotto, non previsto nell'originale fornito dall'utente. */
+  content?: React.ReactNode;
 }
 
 export interface CoverflowCarouselProps {
@@ -307,12 +312,14 @@ export function CoverflowCarousel({
                 )}
                 style={{ width: "var(--cf-card)" }}
               >
-                <img
-                  src={slide.src}
-                  alt={slide.alt}
-                  draggable={false}
-                  className="h-full w-full select-none object-cover"
-                />
+                {slide.content ?? (
+                  <img
+                    src={slide.src}
+                    alt={slide.alt}
+                    draggable={false}
+                    className="h-full w-full select-none object-cover"
+                  />
+                )}
               </div>
             ))}
           </div>

@@ -139,17 +139,22 @@ export function CinematicIntro() {
       <div ref={stageRef} className="relative h-screen w-full overflow-hidden bg-[var(--color-off-black)]">
         {/* Slide 1 — Hero */}
         <div ref={heroLayerRef} className="absolute inset-0 pt-16">
+          {/* Ancorato in basso a destra e ingrandito apposta: il lato
+              inferiore tocca il fondo del blocco nero, il lato destro può
+              uscire dalla cornice (`overflow-hidden` sullo stage) — il
+              taglio dell'immagine si legge come inquadratura voluta invece
+              che come un bordo che fluttua nel vuoto. */}
           <div
             ref={heroImgWrapRef}
             aria-hidden
-            className="pointer-events-none absolute inset-y-0 right-0 hidden w-[46%] items-center justify-center md:flex"
+            className="pointer-events-none absolute inset-y-0 right-0 hidden w-[52%] items-end justify-end md:flex"
             style={{ perspective: "1400px" }}
           >
             <img
               ref={heroImgRef}
               src={heroDog}
               alt=""
-              className="max-h-[80%] w-auto max-w-[85%] object-contain"
+              className="h-[104%] w-auto max-w-none translate-x-[6%] object-contain object-bottom"
               style={{ transformStyle: "preserve-3d" }}
             />
           </div>

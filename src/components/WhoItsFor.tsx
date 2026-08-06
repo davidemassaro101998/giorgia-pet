@@ -122,13 +122,17 @@ export function WhoItsFor() {
       ref={sectionRef}
       className="relative overflow-hidden border-b border-[var(--color-hairline)] bg-[var(--color-off-white)] py-20 md:py-28"
     >
-      <div className="pointer-events-none absolute inset-y-0 right-0 hidden w-[42%] items-center justify-center md:flex">
+      {/* Ancorato nell'angolo in basso a destra: il lato inferiore e quello
+          destro escono dalla cornice (`overflow-hidden` sulla sezione)
+          invece di fermarsi a mezz'aria — il taglio si legge come parte
+          dell'angolo della sezione, non come un bordo che fluttua. */}
+      <div className="pointer-events-none absolute bottom-0 right-0 hidden w-[34%] items-end justify-end md:flex">
         <img
           ref={catRef}
           src={heroCat}
           alt=""
           aria-hidden
-          className="max-h-[70%] w-auto max-w-[80%] object-contain opacity-0"
+          className="w-[92%] max-w-none translate-x-[10%] translate-y-[8%] object-contain opacity-0"
         />
       </div>
       <div className="relative mx-auto grid max-w-[1200px] grid-cols-1 px-6 md:grid-cols-[1fr_1fr]">

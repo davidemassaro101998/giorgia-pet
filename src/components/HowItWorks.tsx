@@ -1,19 +1,12 @@
-// Ricostruita una terza volta su feedback diretto: sfondo passato a
-// chiaro (le card "glass" — vetro smerigliato vero, non un colore pieno —
-// hanno bisogno di uno sfondo su cui l'effetto sia leggibile, e il nero
-// pieno del giro precedente lo appiattiva), i numeri nell'SVG erano
-// "orrendi" (numero bianco/ember su un quadrato nero pieno, nessuna
-// finezza), le frecce di navigazione rimosse — resta solo il drag, più
-// pulito. Vedi CoverflowCarousel.tsx per il componente base (fornito
-// dall'utente, adattato solo nell'icona e nell'import di cn).
-//
-// Le "copertine" ora sono SVG a sfondo TRASPARENTE (solo un bagliore
-// ember sfocato + il numero, niente rettangolo pieno) — è quello che
-// permette alla card sotto di essere davvero vetro: `cardClassName`
-// sovrascrive lo sfondo/ombra di default del carousel con un pannello
-// semi-trasparente + `backdrop-blur-xl` + bordo chiaro, e l'immagine
-// (trasparente) lascia intravedere quel vetro invece di coprirlo con un
-// quadrato opaco.
+// Quarto giro sul coverflow: il testo di ogni step viveva sotto il
+// carousel (caption HTML) — spostato DENTRO ogni card, impaginato, al
+// posto del numero grande in SVG. Le card sono ora piene del colore
+// accento ("quel colore rosa", ember) invece che vetro trasparente su
+// bianco — un'eccezione esplicita alla regola "l'accento mai come
+// riempimento" del resto del sito, qui voluta apposta perché le card
+// devono "risaltare dallo sfondo bianco". `CoverflowCarousel` ora
+// supporta un campo `content` per slide (aggiunto rispetto all'originale
+// fornito dall'utente, che prevedeva solo immagini + caption sotto).
 
 import { ctaLabel } from "../siteConfig";
 import { Reveal } from "./Reveal";
@@ -44,32 +37,23 @@ const steps = [
   },
 ];
 
-function stepCardImage(n: string): string {
-  const svg = `
-    <svg xmlns="http://www.w3.org/2000/svg" width="640" height="640" viewBox="0 0 640 640">
-      <defs>
-        <radialGradient id="glow" cx="50%" cy="42%" r="42%">
-          <stop offset="0%" stop-color="#c9705c" stop-opacity="0.5" />
-          <stop offset="100%" stop-color="#c9705c" stop-opacity="0" />
-        </radialGradient>
-        <linearGradient id="numeral" x1="0%" y1="0%" x2="0%" y2="100%">
-          <stop offset="0%" stop-color="#c9705c" />
-          <stop offset="100%" stop-color="#a85541" />
-        </linearGradient>
-      </defs>
-      <circle cx="320" cy="300" r="230" fill="url(#glow)" />
-      <circle cx="320" cy="320" r="176" fill="none" stroke="#c9705c" stroke-opacity="0.3" stroke-width="1" />
-      <text x="320" y="358" font-family="'Inter Tight', Inter, ui-sans-serif, system-ui, sans-serif" font-size="196" font-weight="300" letter-spacing="-6" fill="url(#numeral)" text-anchor="middle">${n}</text>
-    </svg>
-  `.trim();
-  return `data:image/svg+xml,${encodeURIComponent(svg)}`;
-}
-
 const slides: CoverflowSlide[] = steps.map((s) => ({
-  src: stepCardImage(s.n),
   alt: `Passo ${s.n}: ${s.title}`,
-  title: s.title,
-  subtitle: s.body,
+  content: (
+    <div className="flex h-full w-full flex-col justify-between bg-[var(--color-ember)] p-7 text-left">
+      <span className="font-body text-[13px] text-[color-mix(in_srgb,var(--color-off-white)_75%,transparent)]">
+        {s.n}
+      </span>
+      <div>
+        <h3 className="text-xl font-medium leading-snug text-[var(--color-off-white)] md:text-[22px]">
+          {s.title}
+        </h3>
+        <p className="mt-3 text-[14px] leading-relaxed text-[color-mix(in_srgb,var(--color-off-white)_88%,transparent)]">
+          {s.body}
+        </p>
+      </div>
+    </div>
+  ),
 }));
 
 export function HowItWorks() {
@@ -88,11 +72,10 @@ export function HowItWorks() {
         <Reveal index={1} className="mt-16">
           <CoverflowCarousel
             slides={slides}
-            showCaption
             showPagination
-            cardWidth="clamp(200px, 30vw, 340px)"
+            cardWidth="clamp(220px, 30vw, 360px)"
             label="Come funziona una sessione"
-            cardClassName="rounded-[28px] border border-[color-mix(in_srgb,var(--color-off-black)_8%,transparent)] bg-[color-mix(in_srgb,var(--color-pure-white)_45%,transparent)] shadow-[0_30px_50px_-16px_rgba(21,19,15,0.18)] backdrop-blur-xl"
+            cardClassName="rounded-[28px] shadow-[0_28px_50px_-16px_rgba(201,112,92,0.5)]"
           />
         </Reveal>
 

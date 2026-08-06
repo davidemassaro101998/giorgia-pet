@@ -458,12 +458,43 @@ sia `url()` nel CSS sia i riferimenti stringa nel JS.
       accettata "per ora" dall'utente; sostituire appena disponibile una
       versione più grande, senza cambiare il trattamento (sfondo scuro
       della sezione già intonato al suo)
-- [ ] Le foto di cane/gatto nella hero (`src/assets/hero-dog.jpg`,
-      `hero-cat.jpg`) sono stock Unsplash usate come placeholder per lo
-      stile — sostituire con foto reali (dei clienti, con consenso, o
-      commissionate) prima del lancio pubblico
+- [ ] Verificare la licenza/provenienza dei ritagli cane/gatto
+      (`src/assets/hero-dog-cutout.png`, `hero-cat-cutout.png`) prima del
+      lancio pubblico — forniti dall'utente via Drive, non è documentato
+      se sono foto proprie, di clienti (serve consenso) o stock
 - [ ] Testimonianze reali quando disponibili (sezione `SocialProof.tsx`)
 - [ ] Dominio + deploy (in pausa su richiesta esplicita)
+
+**Step 10 — Ancoraggio agli angoli invece di mascherare i bordi, testo
+dentro le card del coverflow (fatto)**: due giri di correzione sullo
+Step 9.
+- **Cane e gatto ancora "brutti"** nonostante il fix dei bordi (Step 9):
+  il problema residuo non era la nitidezza del bordo ma la
+  **composizione** — galleggiavano centrati con tutti e 4 i lati
+  visibili, quindi qualunque bordo (anche pulito) leggeva come "ritaglio
+  fluttuante nel vuoto". Fix: **ancorati agli angoli** invece che
+  mascherati. Il cane (`CinematicIntro.tsx`) è ancorato in basso a
+  destra e ingrandito (`h-[104%]`, `items-end justify-end`) così il
+  lato inferiore tocca il fondo del blocco nero — il taglio in alto
+  (minimo) e a destra (fuori viewport, `overflow-hidden` sullo stage) si
+  legge come inquadratura editoriale voluta. Il gatto (`WhoItsFor.tsx`)
+  è ancorato nell'angolo in basso a destra della sezione con un
+  `translate-x`/`translate-y` positivo che lo spinge oltre il bordo
+  destro e inferiore — resta visibile solo testa/orecchio in alto a
+  sinistra, il taglio sembra parte dell'angolo della sezione. **Lezione
+  generale**: per un ritaglio con canale alpha, un bordo pulito (Step 9)
+  non basta da solo se la composizione lo isola al centro di uno spazio
+  vuoto — va ancorato a un bordo/angolo reale del contenitore, non
+  centrato.
+- **Testo dentro le card del coverflow** invece che sotto: `CoverflowCarousel.tsx`
+  ha ora un campo opzionale `content` per slide (non nell'originale
+  fornito dall'utente, che prevedeva solo `src` immagine + caption HTML
+  sotto) — quando presente sostituisce l'`<img>`. In `HowItWorks.tsx` le
+  card sono passate da vetro-su-bianco con SVG numerico a **sfondo ember
+  pieno** con numero/titolo/corpo veri impaginati dentro, per "risaltare
+  dallo sfondo bianco" (richiesta esplicita). **Eccezione voluta alla
+  regola "l'accento mai come riempimento"** del resto del sito — qui il
+  colore pieno è il punto, non un errore da correggere in futuro.
 
 ## Gate prima di dire "fatto" (applicato alla build iniziale, riapplicare a ogni modifica)
 1. Dev server avviato e guardato via screenshot reale (Playwright + Chromium
