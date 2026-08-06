@@ -9,7 +9,7 @@ const links = [
 
 export function Nav() {
   return (
-    <header className="sticky top-4 z-50 mx-auto w-fit px-4 md:top-6">
+    <header className="fixed inset-x-0 top-4 z-50 mx-auto w-fit px-4 md:top-6">
       <div className="flex items-center gap-6 rounded-[var(--radius-nav)] border border-[var(--color-hairline)] bg-[color-mix(in_srgb,var(--color-pure-white)_92%,transparent)] px-5 py-3 backdrop-blur-md">
         <a href="#top" className="font-body text-[15px] text-[var(--color-off-black)]">
           {site.brand}

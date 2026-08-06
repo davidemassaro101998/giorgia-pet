@@ -27,8 +27,10 @@ import heroDog from "../assets/hero-dog.jpg";
 // Filtro sempre applicato al cane di sfondo — desaturato e scurito per
 // farlo leggere come atmosfera dentro il canvas nero invece che come una
 // foto "incollata sopra": il primo tentativo era un ritaglio quadrato a
-// piena luminosità con un vignette stretto, leggeva come sticker.
-const DOG_FILTER = "grayscale(0.3) brightness(0.5) contrast(1.05)";
+// piena luminosità con un vignette stretto, leggeva come sticker. Scurito
+// ulteriormente su feedback ("contrasto ancora meno evidente").
+const DOG_FILTER = "grayscale(0.45) brightness(0.32) contrast(0.92)";
+const DOG_MAX_OPACITY = 0.72;
 
 if (typeof window !== "undefined") {
   gsap.registerPlugin(ScrollTrigger);
@@ -50,7 +52,8 @@ export function CinematicIntro() {
 
     const ctx = gsap.context(() => {
       if (reduce) {
-        gsap.set([heroRevealRef.current, heroImgRef.current], { filter: "blur(0px)", opacity: 1, scale: 1 });
+        gsap.set(heroRevealRef.current, { filter: "blur(0px)", opacity: 1, scale: 1 });
+        gsap.set(heroImgRef.current, { filter: `blur(0px) ${DOG_FILTER}`, opacity: DOG_MAX_OPACITY, scale: 1 });
         heroTitleRef.current?.startAnimation();
         return;
       }
@@ -63,7 +66,7 @@ export function CinematicIntro() {
       gsap.fromTo(
         heroImgRef.current,
         { opacity: 0, scale: 1.08, filter: `blur(18px) ${DOG_FILTER}` },
-        { opacity: 1, scale: 1, filter: `blur(0px) ${DOG_FILTER}`, duration: 2.2, ease: "expo.out", delay: 0.15 },
+        { opacity: DOG_MAX_OPACITY, scale: 1, filter: `blur(0px) ${DOG_FILTER}`, duration: 2.2, ease: "expo.out", delay: 0.15 },
       );
       heroTitleRef.current?.startAnimation();
 
@@ -80,7 +83,7 @@ export function CinematicIntro() {
         // cane come parte dell'ambiente, non un livello incollato sopra.
         gsap.to(heroRevealRef.current, { opacity: showHero ? 1 : 0, duration: 0.8, ease: "power3.out" });
         gsap.to(heroImgRef.current, {
-          opacity: showHero ? 1 : 0,
+          opacity: showHero ? DOG_MAX_OPACITY : 0,
           scale: showHero ? 1 : 1.15,
           filter: showHero ? `blur(0px) ${DOG_FILTER}` : `blur(20px) ${DOG_FILTER}`,
           duration: 1.2,
