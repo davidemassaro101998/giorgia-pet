@@ -343,6 +343,35 @@ Titolo/corpo veri di ogni step restano testo HTML reale sotto il
 coverflow (via `showCaption`+`meta` del componente), non dentro l'SVG —
 leggibile e accessibile, non testo rasterizzato.
 
+**Step 9 — Ritagli puliti, nav con profondità reale, coverflow su bianco
+(fatto)**: tre correzioni cliniche sullo Step 8.
+- **`CutoutFilterDefs.tsx`** (nuovo, montato una volta in `App.tsx`,
+  referenziabile da ovunque via `filter: url(#pet-cutout-feather)`): i
+  ritagli PNG di cane e gatto mostravano il bordo del taglio ("si vedono
+  i bordi" sul gatto, "un alone intorno come incollato" sul cane) —
+  causa reale, non l'ombra in sé: la frangia alpha grezza del cutout
+  proiettava la propria ombra, leggendo come un contorno incollato.
+  Fix: filtro SVG che erode l'alpha di 2px (`feMorphology
+  operator="erode"`, mangia la frangia) poi la sfuma (`feGaussianBlur`
+  solo sull'alpha eroso, l'RGB del soggetto resta nitido) prima di
+  comporre. Applicato sia al cane (`CinematicIntro.tsx`) sia al gatto
+  (`WhoItsFor.tsx`), con l'ombra del cane anche ridotta (una sola
+  `drop-shadow` più contenuta invece di due sommate — quella doppia
+  aggravava l'alone invece di dare profondità pulita).
+- **Nav con profondità 3D** (`Nav.tsx`): unica eccezione esplicita alla
+  regola "zero ombre" per un elemento di **chrome UI fisso**, non
+  contenuto/card — due `box-shadow` morbide (lift ampio + contatto
+  stretto) più un bagliore interno in alto (`inset` bianco, imita un
+  bevel di vetro) per il "più 3D" richiesto.
+- **Coverflow passato a sfondo chiaro** (`HowItWorks.tsx`): i numeri
+  SVG del giro precedente (numero pieno su quadrato nero) erano
+  "orrendi". Ridisegnati a sfondo **trasparente** (bagliore ember
+  sfocato + numero in gradiente ember, niente rettangolo pieno) apposta
+  — permette a `cardClassName` di dare alla card vero vetro
+  (`backdrop-blur-xl` + pannello semi-trasparente + ombra morbida)
+  invece di un colore piatto sotto. Frecce di navigazione rimosse
+  (`showNavigation` non più passato) — resta solo il drag.
+
 ## Componenti: 21st.dev prima, custom solo se non c'è nulla di adatto
 Regola cambiata a metà progetto — la prima versione aveva troppi componenti
 fatti a mano (cerchi CSS per il visual di risonanza, bottoni custom, FAQ con

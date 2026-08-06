@@ -19,7 +19,12 @@ if (typeof window !== "undefined") {
   gsap.registerPlugin(ScrollTrigger);
 }
 
-const CAT_SHADOW = "drop-shadow(0 30px 40px rgba(0,0,0,0.18)) drop-shadow(0 8px 12px rgba(0,0,0,0.12))";
+// `url(#pet-cutout-feather)` (CutoutFilterDefs.tsx, montato in App.tsx)
+// erode e sfuma il bordo alpha del ritaglio — senza, la frangia dura del
+// cutout PNG resta visibile ("si vedono i bordi", segnalato dall'utente),
+// soprattutto qui su un fondo chiaro dove il minimo contrasto di bordo
+// salta all'occhio.
+const CAT_SHADOW = "url(#pet-cutout-feather) drop-shadow(0 22px 28px rgba(0,0,0,0.16))";
 
 const cases = [
   "Cani e gatti ansiosi",

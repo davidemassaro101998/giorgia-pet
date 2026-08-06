@@ -34,7 +34,14 @@ import { MotionButton } from "./MotionButton";
 import { VerticalCutReveal, type VerticalCutRevealRef } from "./VerticalCutReveal";
 import heroDog from "../assets/hero-dog-cutout.png";
 
-const DOG_SHADOW = "drop-shadow(0 45px 55px rgba(0,0,0,0.55)) drop-shadow(0 10px 18px rgba(0,0,0,0.4))";
+// `url(#pet-cutout-feather)` (definito in CutoutFilterDefs.tsx, montato
+// una volta in App.tsx) erode e sfuma il bordo alpha del ritaglio prima
+// di applicare l'ombra — senza, la frangia dura del cutout PNG proietta
+// la sua stessa ombra e legge come un "alone incollato" invece che una
+// vera profondità. Ombra singola e più contenuta rispetto al primo
+// tentativo (due drop-shadow sommate, troppo larghe): quella aggravava
+// l'alone invece di dare profondità pulita.
+const DOG_SHADOW = "url(#pet-cutout-feather) drop-shadow(0 22px 26px rgba(0,0,0,0.4))";
 
 if (typeof window !== "undefined") {
   gsap.registerPlugin(ScrollTrigger);

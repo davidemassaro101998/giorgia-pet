@@ -1,4 +1,5 @@
 import { Nav } from "./components/Nav";
+import { CutoutFilterDefs } from "./components/CutoutFilterDefs";
 import { CinematicIntro } from "./components/CinematicIntro";
 import { Problem } from "./components/Problem";
 import { HowItWorks } from "./components/HowItWorks";
@@ -13,6 +14,7 @@ import { Footer } from "./components/Footer";
 function App() {
   return (
     <>
+      <CutoutFilterDefs />
       <Nav />
       <main>
         <CinematicIntro />

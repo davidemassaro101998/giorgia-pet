@@ -10,7 +10,19 @@ const links = [
 export function Nav() {
   return (
     <header className="fixed inset-x-0 top-4 z-50 mx-auto w-fit px-4 md:top-6">
-      <div className="flex items-center gap-6 rounded-[var(--radius-nav)] border border-[var(--color-hairline)] bg-[color-mix(in_srgb,var(--color-pure-white)_92%,transparent)] px-5 py-3 backdrop-blur-md">
+      <div
+        className="flex items-center gap-6 rounded-[var(--radius-nav)] border border-[var(--color-hairline)] bg-[color-mix(in_srgb,var(--color-pure-white)_88%,transparent)] px-5 py-3 backdrop-blur-lg"
+        style={{
+          // Elemento di chrome fluttuante — unica eccezione esplicita alla
+          // regola "zero ombre" del riferimento (che vale per card/contenuto,
+          // non per la UI fissa): due ombre morbide (lift ampio + contatto
+          // stretto) per il sollevamento, più un bagliore interno in alto
+          // che imita il bevel di vetro reale — dà la profondità "3D"
+          // richiesta senza diventare un'ombra pesante da card.
+          boxShadow:
+            "0 24px 48px -12px rgba(21,19,15,0.22), 0 6px 16px -6px rgba(21,19,15,0.14), inset 0 1px 0 rgba(255,255,255,0.7), inset 0 -1px 0 rgba(21,19,15,0.05)",
+        }}
+      >
         <a href="#top" className="font-body text-[15px] text-[var(--color-off-black)]">
           {site.brand}
         </a>
