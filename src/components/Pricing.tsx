@@ -1,6 +1,8 @@
 import { ctaLabel } from "../siteConfig";
 import { Reveal } from "./Reveal";
 import { MotionButton } from "./MotionButton";
+import { FeatureCard } from "./FeatureCard";
+import { SectionTitle } from "./SectionTitle";
 
 const tiers = [
   {
@@ -27,21 +29,25 @@ export function Pricing() {
   return (
     <section id="percorsi" className="border-b border-[var(--color-hairline)] bg-[var(--color-off-white)] py-20 md:py-28">
       <div className="mx-auto max-w-[1200px] px-6">
-        <Reveal>
-          <h2 className="max-w-[20ch] text-3xl leading-tight text-[var(--color-off-black)] md:text-4xl">
-            Percorsi disponibili
-          </h2>
-        </Reveal>
+        <SectionTitle
+          firstHalf="Percorsi "
+          secondHalf="disponibili"
+          className="max-w-[20ch] text-3xl leading-tight text-[var(--color-off-black)] md:text-4xl"
+        />
         <div className="mt-12 grid grid-cols-1 gap-6 md:grid-cols-3">
           {tiers.map((t, i) => (
             <Reveal key={t.name} index={i}>
-              <div className="flex h-full flex-col rounded-[var(--radius-card)] border border-[var(--color-hairline)] bg-[var(--color-pure-white)] p-8">
-                {t.cta && (
-                  <span className="mb-4 w-fit rounded-[var(--radius-pill)] border border-[var(--color-ember)] px-3 py-1 text-[12px] text-[var(--color-ember)]">
-                    Si parte da qui
-                  </span>
-                )}
-                <h3 className="text-lg text-[var(--color-off-black)]">{t.name}</h3>
+              <FeatureCard
+                title={t.name}
+                className="bg-[var(--color-pure-white)] p-8"
+                eyebrow={
+                  t.cta ? (
+                    <span className="mb-4 w-fit rounded-[var(--radius-pill)] border border-[var(--color-ember)] px-3 py-1 text-[12px] text-[var(--color-ember)]">
+                      Si parte da qui
+                    </span>
+                  ) : undefined
+                }
+              >
                 <p className="mt-3 font-body text-3xl text-[var(--color-off-black)]">
                   {t.price}
                 </p>
@@ -51,7 +57,7 @@ export function Pricing() {
                 {t.cta && (
                   <MotionButton href="#prenota" label={ctaLabel} fullWidth className="mt-6" />
                 )}
-              </div>
+              </FeatureCard>
             </Reveal>
           ))}
         </div>

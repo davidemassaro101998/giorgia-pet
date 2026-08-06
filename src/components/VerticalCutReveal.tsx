@@ -139,7 +139,7 @@ export const VerticalCutReveal = forwardRef<VerticalCutRevealRef, VerticalCutRev
 
     return (
       <span
-        className={cn(containerClassName, "flex flex-wrap whitespace-pre-wrap", splitBy === "lines" && "flex-col")}
+        className={cn("flex flex-wrap whitespace-pre-wrap", splitBy === "lines" && "flex-col", containerClassName)}
         onClick={onClick}
         ref={containerRef}
         {...props}

@@ -27,10 +27,12 @@ import heroDog from "../assets/hero-dog.jpg";
 // Filtro sempre applicato al cane di sfondo — desaturato e scurito per
 // farlo leggere come atmosfera dentro il canvas nero invece che come una
 // foto "incollata sopra": il primo tentativo era un ritaglio quadrato a
-// piena luminosità con un vignette stretto, leggeva come sticker. Scurito
-// ulteriormente su feedback ("contrasto ancora meno evidente").
-const DOG_FILTER = "grayscale(0.45) brightness(0.32) contrast(0.92)";
-const DOG_MAX_OPACITY = 0.72;
+// piena luminosità con un vignette stretto, leggeva come sticker.
+// Un ulteriore giro di scurimento è stato provato e poi scartato
+// dall'utente ("rimetti il cane come prima, togli lo scurimento") —
+// questi restano i valori giusti, non ritoccarli senza richiesta esplicita.
+const DOG_FILTER = "grayscale(0.3) brightness(0.5) contrast(1.05)";
+const DOG_MAX_OPACITY = 1;
 
 if (typeof window !== "undefined") {
   gsap.registerPlugin(ScrollTrigger);

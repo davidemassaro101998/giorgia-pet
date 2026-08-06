@@ -2,6 +2,7 @@ import { ctaLabel } from "../siteConfig";
 import { Reveal } from "./Reveal";
 import { MotionButton } from "./MotionButton";
 import { SectionTitle } from "./SectionTitle";
+import { FeatureCard } from "./FeatureCard";
 
 const steps = [
   {
@@ -42,17 +43,19 @@ export function HowItWorks() {
         <div className="mt-14 grid grid-cols-1 gap-x-6 gap-y-6 md:grid-cols-4">
           {steps.map((s, i) => (
             <Reveal key={s.n} index={i}>
-              <div className="rounded-[var(--radius-card)] border border-[var(--color-hairline)] bg-[var(--color-off-white)] p-6">
-                <span className="inline-flex items-center rounded-[var(--radius-pill)] border border-[var(--color-ember)] px-3 py-1 font-body text-[12px] text-[var(--color-ember)]">
-                  {s.n}
-                </span>
-                <h3 className="mt-4 text-lg text-[var(--color-off-black)]">
-                  {s.title}
-                </h3>
+              <FeatureCard
+                title={s.title}
+                className="bg-[var(--color-off-white)]"
+                eyebrow={
+                  <span className="mb-4 inline-flex w-fit items-center rounded-[var(--radius-pill)] border border-[var(--color-ember)] px-3 py-1 font-body text-[12px] text-[var(--color-ember)]">
+                    {s.n}
+                  </span>
+                }
+              >
                 <p className="mt-2 text-[15px] leading-relaxed text-[var(--color-steel)]">
                   {s.body}
                 </p>
-              </div>
+              </FeatureCard>
             </Reveal>
           ))}
         </div>

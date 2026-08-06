@@ -171,17 +171,53 @@ id 5794, semplificata da N slide con liste laterali+audio a 2 sole slide
 testuali) — a metà corsa la hero dissolve nella sezione successiva invece
 di scorrere via, con i titoli che si rivelano via `VerticalCutReveal`
 (cnippet.dev id 18595, wipe verticale a clip-path, adattato in
-`VerticalCutReveal.tsx`). **Resta l'unico punto "spettacolare" del sito**
-— il resto (card, FAQ, prezzi) resta sui semplici fade-up di `Reveal.tsx`,
-deliberatamente, per non tornare a un linguaggio incoerente col
-riferimento. **Ordine di sezione cambiato**: "cos'è la biorisonanza" era
+`VerticalCutReveal.tsx`). Il pin/crossfade a schermo intero **resta
+l'unico punto "spettacolare"** del sito — ma `VerticalCutReveal` è stato
+poi esteso a tutti i titoli di sezione (vedi Step 5) per rompere la
+sensazione di "passaggi tutti uguali" segnalata dall'utente, senza
+introdurre altri pin/schermate intere altrove. **Ordine di sezione
+cambiato**: "cos'è la biorisonanza" era
 dopo `HowItWorks`, ora è la seconda slide della cinematic intro (subito
 dopo l'hook della hero, prima di "riconosci i segnali") — narrativamente
 più corretto.
 
-**Step 4 — Altre transizioni**: non toccate, restano i `Reveal` fade-up
-standard. Non reintrodurre altri momenti "spettacolari" senza richiesta
-esplicita — uno solo per scelta, non un'abitudine.
+**Step 4 — Altre transizioni**: superato dallo Step 5 (l'utente ha chiesto
+esplicitamente di rompere la sensazione di "tutte uguali" nelle sezioni
+2-9) — non reintrodurre un secondo pin/schermo-intero altrove, quello
+resta riservato a hero→"cos'è" per scelta esplicita, non un'abitudine.
+
+**Step 5 — Card più vive + varietà nei titoli + gatto sullo sfondo chiaro
+(fatto)**: tre feedback distinti nello stesso giro.
+- **Card "piatte e povere"** (Problem, HowItWorks, Pricing): create
+  `FeatureCard.tsx`, adattata da 21st.dev manuarora700/feature-section-
+  with-hover-effects (Aceternity, id 1521) — niente ombre/gradienti
+  vistosi (vietati dal riferimento), ma una barra accento accanto al
+  titolo che si allunga e diventa ember all'hover, il titolo che scivola
+  leggermente, un velo di tono (wash, non colore pieno) che sale dal
+  basso. La differenza "piatta vs viva" senza rompere la disciplina.
+- **"I passaggi tra le sezioni sono tutti uguali"**: `VerticalCutReveal`
+  (già usato solo nella cinematic intro) esteso a **tutti** i titoli di
+  sezione via `SectionTitle.tsx` (Pricing e Faq usavano un `<h2>` semplice
+  — passati a `SectionTitle` per coerenza). Sotto la piega va bene
+  `useInView`/IntersectionObserver per triggerare il wipe (il vincolo
+  GOTCHAS #1 riguarda solo l'above-the-fold). **Bug di integrazione
+  trovato**: `VerticalCutReveal` applicava `containerClassName` PRIMA
+  della classe `flex` hardcoded nel suo `cn()` interno — passare
+  `"inline-flex"` per tenere firstHalf/secondHalf sulla stessa riga non
+  aveva effetto perché tailwind-merge risolveva il conflitto a favore del
+  `flex` scritto dopo. Fix: riordinato il `cn()` in `VerticalCutReveal.tsx`
+  così `containerClassName` vince sempre.
+- **Gatto sullo sfondo** (`src/assets/hero-cat.jpg`, non più inutilizzato):
+  stessa tecnica del cane in hero ma invertita per un canvas chiaro —
+  `grayscale(0.5) brightness(1.75) contrast(0.85)` invece di scurire,
+  maschera radiale ampia in basso a sinistra. In `Faq.tsx`, l'ultima
+  sezione vera prima del footer ("sul fondo" della pagina).
+
+Nello stesso giro, corretti anche due bug di layout non richiesti
+esplicitamente ma visti in review: `Nav.tsx` era `sticky` (occupava
+spazio nel flusso, lasciando una fascia bianca vuota sopra l'hero scura)
+— ora `fixed`, si sovrappone come previsto. Scrollbar nativa nascosta via
+CSS in `index.css` (`scrollbar-width: none` + `::-webkit-scrollbar`).
 
 ## Componenti: 21st.dev prima, custom solo se non c'è nulla di adatto
 Regola cambiata a metà progetto — la prima versione aveva troppi componenti

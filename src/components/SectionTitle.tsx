@@ -6,9 +6,17 @@
 // l'offset è tarato per un titolo di sezione normale che scorre dal basso:
 // si "apre" mentre entra, poi resta fermo/leggibile una volta a centro,
 // invece di continuare a distorcersi mentre lo leggi.
+//
+// Ogni titolo ora si rivela anche con un wipe verticale a carattere
+// (VerticalCutReveal, id 18595) al primo ingresso in viewport — prima
+// tutte le sezioni condividevano lo stesso semplice fade, segnalato come
+// "i passaggi tra le sezioni sono tutti uguali". Sotto la piega va bene
+// usare `useInView` (IntersectionObserver): il vincolo GOTCHAS #1 vale
+// solo per contenuto above-the-fold.
 
 import { useRef } from "react";
-import { motion, useScroll, useTransform } from "motion/react";
+import { motion, useInView, useScroll, useTransform } from "motion/react";
+import { VerticalCutReveal } from "./VerticalCutReveal";
 
 export function SectionTitle({
   firstHalf,
@@ -22,24 +30,38 @@ export function SectionTitle({
   as?: "h2" | "h3";
 }) {
   const ref = useRef<HTMLDivElement>(null);
+  const inView = useInView(ref, { once: true, amount: 0.6 });
   const { scrollYProgress } = useScroll({ target: ref, offset: ["start 0.92", "start 0.45"] });
 
   const scale = useTransform(scrollYProgress, [0, 1], [0.92, 1]);
   const tracking = useTransform(scrollYProgress, [0, 1], [-0.01, 0]);
   const trackingEm = useTransform(tracking, (v) => `${v}em`);
-  const split = useTransform(scrollYProgress, [0, 1], [0, 1]);
-  const firstX = useTransform(split, (v) => `${-(1 - v) * 3}%`);
-  const secondX = useTransform(split, (v) => `${(1 - v) * 3}%`);
-  const opacity = useTransform(scrollYProgress, [0, 0.5], [0, 1]);
 
   return (
     <div ref={ref} className={className}>
-      <motion.div style={{ scale, letterSpacing: trackingEm, opacity, transformOrigin: "left center" }}>
+      <motion.div style={{ scale, letterSpacing: trackingEm, transformOrigin: "left center" }}>
         <Tag className="inline">
-          <motion.span style={{ display: "inline-block", whiteSpace: "pre", x: firstX }}>
+          <VerticalCutReveal
+            autoStart={inView}
+            splitBy="words"
+            staggerDuration={0.05}
+            staggerFrom="first"
+            transition={{ type: "spring", stiffness: 210, damping: 24 }}
+            containerClassName="inline-flex"
+            wordLevelClassName="whitespace-pre"
+          >
             {firstHalf}
-          </motion.span>
-          <motion.span style={{ display: "inline-block", x: secondX }}>{secondHalf}</motion.span>
+          </VerticalCutReveal>
+          <VerticalCutReveal
+            autoStart={inView}
+            splitBy="words"
+            staggerDuration={0.05}
+            staggerFrom="first"
+            transition={{ type: "spring", stiffness: 210, damping: 24, delay: 0.12 }}
+            containerClassName="inline-flex"
+          >
+            {secondHalf}
+          </VerticalCutReveal>
         </Tag>
       </motion.div>
     </div>

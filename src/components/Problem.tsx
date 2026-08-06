@@ -1,5 +1,6 @@
 import { Reveal } from "./Reveal";
 import { SectionTitle } from "./SectionTitle";
+import { FeatureCard } from "./FeatureCard";
 
 const signals = [
   {
@@ -33,12 +34,11 @@ export function Problem() {
         <div className="mt-12 grid grid-cols-1 gap-5 sm:grid-cols-2 md:grid-cols-4">
           {signals.map((s, i) => (
             <Reveal key={s.title} index={i}>
-              <div className="rounded-[var(--radius-card)] border border-[var(--color-hairline)] bg-[var(--color-pure-white)] p-7">
-                <h3 className="text-lg text-[var(--color-off-black)]">{s.title}</h3>
+              <FeatureCard title={s.title} className="bg-[var(--color-pure-white)]">
                 <p className="mt-2 text-[15px] leading-relaxed text-[var(--color-steel)]">
                   {s.body}
                 </p>
-              </div>
+              </FeatureCard>
             </Reveal>
           ))}
         </div>
