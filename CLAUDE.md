@@ -207,17 +207,62 @@ resta riservato a hero→"cos'è" per scelta esplicita, non un'abitudine.
   aveva effetto perché tailwind-merge risolveva il conflitto a favore del
   `flex` scritto dopo. Fix: riordinato il `cn()` in `VerticalCutReveal.tsx`
   così `containerClassName` vince sempre.
-- **Gatto sullo sfondo** (`src/assets/hero-cat.jpg`, non più inutilizzato):
-  stessa tecnica del cane in hero ma invertita per un canvas chiaro —
-  `grayscale(0.5) brightness(1.75) contrast(0.85)` invece di scurire,
-  maschera radiale ampia in basso a sinistra. In `Faq.tsx`, l'ultima
-  sezione vera prima del footer ("sul fondo" della pagina).
+- **Gatto sullo sfondo — 3 tentativi, alla fine rimosso**: giro 1, in
+  `Faq.tsx` con un ritaglio stretto — "fatto malissimo". Giro 2, spostato
+  in `WhoItsFor.tsx` con bleed ampio dal bordo sinistro + la stessa
+  animazione GSAP scroll-triggered (non pinnata, `toggleActions: "play
+  reverse play reverse"`) del cane in hero — tecnicamente meglio ma
+  l'utente ha comunque detto "non ci siamo", rimosso del tutto (giro 3).
+  `src/assets/hero-cat.jpg` resta inutilizzato sul disco, non referenziato
+  da nessun componente — non cancellato, potrebbe servire con una foto
+  diversa (vedi sotto, i tentativi con foto vere fornite dall'utente sono
+  stati scartati per il tono "da foto stock" delle espressioni).
 
 Nello stesso giro, corretti anche due bug di layout non richiesti
 esplicitamente ma visti in review: `Nav.tsx` era `sticky` (occupava
 spazio nel flusso, lasciando una fascia bianca vuota sopra l'hero scura)
 — ora `fixed`, si sovrappone come previsto. Scrollbar nativa nascosta via
 CSS in `index.css` (`scrollbar-width: none` + `::-webkit-scrollbar`).
+
+**Step 6 — "Come funziona" ricostruita, foto vera di Giorgia (fatto)**:
+due feedback distinti.
+- **"Come funziona una sessione" senza peso**: le `FeatureCard` in
+  griglia 4 colonne leggevano come "un elenco puntato vestito bene".
+  Buttato via il concetto di card — ora è una **lista editoriale
+  verticale**, righe a tutta larghezza (numero enorme `clamp(2.75rem,
+  5vw,4rem)` | titolo | testo, 3 colonne asimmetriche `0.9fr_1.6fr_2fr`),
+  separate da hairline, senza bordi/contenitori attorno a ogni riga. È il
+  pattern "Breakthrough" a griglia asimmetrica descritto nello style-
+  reference dell'utente stesso (narrow label | wide heading | side
+  paragraph), non ancora usato altrove sul sito. Il numero è
+  `--color-ash` a riposo, diventa `--color-ember` all'hover (**non**
+  `--color-hairline` — un tentativo iniziale usava quel token per il
+  numero ed era praticamente invisibile, essendo pensato per bordi a
+  bassissima opacità, non per testo).
+- **Foto vera di Giorgia Bisognin** (`src/assets/giorgia.jpg`): l'utente
+  ha incollato l'immagine in chat ma non era recuperabile da filesystem
+  (il meccanismo di incolla-immagine di questo ambiente non la scrive su
+  disco) — serviva un URL diretto scaricabile con `curl`. Un link
+  Google Drive `/uc?export=download&id=...` funziona SOLO se il file è
+  condiviso "Chiunque abbia il link" — altrimenti restituisce una pagina
+  HTML di login, non l'immagine (va controllato `file` sull'output, non
+  solo che curl non dia errore). Foto **bassa risoluzione** (190×245px,
+  accettata così dall'utente "per ora") — per questo NON trattata come
+  sfondo ambientale grande (si vedrebbe sgranata), ma tenuta a dimensione
+  contenuta (~233×300px) in `About.tsx`. Lo sfondo della sezione è stato
+  cambiato da chiaro a `--color-off-black` **apposta**: lo sfondo della
+  foto stessa è già un nero molto simile, quindi il ritratto si fonde nel
+  canvas della sezione invece di stare dentro una cornice — "sfondo della
+  sezione uguale a quello della foto", richiesta letterale dell'utente.
+  Comparsa via GSAP ScrollTrigger (blur+scale, stessa tecnica di
+  cane/gatto). **Foto sostitutive proposte dall'utente e scartate**: un
+  golden retriever con la zampa alzata su sfondo azzurro acceso (sfondo
+  colorato non si fonde nel nero della hero, posa da foto stock) e un
+  gatto a bocca aperta mentre si lecca il naso su sfondo bianco (sfondo
+  ok, ma espressione troppo comica/da stock per il tono del sito) — se
+  arrivano foto sostitutive in futuro, verificare che abbiano uno sfondo
+  scuro/neutro coerente con la sezione di destinazione e un'espressione
+  composta, non in movimento.
 
 ## Componenti: 21st.dev prima, custom solo se non c'è nulla di adatto
 Regola cambiata a metà progetto — la prima versione aveva troppi componenti
@@ -300,8 +345,11 @@ sia `url()` nel CSS sia i riferimenti stringa nel JS.
 - [ ] Contatti reali: WhatsApp, email, telefono (attualmente placeholder)
 - [ ] Prezzi reali per sessione singola e percorso 3 sessioni (attualmente `€ —`)
 - [ ] Logo vero (attualmente solo wordmark testuale "Vibra")
-- [ ] Foto vera di Giorgia Bisognin (attualmente monogramma "GB" — un ritratto
-      stock al suo posto sarebbe fuorviante, va sostituito con una foto reale)
+- [ ] Foto di Giorgia Bisognin a risoluzione più alta — quella attuale
+      (`src/assets/giorgia.jpg`) è vera ma bassa risoluzione (190×245px),
+      accettata "per ora" dall'utente; sostituire appena disponibile una
+      versione più grande, senza cambiare il trattamento (sfondo scuro
+      della sezione già intonato al suo)
 - [ ] Le foto di cane/gatto nella hero (`src/assets/hero-dog.jpg`,
       `hero-cat.jpg`) sono stock Unsplash usate come placeholder per lo
       stile — sostituire con foto reali (dei clienti, con consenso, o

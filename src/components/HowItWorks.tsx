@@ -1,8 +1,18 @@
+// Ricostruita da zero: la versione a 4 card in griglia (FeatureCard)
+// leggeva come un elenco puntato vestito bene, "non ha un peso
+// importante" (feedback diretto). Sostituita con una lista editoriale
+// verticale — righe a tutta larghezza in 3 colonne (numero grande |
+// titolo | testo), separate da hairline, senza contenitori/bordi attorno
+// a ogni riga: è il pattern "Breakthrough" a griglia asimmetrica descritto
+// nello style-reference scelto dall'utente (Augen Pro — "narrow label |
+// wide heading | side paragraph"), mai usato altrove sul sito finora. Il
+// numero enorme dà peso senza bisogno di un box; la vita all'hover (numero
+// che diventa ember, titolo che scivola) resta coerente con FeatureCard.
+
 import { ctaLabel } from "../siteConfig";
 import { Reveal } from "./Reveal";
 import { MotionButton } from "./MotionButton";
 import { SectionTitle } from "./SectionTitle";
-import { FeatureCard } from "./FeatureCard";
 
 const steps = [
   {
@@ -40,22 +50,20 @@ export function HowItWorks() {
           className="max-w-[22ch] text-3xl leading-tight text-[var(--color-off-black)] md:text-4xl"
         />
 
-        <div className="mt-14 grid grid-cols-1 gap-x-6 gap-y-6 md:grid-cols-4">
+        <div className="mt-16 border-t border-[var(--color-hairline)]">
           {steps.map((s, i) => (
             <Reveal key={s.n} index={i}>
-              <FeatureCard
-                title={s.title}
-                className="bg-[var(--color-off-white)]"
-                eyebrow={
-                  <span className="mb-4 inline-flex w-fit items-center rounded-[var(--radius-pill)] border border-[var(--color-ember)] px-3 py-1 font-body text-[12px] text-[var(--color-ember)]">
-                    {s.n}
-                  </span>
-                }
-              >
-                <p className="mt-2 text-[15px] leading-relaxed text-[var(--color-steel)]">
+              <div className="group/step grid grid-cols-1 items-baseline gap-x-8 gap-y-3 border-b border-[var(--color-hairline)] py-10 transition-colors duration-300 md:grid-cols-[0.9fr_1.6fr_2fr] md:gap-y-0 md:py-12">
+                <span className="font-body text-[clamp(2.75rem,5vw,4rem)] leading-none text-[var(--color-ash)] transition-colors duration-300 group-hover/step:text-[var(--color-ember)]">
+                  {s.n}
+                </span>
+                <h3 className="text-xl text-[var(--color-off-black)] transition-transform duration-300 group-hover/step:translate-x-1.5 md:text-2xl">
+                  {s.title}
+                </h3>
+                <p className="max-w-[46ch] text-[15px] leading-relaxed text-[var(--color-steel)] md:text-base">
                   {s.body}
                 </p>
-              </FeatureCard>
+              </div>
             </Reveal>
           ))}
         </div>
