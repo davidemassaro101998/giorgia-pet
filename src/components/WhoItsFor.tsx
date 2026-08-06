@@ -77,19 +77,19 @@ export function WhoItsFor() {
         style={{
           backgroundImage: `url(${heroCat})`,
           backgroundSize: "cover",
-          backgroundPosition: "center 20%",
-          maskImage: "radial-gradient(80% 75% at 78% 48%, black 22%, transparent 78%)",
-          WebkitMaskImage: "radial-gradient(80% 75% at 78% 48%, black 22%, transparent 78%)",
+          backgroundPosition: "center 32%",
+          maskImage: "radial-gradient(85% 80% at 68% 48%, black 30%, transparent 80%)",
+          WebkitMaskImage: "radial-gradient(85% 80% at 68% 48%, black 30%, transparent 80%)",
         }}
       />
-      <div className="relative mx-auto max-w-[800px] px-6 text-center">
+      <div className="relative mx-auto grid max-w-[1200px] grid-cols-1 px-6 md:grid-cols-[1fr_1fr]">
         <Reveal>
           <SectionTitle
             firstHalf="Per chi è pensato "
             secondHalf="Vibra"
             className="text-3xl leading-tight tracking-tight text-[var(--color-off-black)] md:text-4xl"
           />
-          <div className="mt-7 flex flex-wrap justify-center gap-3">
+          <div className="mt-7 flex flex-wrap gap-3">
             {cases.map((c) => (
               <span
                 key={c}
@@ -100,6 +100,7 @@ export function WhoItsFor() {
             ))}
           </div>
         </Reveal>
+        <div aria-hidden />
       </div>
     </section>
   );
