@@ -1,13 +1,13 @@
-// Sezione ripensata per la foto vera di Giorgia (bassa risoluzione,
-// 190×245 — l'utente ha chiesto di usarla comunque "così piccola per
-// ora", quindi il ritratto resta a dimensione contenuta invece di essere
-// ingrandito come sfondo ambientale, per non renderlo sgranato). Lo
-// sfondo della sezione diventa scuro (`--color-off-black`) apposta:
-// lo sfondo della foto stessa è già un nero quasi identico, così il
-// ritratto si fonde nel canvas della sezione invece di stare dentro una
-// cornice — "sfondo della sezione uguale a quello della foto", come
-// richiesto. Comparsa via GSAP ScrollTrigger (blur+scale, stessa
-// tecnica di cane/gatto) per l'ingresso "spettacolare" richiesto.
+// Foto vera di Giorgia trattata come le altre: non una "card" con un box
+// rigido (il tentativo precedente — un rettangolo 233×300 su sfondo
+// nero, con un fade interno troppo stretto per nascondere il proprio
+// bordo — leggeva come un'immagine incollata sopra, segnalato
+// dall'utente). Ora è un livello di sfondo che sanguina da sinistra
+// dietro al testo, maschera molto più ampia (il fade comincia ben prima
+// del bordo del contenitore, non ha un bordo percepibile) — stessa
+// tecnica di cane/gatto, non più un riquadro a sé. Bassa risoluzione
+// (190×245) accettata "per ora": la sfumatura ampia aiuta a nasconderlo,
+// una foto nitida e piccola in un box netto lo avrebbe reso più evidente.
 
 import { useEffect, useRef } from "react";
 import gsap from "gsap";
@@ -56,20 +56,22 @@ export function About() {
     <section
       ref={sectionRef}
       id="chi-ti-segue"
-      className="border-b border-[var(--color-hairline)] bg-[var(--color-off-black)] py-20 md:py-28"
+      className="relative overflow-hidden border-b border-[var(--color-hairline)] bg-[var(--color-off-black)] py-20 md:py-28"
     >
-      <div className="mx-auto grid max-w-[1200px] grid-cols-1 items-center gap-14 px-6 md:grid-cols-[300px_1fr]">
-        <div
-          ref={photoRef}
-          className="relative mx-auto h-[300px] w-[233px] md:mx-0"
-          style={{
-            backgroundImage: `url(${giorgiaPhoto})`,
-            backgroundSize: "cover",
-            backgroundPosition: "center top",
-            maskImage: "radial-gradient(85% 85% at 50% 40%, black 55%, transparent 96%)",
-            WebkitMaskImage: "radial-gradient(85% 85% at 50% 40%, black 55%, transparent 96%)",
-          }}
-        />
+      <div
+        ref={photoRef}
+        aria-hidden
+        className="pointer-events-none absolute inset-y-0 left-0 hidden w-[50%] md:block"
+        style={{
+          backgroundImage: `url(${giorgiaPhoto})`,
+          backgroundSize: "cover",
+          backgroundPosition: "center 25%",
+          maskImage: "radial-gradient(75% 70% at 28% 45%, black 20%, transparent 75%)",
+          WebkitMaskImage: "radial-gradient(75% 70% at 28% 45%, black 20%, transparent 75%)",
+        }}
+      />
+      <div className="relative mx-auto grid max-w-[1200px] grid-cols-1 px-6 md:grid-cols-[1fr_1fr]">
+        <div className="hidden md:block" aria-hidden />
         <Reveal index={1}>
           <p className="font-body text-[13px] text-[var(--color-ash)]">Chi ti segue</p>
           <SectionTitle

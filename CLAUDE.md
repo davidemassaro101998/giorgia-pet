@@ -264,6 +264,28 @@ due feedback distinti.
   scuro/neutro coerente con la sezione di destinazione e un'espressione
   composta, non in movimento.
 
+**Step 7 — Foto definitive di cane/gatto, fix del "pasted look" su
+Giorgia (fatto)**: l'utente ha trovato due foto giuste al secondo giro
+— un labrador nero con sfondo studio quasi identico al nero della hero
+(`src/assets/hero-dog.jpg`, sostituisce il cane precedente) e un gatto
+rosso/bianco con sguardo laterale calmo su sfondo bianco pulito
+(`src/assets/hero-cat.jpg`, sostituisce il file scartato — il gatto
+torna in `WhoItsFor.tsx`, questa volta sul lato **destro** invece che
+sinistro, stessa tecnica GSAP ScrollTrigger non pinnata di prima).
+
+Corretto anche il "si vede che hai incollato l'immagine" su Giorgia
+(`About.tsx`): la versione precedente la trattava come una **card** —
+un riquadro rigido 233×300px con un fade interno troppo stretto per
+nascondere il proprio bordo, quindi il rettangolo restava visibile come
+sagoma sopra il canvas nero. Ristrutturata sullo stesso pattern di
+cane/gatto: non più un box a dimensione fissa dentro la grid, ma un
+**livello di sfondo assoluto** che sanguina dal bordo sinistro dietro al
+testo (`w-[50%]`, maschera radiale `75% 70% at 28% 45%` con fade che
+comincia already al 20% — molto più ampio del tentativo precedente).
+Nessun bordo percepibile ora: la bassa risoluzione (190×245) aiuta,
+paradossalmente, perché la sfumatura ampia la nasconde meglio di quanto
+farebbe in un riquadro nitido e piccolo.
+
 ## Componenti: 21st.dev prima, custom solo se non c'è nulla di adatto
 Regola cambiata a metà progetto — la prima versione aveva troppi componenti
 fatti a mano (cerchi CSS per il visual di risonanza, bottoni custom, FAQ con
