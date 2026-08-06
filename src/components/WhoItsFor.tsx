@@ -6,6 +6,14 @@
 // `drop-shadow` sono stati rimossi su feedback diretto ("non devono
 // fluttuare... sfondo completamente uniforme") — resta solo il filtro che
 // erode e sfuma il bordo del cutout.
+//
+// Padding verticale della sezione cresciuto a `xl`/`2xl` (oltre a
+// `md:py-28`): la sezione è alta quanto il suo contenuto (titolo + tag),
+// mentre il gatto è ancorato in basso e vincolato solo da `max-h-[70vh]` —
+// su schermi molto larghi il contenuto testuale è corto ma il gatto resta
+// alto, quindi la sua testa superava il bordo alto della sezione e veniva
+// tagliata dall'`overflow-hidden`. Più padding verticale = sezione più
+// alta = spazio sufficiente sopra il gatto perché non venga tagliato.
 
 import { useEffect, useRef } from "react";
 import gsap from "gsap";
@@ -74,7 +82,7 @@ export function WhoItsFor() {
   return (
     <section
       ref={sectionRef}
-      className="relative overflow-hidden border-b border-[var(--color-hairline)] bg-[var(--color-off-white)] py-20 md:py-28"
+      className="relative overflow-hidden border-b border-[var(--color-hairline)] bg-[var(--color-off-white)] py-20 md:py-28 xl:py-36 2xl:py-44"
     >
       {/* Ancorato nell'angolo in basso a destra: il lato inferiore e quello
           destro escono dalla cornice (`overflow-hidden` sulla sezione)

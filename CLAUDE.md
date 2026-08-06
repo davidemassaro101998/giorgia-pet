@@ -552,6 +552,35 @@ prima del test "ufficiale" dell'utente.
   pausa tra uno step e l'altro) prima di catturare, altrimenti si legge
   come "sezioni vuote" quando non lo sono per un utente reale.
 
+**Step 13 — Cat crop su schermi larghissimi, bug del doppio-click sui
+link della nav (fatto)**: ultimi due difetti trovati nel test "ufficiale"
+dell'utente.
+- **Testa del gatto tagliata su schermi molto larghi**: la sezione
+  `WhoItsFor` è alta quanto il suo contenuto (titolo + tag), mentre il
+  gatto è ancorato in basso con solo `max-h-[70vh]` come limite — su
+  schermi larghi il testo è corto ma il gatto resta alto, quindi la sua
+  testa superava il bordo alto della sezione e veniva tagliata
+  dall'`overflow-hidden`. Fix: più padding verticale sulla sezione a
+  `xl`/`2xl` (`xl:py-36 2xl:py-44`, oltre a `md:py-28`) — sezione più
+  alta, spazio sufficiente sopra il gatto. Verificato a 2560px e 3440px.
+- **Bug "primo click bianco/torna indietro, secondo click funziona" sui
+  link della nav**: causa reale — `html { scroll-behavior: smooth }`
+  (`index.css`) più il salto nativo del browser su `href="#id"`
+  competevano con lo `ScrollTrigger` pinnato di `CinematicIntro.tsx`
+  (200vh): il salto nativo puntava a una posizione calcolata su un
+  layout non ancora aggiornato, poi il refresh di ScrollTrigger
+  correggeva/"tirava indietro" lo scroll — da qui il flash e il bisogno
+  di un secondo click. Fix: nuovo `src/lib/scroll.ts` — un handler
+  condiviso che intercetta il click, chiama `ScrollTrigger.refresh()`
+  **prima** di calcolare la destinazione (così le posizioni sono già
+  aggiornate), poi anima lo scroll con `gsap.to(window, {scrollTo...})`
+  (`ScrollToPlugin`, incluso gratis in GSAP 3) invece dello scroll
+  nativo del browser — nessun secondo evento di scroll in grado di
+  interrompere/correggere il salto a metà. Applicato sia ai link diretti
+  di `Nav.tsx` sia dentro `MotionButton.tsx` (usato per tutte le altre
+  CTA con `href="#..."` in giro per il sito, stessa causa quindi stesso
+  fix necessario ovunque per coerenza).
+
 ## Gate prima di dire "fatto" (applicato alla build iniziale, riapplicare a ogni modifica)
 1. Dev server avviato e guardato via screenshot reale (Playwright + Chromium
    preinstallati in questo ambiente), non dedotto dal build che passa

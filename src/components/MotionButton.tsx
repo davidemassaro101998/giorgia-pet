@@ -8,6 +8,7 @@
 
 import { ArrowRight } from "@phosphor-icons/react";
 import { cn } from "../lib/utils";
+import { smoothScrollToHash } from "../lib/scroll";
 
 const variants = {
   // Floating CTA Pill: wash quasi-trasparente, mai un blocco di colore pieno.
@@ -39,6 +40,9 @@ export function MotionButton({
   return (
     <a
       href={href}
+      onClick={(event) => {
+        if (smoothScrollToHash(href)) event.preventDefault();
+      }}
       className={cn(
         "group relative inline-flex select-none items-center justify-center gap-2 text-center font-body text-[15px] font-normal transition-colors duration-200 ease-out",
         fullWidth ? "w-full" : "w-fit",

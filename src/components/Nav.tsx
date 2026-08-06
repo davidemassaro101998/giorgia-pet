@@ -1,5 +1,6 @@
 import { ctaLabel, site } from "../siteConfig";
 import { MotionButton } from "./MotionButton";
+import { smoothScrollToHash } from "../lib/scroll";
 
 const links = [
   { href: "#come-funziona", label: "Come funziona" },
@@ -23,7 +24,13 @@ export function Nav() {
             "0 24px 48px -12px rgba(21,19,15,0.22), 0 6px 16px -6px rgba(21,19,15,0.14), inset 0 1px 0 rgba(255,255,255,0.7), inset 0 -1px 0 rgba(21,19,15,0.05)",
         }}
       >
-        <a href="#top" className="font-body text-[15px] text-[var(--color-off-black)]">
+        <a
+          href="#top"
+          onClick={(event) => {
+            if (smoothScrollToHash("#top")) event.preventDefault();
+          }}
+          className="font-body text-[15px] text-[var(--color-off-black)]"
+        >
           {site.brand}
         </a>
         <nav className="hidden items-center gap-5 md:flex">
@@ -31,6 +38,9 @@ export function Nav() {
             <a
               key={l.href}
               href={l.href}
+              onClick={(event) => {
+                if (smoothScrollToHash(l.href)) event.preventDefault();
+              }}
               className="font-body text-[14px] text-[var(--color-off-black)] transition-colors hover:text-[var(--color-steel)]"
             >
               {l.label}
