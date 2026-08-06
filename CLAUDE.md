@@ -612,6 +612,72 @@ precedente (190×245, un fallback "per ora" mai sostituito finora).
   `object-bottom` porta i piedi esattamente a contatto con il fondo,
   come cane e gatto.
 
+**Step 15 — Foto di Giorgia appoggiata al fondo (fix preciso), sezione
+"pilastro" con scroll-scrub sticky (fatto)**: due richieste, la seconda
+un cambio strutturale importante voluto esplicitamente ("deve essere un
+pilastro del sito").
+- **Foto non davvero appoggiata al pavimento**: nonostante `h-full
+  object-bottom`, restava un piccolo distacco visibile — causa reale:
+  il PNG ritagliato (`giorgia-cutout.png`) aveva ~2% di padding
+  trasparente sotto ai piedi (verificato via Pillow, `alpha.getbbox()`
+  vs dimensioni immagine). `object-fit`/`object-position` lavorano sui
+  bordi del *file*, non sul contenuto visibile al suo interno — un
+  padding trasparente invisibile ma presente nel file produce comunque
+  un gap. Fix: ritagliato il PNG al bounding box reale del canale alpha
+  (+4px di margine per non tagliare l'antialiasing del bordo), 390×644
+  diventato 211×482. Lezione generale per qualsiasi cutout futuro:
+  **verificare `getbbox()`, non solo la trasparenza**, prima di fidarsi
+  di object-position per un "appoggio" preciso.
+- **Sezione "pilastro"**: su richiesta esplicita, Giorgia doveva avere
+  un trattamento a parità di peso con la cinematic intro (hero →
+  "cos'è"), non solo la foto animata ma **tutta la sezione che
+  risponde allo scroll**. Regola obbligatoria del progetto: sourced da
+  21st.dev prima di scrivere da zero — trovato "Cinematic Product
+  Scroll Section" di a.karamooz3232 (id 17441), sotto-componente
+  `ProductHero`: stage che resta fermo mentre uno scroll lungo rivela
+  un'immagine da grigio a colore via `clip-path`, con blocchi di testo
+  che si sbloccano a soglie di progresso diverse. Adattato (non copiato
+  1:1):
+  - Al posto dello scroll-listener manuale + `getBoundingClientRect`
+    dell'originale, `ScrollTrigger` con `scrub: true` (`onUpdate` legge
+    `self.progress`) — già nello stack del progetto.
+  - **Niente pin GSAP**: lo stage resta fermo via `position: sticky`
+    CSS nativa dentro un contenitore `md:h-[220vh]`, non un pin gestito
+    da GSAP — scelta deliberata per non riprodurre la stessa classe di
+    bug appena risolta sui link nav (spacer di pin che si ricalcola in
+    conflitto con lo scroll); `sticky` non ha spacer da ricalcolare.
+  - Il "colore" non è saturazione fotografica letterale: due `<img>`
+    sovrapposti dello stesso ritaglio, uno sempre visibile con
+    `filter: grayscale(1) brightness(0.55)`, l'altro nitido sopra
+    rivelato da un `clip-path: inset()` animato dal basso verso l'alto
+    (coerente con "appoggiata al pavimento") — entrambi con lo stesso
+    `url(#pet-cutout-feather)` anti-alone di cane/gatto, zero
+    `drop-shadow`.
+  - Sotto `md` l'intero meccanismo è disattivato via classi CSS
+    responsive (niente `md:h-[220vh]`/`md:sticky`) — foto nascosta,
+    testo statico, stessa filosofia già in uso per cane/gatto/lei.
+  - Aggiunto un vero bottone CTA come quarto "step" di testo (prima non
+    c'era), coerente con le altre sezioni che chiudono con un'azione.
+- **Bug reale trovato e risolto durante il QA**: `overflow-hidden`
+  sulla `<section>` esterna **rompeva silenziosamente `position:
+  sticky`** sui discendenti — gotcha CSS non ovvio (qualsiasi ancestor
+  con `overflow` diverso da `visible` interrompe la catena di sticky
+  positioning). Sintomo: lo stage non restava fermo, scorreva via
+  normalmente. Fix: rimosso `overflow-hidden` dalla sezione, spostato
+  sullo stage sticky stesso (`md:overflow-hidden`, che può clippare i
+  propri figli senza rompere la propria sticky-ness) per contenere il
+  bleed della foto (`-translate-x-[6%]`).
+- **Bug reale trovato e risolto in `src/lib/scroll.ts`**: la
+  `ScrollTrigger.refresh()` introdotta nello Step 13 per il fix dei
+  link nav, chiamata su ogni click, ricalcolava l'intera pagina in modo
+  sincrono — con un secondo scrub/pin ora in pagina (questa sezione)
+  costava bene oltre un secondo di blocco prima che lo scroll partisse
+  anche solo visivamente, un click che sembrava non rispondere.
+  Rimossa: il calcolo del target usa già `getBoundingClientRect()`
+  sempre aggiornato al layout corrente, il refresh era ridondante per
+  questo caso (serviva contro lo spacer di un pin nativo, non più in
+  gioco con l'approccio "niente pin" di questa sezione).
+
 ## Gate prima di dire "fatto" (applicato alla build iniziale, riapplicare a ogni modifica)
 1. Dev server avviato e guardato via screenshot reale (Playwright + Chromium
    preinstallati in questo ambiente), non dedotto dal build che passa

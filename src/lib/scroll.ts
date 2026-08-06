@@ -5,12 +5,21 @@
 // click → arriva alla sezione giusta. Causa: il salto nativo avviene
 // *prima* che ScrollTrigger ricalcoli lo spacer del pin sull'evento
 // scroll, quindi punta a una posizione basata su un layout non ancora
-// aggiornato — il refresh che segue "corregge" lo scroll indietro. Fix:
-// intercettare il click, forzare `ScrollTrigger.refresh()` così le
-// posizioni sono aggiornate PRIMA di calcolare la destinazione, poi
-// animare lo scroll con GSAP (`ScrollToPlugin`) invece che con lo scroll
-// nativo del browser — nessun secondo evento di scroll che possa
-// ricalcolare/interrompere il salto a metà.
+// aggiornato. Fix: intercettare il click e animare lo scroll con GSAP
+// (`ScrollToPlugin`) verso una posizione calcolata da
+// `getBoundingClientRect()` **live** (non dalle posizioni cache di
+// ScrollTrigger) — nessun salto nativo del browser che possa entrare in
+// conflitto con il pin.
+//
+// **Non chiamare `ScrollTrigger.refresh()` qui**: un primo tentativo lo
+// faceva prima di calcolare la destinazione (pensato per garantire
+// posizioni fresche), ma con più pin/scrub in pagina (hero + la sezione
+// "pilastro" di Giorgia, `About.tsx`) `refresh()` ricalcola l'intera
+// pagina in modo sincrono — costava oltre un secondo di blocco prima
+// che lo scroll partisse anche solo visivamente, un click che sembrava
+// non rispondere. `getBoundingClientRect()` è già sempre aggiornato al
+// layout corrente da solo, il refresh era ridondante per il nostro caso
+// (serviva contro lo spacer del pin nativo, non più in gioco qui).
 
 import gsap from "gsap";
 import { ScrollToPlugin } from "gsap/ScrollToPlugin";
@@ -30,8 +39,6 @@ export function smoothScrollToHash(hash: string) {
   const id = hash.slice(1);
   const target = id === "top" ? 0 : document.getElementById(id);
   if (target === null) return false;
-
-  ScrollTrigger.refresh();
 
   const y =
     target === 0
