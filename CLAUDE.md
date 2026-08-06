@@ -529,6 +529,29 @@ Step 10.
   titolo+corpo ora segue subito il numero in cima, titolo passato da
   `text-xl font-medium` a `text-2xl font-semibold` per più peso visivo.
 
+**Step 12 — Rimossa l'ombra/riflesso sotto le card del coverflow, QA di
+coerenza responsive su tutto il sito (fatto)**: ultimo giro di rifinitura
+prima del test "ufficiale" dell'utente.
+- **Riflesso sotto le card di `HowItWorks`**: l'ombra colorata passata a
+  `cardClassName` nello Step 10/11 (`shadow-[0_28px_50px_-16px_...]`),
+  sommata allo `shadow-xl` di base del componente, leggeva come un
+  riflesso che faceva sembrare le card sospese sullo sfondo bianco anche
+  da ferme — segnalato dall'utente. Rimossa del tutto (`shadow-none` in
+  `cardClassName`, vince su `shadow-xl` via tailwind-merge): le card
+  restano piatte sul bianco, la profondità 3D la dà solo la prospettiva
+  del coverflow (rotazione/rientranza), non un'ombra decorativa.
+- **QA di coerenza responsive su tutto il sito**: verificato con
+  Playwright su 5 viewport (375, 768, 1280, 1440, 2560px) — tutti i link
+  della nav puntano ad ancore esistenti e scrollano correttamente, zero
+  errori console su ognuno. **Attenzione per verifiche future**: uno
+  screenshot `fullPage` istantaneo (senza scroll incrementale) cattura
+  molte sezioni ancora a `opacity:0` perché le reveal sono legate a
+  scroll/IntersectionObserver che non si attivano senza scrollare
+  davvero — non è un bug del sito, è un artefatto dello screenshot.
+  Bisogna scrollare a step (es. 60% della viewport per volta, con una
+  pausa tra uno step e l'altro) prima di catturare, altrimenti si legge
+  come "sezioni vuote" quando non lo sono per un utente reale.
+
 ## Gate prima di dire "fatto" (applicato alla build iniziale, riapplicare a ogni modifica)
 1. Dev server avviato e guardato via screenshot reale (Playwright + Chromium
    preinstallati in questo ambiente), non dedotto dal build che passa

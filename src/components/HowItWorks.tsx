@@ -14,6 +14,13 @@
 // titolo+corpo è stato spostato subito sotto il numero (niente più
 // `justify-between`) e il titolo è più grande/pesante per darne più
 // rilievo visivo.
+//
+// Sesto giro: l'ombra colorata sotto ogni card (più lo `shadow-xl` di
+// base del componente) leggeva come un "riflesso" che le faceva
+// sembrare sospese sopra lo sfondo bianco anche da ferme — tolta del
+// tutto (`shadow-none` in `cardClassName`, vince su `shadow-xl` via
+// tailwind-merge). Le card restano piatte sul bianco, la profondità la
+// dà solo la prospettiva 3D del coverflow stesso.
 
 import { ctaLabel } from "../siteConfig";
 import { Reveal } from "./Reveal";
@@ -80,7 +87,7 @@ export function HowItWorks() {
             showPagination
             cardWidth="clamp(220px, 30vw, 360px)"
             label="Come funziona una sessione"
-            cardClassName="rounded-[28px] shadow-[0_28px_50px_-16px_rgba(201,112,92,0.5)]"
+            cardClassName="rounded-[28px] shadow-none"
           />
         </Reveal>
 
