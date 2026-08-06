@@ -8,14 +8,6 @@ import { useState } from "react";
 import { motion, AnimatePresence } from "motion/react";
 import { Reveal } from "./Reveal";
 import { SectionTitle } from "./SectionTitle";
-import heroCat from "../assets/hero-cat.jpg";
-
-// Stessa tecnica del cane nella hero (CinematicIntro.tsx), invertita per
-// un fondo chiaro: luminosità alzata invece che abbassata, contrasto
-// ridotto, così il gatto si dissolve nel canvas bianco invece di
-// staccarsi come una foto a sé. In basso a sinistra, l'ultima sezione
-// vera prima del footer.
-const CAT_FILTER = "grayscale(0.5) brightness(1.75) contrast(0.85)";
 
 const faqs = [
   {
@@ -45,20 +37,8 @@ export function Faq() {
   const [hoveredId, setHoveredId] = useState<string | null>(null);
 
   return (
-    <section className="relative overflow-hidden border-b border-[var(--color-hairline)] bg-[var(--color-off-white)] py-20 md:py-28">
-      <div
-        aria-hidden
-        className="pointer-events-none absolute -bottom-10 -left-10 hidden h-[70%] w-[34%] md:block"
-        style={{
-          backgroundImage: `url(${heroCat})`,
-          backgroundSize: "cover",
-          backgroundPosition: "center 20%",
-          filter: CAT_FILTER,
-          maskImage: "radial-gradient(75% 75% at 25% 75%, black 25%, transparent 78%)",
-          WebkitMaskImage: "radial-gradient(75% 75% at 25% 75%, black 25%, transparent 78%)",
-        }}
-      />
-      <div className="relative mx-auto max-w-[800px] px-6">
+    <section className="border-b border-[var(--color-hairline)] bg-[var(--color-off-white)] py-20 md:py-28">
+      <div className="mx-auto max-w-[800px] px-6">
         <SectionTitle
           firstHalf="Domande "
           secondHalf="frequenti"
