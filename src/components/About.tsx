@@ -22,10 +22,12 @@
 //   ricalcolare, è il browser a gestirlo.
 // - Il "colore" non è letteralmente saturazione fotografica: è lei che
 //   **si materializza** da un doppio scarico (grayscale + attenuata) a
-//   nitida, con lo stesso filtro anti-alone di cane/gatto
-//   (`url(#pet-cutout-feather)`) su entrambi i livelli, zero
-//   `drop-shadow` (stessa lezione — su questo fondo un'ombra legge come
-//   alone).
+//   nitida. Il filtro anti-alone di cane/gatto (`url(#pet-cutout-feather)`)
+//   è applicato **una sola volta sul contenitore** dei due livelli
+//   (non su ciascun `<img>` separatamente, versione precedente) —
+//   stesso risultato visivo, meno filtri CSS ricalcolati a ogni frame
+//   dello scrub, più fluido. Zero `drop-shadow` su entrambi (stessa
+//   lezione del cane — su questo fondo un'ombra legge come alone).
 // - Il wipe è verticale dal basso (coerente con l'ancoraggio "appoggiata
 //   al pavimento" della sezione), non una maschera circolare come
 //   nell'originale (pensata per un hover su una card prodotto, non per
@@ -48,7 +50,6 @@ if (typeof window !== "undefined") {
 }
 
 const GIORGIA_FILTER = "url(#pet-cutout-feather)";
-const BASE_FILTER = `${GIORGIA_FILTER} grayscale(1) brightness(0.55) contrast(1.05)`;
 
 // Soglie di progresso scroll (0-1) a cui ogni blocco di testo si sblocca.
 const STEP_THRESHOLDS = [0.12, 0.34, 0.56, 0.78];
@@ -111,22 +112,25 @@ export function About() {
             {/* Ancorata in basso a sinistra come cane/gatto: il lato
                 inferiore tocca il fondo dello stage, il lato sinistro
                 esce dalla cornice. */}
-            <div className="pointer-events-none absolute inset-y-0 left-0 hidden w-[min(48%,560px)] items-end justify-start md:flex">
-              <div className="relative h-full max-h-full w-full max-w-[520px] -translate-x-[6%]">
+            <div className="pointer-events-none absolute inset-x-0 bottom-0 top-0 left-0 hidden w-[min(48%,560px)] items-end justify-start md:flex">
+              <div
+                className="relative h-full w-full max-w-[520px] -translate-x-[6%]"
+                style={{ filter: GIORGIA_FILTER }}
+              >
                 <img
                   src={giorgiaPhoto}
                   alt=""
                   aria-hidden
-                  className="absolute inset-0 h-full w-full object-contain object-bottom"
-                  style={{ filter: BASE_FILTER }}
+                  className="absolute bottom-0 left-0 h-full w-full object-contain object-bottom"
+                  style={{ filter: "grayscale(1) brightness(0.55) contrast(1.05)" }}
                 />
                 <img
                   ref={colorPhotoRef}
                   src={giorgiaPhoto}
                   alt=""
                   aria-hidden
-                  className="absolute inset-0 h-full w-full object-contain object-bottom"
-                  style={{ filter: GIORGIA_FILTER, clipPath: "inset(100% 0 0 0)" }}
+                  className="absolute bottom-0 left-0 h-full w-full object-contain object-bottom"
+                  style={{ clipPath: "inset(100% 0 0 0)" }}
                 />
               </div>
             </div>
