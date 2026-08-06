@@ -1,13 +1,20 @@
-// Foto vera di Giorgia trattata come le altre: non una "card" con un box
-// rigido (il tentativo precedente — un rettangolo 233×300 su sfondo
-// nero, con un fade interno troppo stretto per nascondere il proprio
-// bordo — leggeva come un'immagine incollata sopra, segnalato
-// dall'utente). Ora è un livello di sfondo che sanguina da sinistra
-// dietro al testo, maschera molto più ampia (il fade comincia ben prima
-// del bordo del contenitore, non ha un bordo percepibile) — stessa
-// tecnica di cane/gatto, non più un riquadro a sé. Bassa risoluzione
-// (190×245) accettata "per ora": la sfumatura ampia aiuta a nasconderlo,
-// una foto nitida e piccola in un box netto lo avrebbe reso più evidente.
+// Foto di Giorgia sostituita con un ritaglio vero (PNG alpha, verificato
+// via Pillow — angoli alpha=0, soggetto alpha=255) fornito dall'utente,
+// più grande e nitido del placeholder precedente (390×644 contro
+// 190×245). Trattata come cane/gatto — `<img>` reale con
+// `url(#pet-cutout-feather)` per pulire il bordo del ritaglio, zero
+// `drop-shadow` (stessa lezione del cane: su un fondo quasi nero
+// l'ombra legge come un alone) — non più il vecchio livello di sfondo
+// con `mask-image` radiale, quello serviva a nascondere il bordo di una
+// foto intera con sfondo, qui il canale alpha lo risolve alla radice.
+//
+// Animazione volutamente diversa da cane (blur+scale) e gatto (slide
+// diagonale + rimbalzo): è la fondatrice, ha "un peso grosso nel sito"
+// (richiesta esplicita) — un **wipe verticale** (clip-path che si apre
+// dal basso, come un sipario) invece di un semplice fade, con la sua
+// uscita di scena distinta dall'ingresso (dissolve verso l'alto/il
+// basso a seconda della direzione di scroll) invece di essere solo
+// l'ingresso invertito.
 
 import { useEffect, useRef } from "react";
 import gsap from "gsap";
@@ -15,39 +22,82 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { site } from "../siteConfig";
 import { Reveal } from "./Reveal";
 import { SectionTitle } from "./SectionTitle";
-import giorgiaPhoto from "../assets/giorgia.jpg";
+import giorgiaPhoto from "../assets/giorgia-cutout.png";
 
 if (typeof window !== "undefined") {
   gsap.registerPlugin(ScrollTrigger);
 }
 
+const GIORGIA_FILTER = "url(#pet-cutout-feather)";
+
 export function About() {
   const sectionRef = useRef<HTMLDivElement>(null);
-  const photoRef = useRef<HTMLDivElement>(null);
+  const photoRef = useRef<HTMLImageElement>(null);
 
   useEffect(() => {
     const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     const ctx = gsap.context(() => {
       if (reduce) {
-        gsap.set(photoRef.current, { opacity: 1, scale: 1, filter: "blur(0px)" });
+        gsap.set(photoRef.current, { opacity: 1, y: 0, scale: 1, clipPath: "inset(0% 0 0 0)", filter: `blur(0px) ${GIORGIA_FILTER}` });
         return;
       }
-      gsap.fromTo(
-        photoRef.current,
-        { opacity: 0, scale: 1.12, filter: "blur(22px)" },
-        {
-          opacity: 1,
-          scale: 1,
-          filter: "blur(0px)",
-          duration: 1.3,
-          ease: "power2.out",
-          scrollTrigger: {
-            trigger: sectionRef.current,
-            start: "top 70%",
-            toggleActions: "play none none reverse",
+
+      gsap.set(photoRef.current, { clipPath: "inset(0% 0 0 0)" });
+
+      const enter = () => {
+        gsap.fromTo(
+          photoRef.current,
+          { opacity: 1, scale: 1.06, clipPath: "inset(100% 0 0 0)", filter: `blur(14px) ${GIORGIA_FILTER}` },
+          {
+            scale: 1,
+            clipPath: "inset(0% 0 0 0)",
+            filter: `blur(0px) ${GIORGIA_FILTER}`,
+            duration: 1.4,
+            ease: "power3.out",
           },
-        },
-      );
+        );
+      };
+      const leave = () => {
+        gsap.to(photoRef.current, {
+          opacity: 0,
+          y: -36,
+          filter: `blur(16px) ${GIORGIA_FILTER}`,
+          duration: 0.7,
+          ease: "power2.in",
+        });
+      };
+      const leaveBack = () => {
+        gsap.to(photoRef.current, {
+          opacity: 0,
+          y: 36,
+          filter: `blur(16px) ${GIORGIA_FILTER}`,
+          duration: 0.7,
+          ease: "power2.in",
+        });
+      };
+      const enterBack = () => {
+        gsap.fromTo(
+          photoRef.current,
+          { opacity: 0, y: 0, scale: 1.06, clipPath: "inset(0% 0 0 0)", filter: `blur(14px) ${GIORGIA_FILTER}` },
+          {
+            opacity: 1,
+            scale: 1,
+            filter: `blur(0px) ${GIORGIA_FILTER}`,
+            duration: 1.1,
+            ease: "power3.out",
+          },
+        );
+      };
+
+      ScrollTrigger.create({
+        trigger: sectionRef.current,
+        start: "top 70%",
+        end: "bottom 20%",
+        onEnter: enter,
+        onLeave: leave,
+        onEnterBack: enterBack,
+        onLeaveBack: leaveBack,
+      });
     }, sectionRef);
     return () => ctx.revert();
   }, []);
@@ -56,20 +106,21 @@ export function About() {
     <section
       ref={sectionRef}
       id="chi-ti-segue"
-      className="relative overflow-hidden border-b border-[var(--color-hairline)] bg-[var(--color-off-black)] py-20 md:py-28"
+      className="relative overflow-hidden border-b border-[var(--color-hairline)] bg-[var(--color-off-black)] py-24 md:py-32 xl:py-40"
     >
-      <div
-        ref={photoRef}
-        aria-hidden
-        className="pointer-events-none absolute inset-y-0 left-0 hidden w-[50%] md:block"
-        style={{
-          backgroundImage: `url(${giorgiaPhoto})`,
-          backgroundSize: "cover",
-          backgroundPosition: "center 25%",
-          maskImage: "radial-gradient(75% 70% at 28% 45%, black 20%, transparent 75%)",
-          WebkitMaskImage: "radial-gradient(75% 70% at 28% 45%, black 20%, transparent 75%)",
-        }}
-      />
+      {/* Ancorata in basso a sinistra come cane/gatto: il lato inferiore
+          tocca il fondo della sezione, il lato sinistro esce dalla
+          cornice — coerente con la regola "ancorata a un bordo reale,
+          mai centrata nel vuoto" (Step 10). */}
+      <div className="pointer-events-none absolute inset-y-0 left-0 hidden w-[min(40%,460px)] items-end justify-start md:flex">
+        <img
+          ref={photoRef}
+          src={giorgiaPhoto}
+          alt=""
+          aria-hidden
+          className="h-full max-h-full w-full max-w-[420px] -translate-x-[6%] object-contain object-bottom opacity-0"
+        />
+      </div>
       <div className="relative mx-auto grid max-w-[1200px] grid-cols-1 px-6 md:grid-cols-[1fr_1fr]">
         <div className="hidden md:block" aria-hidden />
         <Reveal index={1}>

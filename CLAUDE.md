@@ -453,15 +453,15 @@ sia `url()` nel CSS sia i riferimenti stringa nel JS.
 - [ ] Contatti reali: WhatsApp, email, telefono (attualmente placeholder)
 - [ ] Prezzi reali per sessione singola e percorso 3 sessioni (attualmente `€ —`)
 - [ ] Logo vero (attualmente solo wordmark testuale "Vibra")
-- [ ] Foto di Giorgia Bisognin a risoluzione più alta — quella attuale
-      (`src/assets/giorgia.jpg`) è vera ma bassa risoluzione (190×245px),
-      accettata "per ora" dall'utente; sostituire appena disponibile una
-      versione più grande, senza cambiare il trattamento (sfondo scuro
-      della sezione già intonato al suo)
-- [ ] Verificare la licenza/provenienza dei ritagli cane/gatto
-      (`src/assets/hero-dog-cutout.png`, `hero-cat-cutout.png`) prima del
-      lancio pubblico — forniti dall'utente via Drive, non è documentato
-      se sono foto proprie, di clienti (serve consenso) o stock
+- [x] Foto di Giorgia Bisognin a risoluzione più alta — sostituita nello
+      Step 14 con un ritaglio vero 390×644 (`src/assets/giorgia-cutout.png`),
+      il vecchio placeholder low-res (`giorgia.jpg`, 190×245) è stato
+      cancellato
+- [ ] Verificare la licenza/provenienza dei ritagli cane/gatto/Giorgia
+      (`src/assets/hero-dog-cutout.png`, `hero-cat-cutout.png`,
+      `giorgia-cutout.png`) prima del lancio pubblico — forniti
+      dall'utente via Drive, non è documentato se sono foto proprie o
+      scattate da un fotografo (serve la liberatoria per l'uso pubblico)
 - [ ] Testimonianze reali quando disponibili (sezione `SocialProof.tsx`)
 - [ ] Dominio + deploy (in pausa su richiesta esplicita)
 
@@ -580,6 +580,37 @@ dell'utente.
   di `Nav.tsx` sia dentro `MotionButton.tsx` (usato per tutte le altre
   CTA con `href="#..."` in giro per il sito, stessa causa quindi stesso
   fix necessario ovunque per coerenza).
+
+**Step 14 — Foto di Giorgia sostituita con un ritaglio vero, animazione
+di ingresso/uscita dedicata (fatto)**: l'utente ha fornito una foto
+nuova via Drive — verificata come PNG con alpha reale (Pillow: angoli
+alpha=0, soggetto alpha=255), 390×644, molto più nitida del placeholder
+precedente (190×245, un fallback "per ora" mai sostituito finora).
+- **Trattamento allineato a cane/gatto**: da livello di sfondo con
+  `mask-image` radiale (tecnica pensata per nascondere il bordo di una
+  foto intera *senza* alpha) a `<img>` reale con
+  `url(#pet-cutout-feather)` per pulire il bordo del ritaglio — stessa
+  lezione delle Step 8-9-11: zero `drop-shadow` (eviterebbe un alone
+  sul fondo quasi nero della sezione, come già successo col cane).
+  Ancorata in basso a sinistra come le altre due immagini.
+- **Animazione dedicata, non riciclata**: richiesta esplicita
+  dell'utente — è la fondatrice, "ha un grosso peso nel sito", merita
+  un trattamento diverso dal blur+scale del cane e dallo slide+rimbalzo
+  del gatto. Ingresso: **wipe verticale** via `clip-path: inset(...)`
+  animato (un sipario che si apre dal basso verso l'alto, non un
+  semplice fade) più uno scale-down leggero. Uscita: **distinta
+  dall'ingresso invertito** — un dissolve con blur crescente che si
+  muove in direzioni opposte a seconda del verso dello scroll (`y: -36`
+  uscendo verso il basso della pagina, `y: +36` risalendo sopra la
+  sezione) invece di limitarsi a rigiocare l'entrata al contrario.
+- File vecchio (`giorgia.jpg`) cancellato, non referenziato da nessun
+  altro componente.
+- **Appoggiata al fondo della sezione**: primo giro con `max-h-[94%]`
+  lasciava un piccolo distacco dal bordo inferiore, percepibile come
+  "non appoggiata" — cambiato in `h-full max-h-full` (la stessa altezza
+  del contenitore `inset-y-0`, che copre già tutta la sezione) così
+  `object-bottom` porta i piedi esattamente a contatto con il fondo,
+  come cane e gatto.
 
 ## Gate prima di dire "fatto" (applicato alla build iniziale, riapplicare a ogni modifica)
 1. Dev server avviato e guardato via screenshot reale (Playwright + Chromium
