@@ -7,6 +7,7 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "motion/react";
 import { Reveal } from "./Reveal";
+import { SeamFade } from "./SeamFade";
 import { SectionTitle } from "./SectionTitle";
 
 const faqs = [
@@ -37,7 +38,12 @@ export function Faq() {
   const [hoveredId, setHoveredId] = useState<string | null>(null);
 
   return (
-    <section className="border-b border-[var(--color-hairline)] bg-[var(--color-off-white)] py-20 md:py-28">
+    // Niente `border-b`: la sezione seguente (Footer, nero pieno) porta
+    // il proprio `SeamFade`. Questa riceve il SeamFade in entrata da
+    // FinalCta (off-black) — `relative` aggiunto apposta per ancorare
+    // l'overlay assoluto alla sezione.
+    <section className="relative bg-[var(--color-off-white)] py-20 md:py-28">
+      <SeamFade fromColor="var(--color-off-black)" />
       <div className="mx-auto max-w-[800px] px-6">
         <SectionTitle
           firstHalf="Domande "

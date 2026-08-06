@@ -19,6 +19,7 @@ import { useEffect, useRef } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { Reveal } from "./Reveal";
+import { SeamFade } from "./SeamFade";
 import { SectionTitle } from "./SectionTitle";
 import heroCat from "../assets/hero-cat-cutout.png";
 
@@ -84,6 +85,7 @@ export function WhoItsFor() {
       ref={sectionRef}
       className="relative overflow-hidden border-b border-[var(--color-hairline)] bg-[var(--color-off-white)] py-20 md:py-28 xl:py-36 2xl:py-44"
     >
+      <SeamFade fromColor="var(--color-off-black)" />
       {/* Ancorato nell'angolo in basso a destra: il lato inferiore e quello
           destro escono dalla cornice (`overflow-hidden` sulla sezione)
           invece di fermarsi a mezz'aria — il taglio si legge come parte

@@ -70,9 +70,12 @@ const slides: CoverflowSlide[] = steps.map((s) => ({
 
 export function HowItWorks() {
   return (
+    // Niente `border-b`: la sezione seguente (About, sfondo scuro) porta
+    // il proprio `SeamFade` per una dissolvenza invece del taglio secco
+    // sull'hairline.
     <section
       id="come-funziona"
-      className="border-b border-[var(--color-hairline)] bg-[var(--color-pure-white)] py-20 md:py-28"
+      className="bg-[var(--color-pure-white)] py-20 md:py-28"
     >
       <div className="mx-auto max-w-[1200px] px-6">
         <SectionTitle

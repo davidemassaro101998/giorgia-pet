@@ -42,6 +42,7 @@ import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { ctaLabel, site } from "../siteConfig";
 import { MotionButton } from "./MotionButton";
+import { SeamFade } from "./SeamFade";
 import { SectionTitle } from "./SectionTitle";
 import giorgiaPhoto from "../assets/giorgia-cutout.png";
 
@@ -101,11 +102,15 @@ export function About() {
     // (`-translate-x-[6%]`) resta sullo stage sticky stesso
     // (`md:overflow-hidden`), che può clippare i propri figli senza
     // rompere la propria sticky-ness.
+    // Niente `border-b`: la sezione seguente (WhoItsFor, sfondo chiaro)
+    // porta il proprio `SeamFade`. Questa sezione riceve il SeamFade in
+    // entrata da HowItWorks (bianco) — vedi subito sotto l'apertura del tag.
     <section
       ref={sectionRef}
       id="chi-ti-segue"
-      className="relative border-b border-[var(--color-hairline)] bg-[var(--color-off-black)]"
+      className="relative bg-[var(--color-off-black)]"
     >
+      <SeamFade fromColor="var(--color-pure-white)" />
       <div ref={wrapRef} className="relative md:h-[220vh]">
         <div className="relative w-full md:sticky md:top-0 md:h-screen md:overflow-hidden">
           <div className="relative mx-auto grid max-w-[1200px] grid-cols-1 items-center gap-10 px-6 py-24 md:h-full md:grid-cols-[1fr_1fr] md:gap-0 md:py-0 md:pt-16">

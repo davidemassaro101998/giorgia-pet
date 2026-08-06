@@ -1,8 +1,12 @@
 import { site } from "../siteConfig";
+import { SeamFade } from "./SeamFade";
 
 export function Footer() {
   return (
-    <footer className="bg-[var(--color-pure-black)] py-12">
+    // Ultima giunzione della catena: riceve il SeamFade in entrata da
+    // Faq (off-white) — `relative` per ancorare l'overlay assoluto.
+    <footer className="relative bg-[var(--color-pure-black)] py-12">
+      <SeamFade fromColor="var(--color-off-white)" />
       <div className="mx-auto flex max-w-[1200px] flex-col items-center gap-4 px-6 text-center">
         <p className="font-body text-lg text-[var(--color-off-white)]">
           {site.brand}

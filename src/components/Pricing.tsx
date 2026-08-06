@@ -27,7 +27,9 @@ const tiers = [
 
 export function Pricing() {
   return (
-    <section id="percorsi" className="border-b border-[var(--color-hairline)] bg-[var(--color-off-white)] py-20 md:py-28">
+    // Niente `border-b`: la sezione seguente (FinalCta, sfondo scuro)
+    // porta il proprio `SeamFade`.
+    <section id="percorsi" className="bg-[var(--color-off-white)] py-20 md:py-28">
       <div className="mx-auto max-w-[1200px] px-6">
         <SectionTitle
           firstHalf="Percorsi "
